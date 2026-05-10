@@ -1,28 +1,47 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --raka-primary: #051C50;
+  --raka-dark: #050B27;
+  --raka-blue: #2257B3;
+  --raka-blue-bright: #105BBC;
+  --raka-blue-soft: #6299D2;
+  --raka-blue-light: #A4C1DF;
+
+  --raka-white: #FDFEFF;
+  --raka-off-white: #EEF0EF;
+
+  --raka-accent: #DE8E46;
+  --raka-accent-soft: #F5B37F;
+
+  --raka-gradient: linear-gradient(135deg, #050B27 0%, #051C50 35%, #2257B3 100%);
+  --raka-accent-gradient: linear-gradient(135deg, #DE8E46 0%, #F5B37F 100%);
+
+  --background: var(--raka-off-white);
+  --foreground: var(--raka-dark);
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --color-raka-primary: var(--raka-primary);
+  --color-raka-dark: var(--raka-dark);
+  --color-raka-blue: var(--raka-blue);
+  --color-raka-blue-bright: var(--raka-blue-bright);
+  --color-raka-blue-soft: var(--raka-blue-soft);
+  --color-raka-blue-light: var(--raka-blue-light);
+  --color-raka-white: var(--raka-white);
+  --color-raka-off-white: var(--raka-off-white);
+  --color-raka-accent: var(--raka-accent);
+  --color-raka-accent-soft: var(--raka-accent-soft);
+  --font-sans: var(--font-poppins);
+  --font-mono: var(--font-poppins);
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
+  font-family: var(--font-poppins), sans-serif;
   margin: 0;
 }
 
