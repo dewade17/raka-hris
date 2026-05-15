@@ -109,16 +109,16 @@ function MarketingHeader() {
           >
             Sign in
           </Link>
-          <a
-            href='/home#contact'
+          <Link
+            href='/register'
             className='inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-raka-accent px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-raka-accent/20 transition hover:-translate-y-0.5 hover:bg-raka-accent-soft focus:outline-none focus:ring-2 focus:ring-raka-accent-soft focus:ring-offset-2 focus:ring-offset-raka-dark'
           >
-            Request Demo
+            Register
             <ArrowRight
               size={16}
               aria-hidden='true'
             />
-          </a>
+          </Link>
         </div>
 
         <details className='group relative lg:hidden'>
@@ -153,12 +153,12 @@ function MarketingHeader() {
               >
                 Sign in
               </Link>
-              <a
-                href='/home#contact'
+              <Link
+                href='/register'
                 className='inline-flex min-h-11 items-center justify-center rounded-2xl bg-raka-accent px-4 py-2 text-sm font-semibold text-white'
               >
-                Request Demo
-              </a>
+                Register
+              </Link>
             </div>
           </div>
         </details>

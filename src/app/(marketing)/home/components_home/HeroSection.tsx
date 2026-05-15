@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import Link from 'next/link';
 import {
   ArrowRight,
   BadgeCheck,
@@ -32,16 +33,16 @@ export function HeroSection() {
           <p className='mt-6 max-w-2xl text-base leading-8 text-white/75 sm:text-lg'>RAKA HRIS helps companies manage employee records, attendance, leave requests, approval workflows, and HR reports in one reliable workspace.</p>
 
           <div className='mt-9 flex flex-col gap-3 sm:flex-row'>
-            <a
-              href='#contact'
+            <Link
+              href='/register'
               className='inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-raka-accent px-6 py-3 text-sm font-semibold text-white shadow-xl shadow-raka-accent/25 transition hover:-translate-y-0.5 hover:bg-raka-accent-soft focus:outline-none focus:ring-2 focus:ring-raka-accent-soft focus:ring-offset-2 focus:ring-offset-raka-dark'
             >
-              Request Demo
+              Register
               <ArrowRight
                 size={17}
                 aria-hidden='true'
               />
-            </a>
+            </Link>
             <a
               href='#platform'
               className='inline-flex min-h-12 items-center justify-center rounded-full border border-white/20 bg-white/10 px-6 py-3 text-sm font-semibold text-white backdrop-blur transition hover:-translate-y-0.5 hover:bg-white/15 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-raka-dark'

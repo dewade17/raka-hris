@@ -217,7 +217,15 @@ export function LoginFormCard() {
               >
                 <Checkbox className='text-sm font-medium text-slate-600'>Remember me</Checkbox>
               </Form.Item>
-              <Text className='!text-sm !text-slate-500'>Need access? Contact your HR administrator.</Text>
+              <Text className='!text-sm !text-slate-500'>
+                Need access?{' '}
+                <Link
+                  href='/register'
+                  className='font-semibold text-raka-blue transition hover:text-raka-primary focus:outline-none focus:ring-2 focus:ring-raka-blue focus:ring-offset-2'
+                >
+                  Create account
+                </Link>
+              </Text>
             </div>
 
             <Button
@@ -242,7 +250,9 @@ export function LoginFormCard() {
               size='large'
               block
               icon={<SatelliteDish size={18} />}
-              onClick={() => setGeneralErrorMessage('Google sign-in is not configured yet. Please use your email and password or contact your HR administrator.')}
+              onClick={() => {
+                window.location.href = '/api/auth/google/start';
+              }}
               className='!min-h-[3.25rem] !rounded-2xl !border-slate-200 !bg-white !text-sm !font-semibold !text-raka-dark !shadow-sm transition hover:!-translate-y-0.5 hover:!border-raka-blue-light hover:!bg-[#f8fafc] hover:!text-raka-primary'
             >
               Sign in with Google

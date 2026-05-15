@@ -14,16 +14,16 @@ export function ContactSection() {
             <h2 className='mt-4 max-w-3xl text-4xl font-semibold tracking-[-0.04em] sm:text-5xl'>Give your HR team one reliable place to manage employees, attendance, leave, approvals, and reports.</h2>
           </div>
           <div className='flex flex-col gap-3 sm:flex-row lg:flex-col xl:flex-row'>
-            <a
-              href='mailto:hello@rakahris.com'
+            <Link
+              href='/register'
               className='inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-raka-accent px-6 py-3 text-sm font-semibold text-white shadow-xl shadow-raka-accent/20 transition hover:-translate-y-0.5 hover:bg-raka-accent-soft focus:outline-none focus:ring-2 focus:ring-raka-accent-soft focus:ring-offset-2 focus:ring-offset-raka-primary'
             >
-              Request Demo
+              Register
               <ArrowRight
                 size={17}
                 aria-hidden='true'
               />
-            </a>
+            </Link>
             <Link
               href='/login'
               className='inline-flex min-h-12 items-center justify-center rounded-full border border-white/20 bg-white/10 px-6 py-3 text-sm font-semibold text-white backdrop-blur transition hover:-translate-y-0.5 hover:bg-white/15 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-raka-primary'

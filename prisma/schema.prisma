@@ -11,67 +11,85 @@ datasource db {
 }
 
 enum PlatformRole {
-  USER
-  SUPERADMIN
+  USER       // Pengguna biasa platform
+  SUPERADMIN // Admin tertinggi platform yang mengelola seluruh sistem
 }
 
 enum CompanyStatus {
-  ACTIVE
-  SUSPENDED
-  CANCELED
+  ACTIVE    // Perusahaan aktif dan dapat menggunakan sistem
+  SUSPENDED // Perusahaan dibekukan sementara oleh sistem/admin
+  CANCELED  // Perusahaan sudah membatalkan layanan
 }
 
 enum MembershipStatus {
-  ACTIVE
-  INACTIVE
-  SUSPENDED
-  TERMINATED
-}
-
-enum TerminationType {
-  RESIGNED
-  TERMINATED
-  CONTRACT_ENDED
-  RETIRED
+  ACTIVE     // Member bisa login dan bekerja normal
+  SUSPENDED  // Akses member dibekukan sementara karena alasan admin/compliance
+  TERMINATED // Hubungan kerja/member sudah selesai permanen
 }
 
 enum SessionStatus {
-  ACTIVE
-  REVOKED
-  EXPIRED
+  ACTIVE  // Sesi login masih aktif dan dapat digunakan
+  REVOKED // Sesi login dicabut, misalnya karena logout atau alasan keamanan
 }
 
 enum BillingInterval {
-  MONTHLY
-  YEARLY
+  MONTHLY // Tagihan berulang setiap bulan
+  YEARLY  // Tagihan berulang setiap tahun
 }
 
 enum SubscriptionStatus {
-  TRIALING
-  ACTIVE
-  PAST_DUE
-  CANCELED
-  EXPIRED
+  TRIALING // Subscription sedang dalam masa trial
+  ACTIVE   // Subscription aktif dan dapat digunakan
+  PAST_DUE // Pembayaran terlambat atau belum berhasil ditagih
+  CANCELED // Subscription dibatalkan
+  EXPIRED  // Subscription sudah kedaluwarsa
+}
+
+enum AuthProvider {
+  GOOGLE // Login menggunakan akun Google
 }
 
 model User {
-  userId             String       @id @default(cuid())
-  email              String?      @unique @db.VarChar(191)
-  name               String       @db.VarChar(191)
-  passwordHash       String       @db.VarChar(255)
-  mustChangePassword Boolean      @default(true)
-  passwordChangedAt  DateTime?
-  platformRole       PlatformRole @default(USER)
-  isActive           Boolean      @default(true)
+  userId               String       @id @default(cuid())
+  email                String?      @unique @db.VarChar(191)
+  name                 String       @db.VarChar(191)
+  passwordHash         String       @db.VarChar(255)
+  passwordLoginEnabled Boolean      @default(true)
+  mustChangePassword   Boolean      @default(true)
+  passwordChangedAt    DateTime?
+  platformRole         PlatformRole @default(USER)
+  isActive             Boolean      @default(true)
+  createdAt            DateTime     @default(now())
+  updatedAt            DateTime     @updatedAt
+
+  memberships           Membership[]
+  terminatedMemberships Membership[]       @relation("MembershipTerminatedBy")
+  sessions              UserSession[]
+  authProviders         UserAuthProvider[]
+  createdCompanies      Company[]          @relation("CreatedByUser")
+
+  @@map("users")
+}
+
+model UserAuthProvider {
+  userAuthProviderId String       @id @default(cuid())
+  userId             String
+  provider           AuthProvider
+  providerAccountId  String       @db.VarChar(191)
+  email              String?      @db.VarChar(191)
+  emailVerified      Boolean      @default(false)
+  displayName        String?      @db.VarChar(191)
+  avatarUrl          String?      @db.VarChar(500)
+  lastLoginAt        DateTime?
   createdAt          DateTime     @default(now())
   updatedAt          DateTime     @updatedAt
 
-  memberships           Membership[]
-  terminatedMemberships Membership[]  @relation("MembershipTerminatedBy")
-  sessions              UserSession[]
-  createdCompanies      Company[]     @relation("CreatedByUser")
+  user User @relation(fields: [userId], references: [userId], onDelete: Cascade, onUpdate: Cascade)
 
-  @@map("users")
+  @@unique([provider, providerAccountId])
+  @@index([userId])
+  @@index([provider, email])
+  @@map("user_auth_providers")
 }
 
 model Company {
@@ -117,8 +135,8 @@ model Membership {
   lastLoginAt  DateTime?
 
   employmentEndedAt  DateTime?
-  terminationType    TerminationType?
-  terminationReason  String?          @db.Text
+  terminationType    String?   @db.VarChar(50)
+  terminationReason  String?   @db.Text
   terminatedByUserId String?
   accessRevokedAt    DateTime?
 
@@ -250,7 +268,7 @@ model UserSession {
   userSessionId    String        @id @default(cuid())
   userId           String
   membershipId     String?
-  refreshTokenHash String        @unique @db.VarChar(255)
+  refreshTokenHash String        @unique @db.Char(64)
   deviceId         String?       @db.VarChar(191)
   deviceName       String?       @db.VarChar(100)
   platform         String?       @db.VarChar(50)
@@ -258,6 +276,7 @@ model UserSession {
   userAgent        String?       @db.VarChar(512)
   status           SessionStatus @default(ACTIVE)
   lastUsedAt       DateTime?
+  renewedAt        DateTime?
   expiresAt        DateTime
   revokedAt        DateTime?
   revokedReason    String?       @db.VarChar(255)
@@ -269,6 +288,7 @@ model UserSession {
 
   @@index([userId, status])
   @@index([membershipId, status])
+  @@index([status, expiresAt])
   @@map("user_sessions")
 }
 

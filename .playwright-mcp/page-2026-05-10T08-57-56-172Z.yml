@@ -1,0 +1,341 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e3]:
+    - banner [ref=e4]:
+      - generic [ref=e5]:
+        - link "RAKA HRIS home" [ref=e6] [cursor=pointer]:
+          - /url: /home
+          - img "RAKA HRIS logo" [ref=e8]
+          - generic [ref=e9]: RAKA HRIS
+        - navigation "Main navigation" [ref=e10]:
+          - link "Platform" [ref=e11] [cursor=pointer]:
+            - /url: /home#platform
+          - link "Features" [ref=e12] [cursor=pointer]:
+            - /url: /home#features
+          - link "Workflow" [ref=e13] [cursor=pointer]:
+            - /url: /home#workflow
+          - link "Security" [ref=e14] [cursor=pointer]:
+            - /url: /home#security
+          - link "FAQ" [ref=e15] [cursor=pointer]:
+            - /url: /home#faq
+        - generic [ref=e16]:
+          - link "Sign in" [ref=e17] [cursor=pointer]:
+            - /url: /login
+          - link "Register" [ref=e18] [cursor=pointer]:
+            - /url: /register
+            - text: Register
+            - img [ref=e19]
+    - main [ref=e21]:
+      - generic [ref=e26]:
+        - generic [ref=e27]:
+          - generic [ref=e28]:
+            - img [ref=e29]
+            - text: Modern HR operations platform
+          - heading "Simplify HR operations from employee data to payroll readiness." [level=1] [ref=e32]
+          - paragraph [ref=e33]: RAKA HRIS helps companies manage employee records, attendance, leave requests, approval workflows, and HR reports in one reliable workspace.
+          - generic [ref=e34]:
+            - link "Register" [ref=e35] [cursor=pointer]:
+              - /url: /register
+              - text: Register
+              - img [ref=e36]
+            - link "Explore Platform" [ref=e38] [cursor=pointer]:
+              - /url: "#platform"
+          - generic [ref=e39]:
+            - generic [ref=e40]:
+              - img [ref=e41]
+              - text: Employee self-service
+            - generic [ref=e44]:
+              - img [ref=e45]
+              - text: Manager approvals
+            - generic [ref=e48]:
+              - img [ref=e49]
+              - text: Payroll-ready records
+        - generic [ref=e52]:
+          - generic [ref=e54]:
+            - img [ref=e56]
+            - generic [ref=e59]:
+              - paragraph [ref=e60]: Attendance synced
+              - paragraph [ref=e61]: Today, 08:05 AM
+          - generic [ref=e63]:
+            - img [ref=e65]
+            - generic [ref=e68]:
+              - paragraph [ref=e69]: 12 approvals pending
+              - paragraph [ref=e70]: Ready to review
+          - generic [ref=e72]:
+            - img [ref=e74]
+            - generic [ref=e77]:
+              - paragraph [ref=e78]: Payroll data ready
+              - paragraph [ref=e79]: 98% cleaner visibility
+          - img "RAKA HRIS employee management dashboard preview" [ref=e87]
+      - region "RAKA HRIS metrics" [ref=e88]:
+        - generic [ref=e89]:
+          - generic [ref=e90]:
+            - paragraph [ref=e91]: 4x
+            - paragraph [ref=e92]: faster HR administration
+          - generic [ref=e93]:
+            - paragraph [ref=e94]: 98%
+            - paragraph [ref=e95]: attendance visibility
+          - generic [ref=e96]:
+            - paragraph [ref=e97]: 24/7
+            - paragraph [ref=e98]: employee access
+          - generic [ref=e99]:
+            - paragraph [ref=e100]: "1"
+            - paragraph [ref=e101]: source of truth
+      - generic [ref=e103]:
+        - generic [ref=e104]:
+          - paragraph [ref=e105]: Platform
+          - heading "Everything HR teams need in one connected workspace." [level=2] [ref=e106]
+          - paragraph [ref=e107]: RAKA HRIS brings core employee operations into a structured system so HR teams can reduce manual work and keep company data organized.
+        - generic [ref=e108]:
+          - article [ref=e109]:
+            - img [ref=e111]
+            - heading "Employee Database" [level=3] [ref=e116]
+            - paragraph [ref=e117]: Centralize employee profiles, contracts, positions, departments, and document history.
+          - article [ref=e118]:
+            - img [ref=e120]
+            - heading "Attendance Management" [level=3] [ref=e123]
+            - paragraph [ref=e124]: Track attendance, shifts, late arrivals, corrections, and daily summaries.
+          - article [ref=e125]:
+            - img [ref=e127]
+            - heading "Leave & Approval Workflow" [level=3] [ref=e131]
+            - paragraph [ref=e132]: Manage leave requests, approvals, attendance corrections, and manager reviews.
+          - article [ref=e133]:
+            - img [ref=e135]
+            - heading "Payroll Preparation" [level=3] [ref=e139]
+            - paragraph [ref=e140]: Prepare attendance, allowance, deduction, and employment data before payroll processing.
+      - generic [ref=e142]:
+        - generic [ref=e144]:
+          - generic [ref=e150]: Product preview
+          - img "RAKA HRIS product dashboard preview" [ref=e151]
+        - generic [ref=e152]:
+          - paragraph [ref=e153]: Product experience
+          - heading "Built for clarity across HR, managers, and employees." [level=2] [ref=e154]
+          - paragraph [ref=e155]: Give every role a cleaner way to complete daily HR tasks, review requests, and access the information they need.
+          - generic [ref=e156]:
+            - generic [ref=e157]:
+              - img [ref=e159]
+              - generic [ref=e162]: Role-based access experience
+            - generic [ref=e163]:
+              - img [ref=e165]
+              - generic [ref=e168]: Clear approval status
+            - generic [ref=e169]:
+              - img [ref=e171]
+              - generic [ref=e174]: Organized employee records
+            - generic [ref=e175]:
+              - img [ref=e177]
+              - generic [ref=e180]: Faster operational reporting
+            - generic [ref=e181]:
+              - img [ref=e183]
+              - generic [ref=e186]: Cleaner payroll preparation data
+      - generic [ref=e188]:
+        - generic [ref=e189]:
+          - generic [ref=e190]:
+            - paragraph [ref=e191]: Workflow
+            - heading "From request to report, every step stays visible." [level=2] [ref=e192]
+          - paragraph [ref=e193]: Make routine HR work easier to follow with a connected flow for requests, reviews, approvals, and reporting.
+        - generic [ref=e194]:
+          - article [ref=e196]:
+            - generic [ref=e197]: "01"
+            - heading "Collect" [level=3] [ref=e198]
+            - paragraph [ref=e199]: Employee, attendance, leave, and payroll support data enters one workspace.
+          - article [ref=e200]:
+            - generic [ref=e201]: "02"
+            - heading "Review" [level=3] [ref=e202]
+            - paragraph [ref=e203]: Managers and HR teams review requests, corrections, and documents.
+          - article [ref=e204]:
+            - generic [ref=e205]: "03"
+            - heading "Approve" [level=3] [ref=e206]
+            - paragraph [ref=e207]: Approval status stays clear for employees and decision makers.
+          - article [ref=e208]:
+            - generic [ref=e209]: "04"
+            - heading "Report" [level=3] [ref=e210]
+            - paragraph [ref=e211]: HR teams generate cleaner summaries for leadership and finance.
+      - generic [ref=e213]:
+        - generic [ref=e214]:
+          - paragraph [ref=e215]: Role-based benefits
+          - heading "Designed for every role in your organization." [level=2] [ref=e216]
+        - generic [ref=e217]:
+          - article [ref=e218]:
+            - img [ref=e221]
+            - heading "For HR Teams" [level=3] [ref=e225]
+            - paragraph [ref=e226]: Reduce manual administration, organize employee data, and improve reporting.
+          - article [ref=e227]:
+            - img [ref=e230]
+            - heading "For Managers" [level=3] [ref=e234]
+            - paragraph [ref=e235]: Review requests, monitor team attendance, and approve actions faster.
+          - article [ref=e236]:
+            - img [ref=e239]
+            - heading "For Employees" [level=3] [ref=e241]
+            - paragraph [ref=e242]: Access personal information, submit requests, and follow approval progress.
+      - generic [ref=e245]:
+        - generic [ref=e246]:
+          - img [ref=e248]
+          - paragraph [ref=e251]: Security & Governance
+          - heading "Designed for sensitive employee data." [level=2] [ref=e252]
+          - paragraph [ref=e253]: RAKA HRIS supports cleaner HR governance with structured records, controlled access, and reliable operational visibility.
+        - generic [ref=e254]:
+          - article [ref=e255]:
+            - img [ref=e257]
+            - heading "Role-aware workspace" [level=3] [ref=e261]
+            - paragraph [ref=e262]: Give each user the right workspace for their responsibility and access level.
+          - article [ref=e263]:
+            - img [ref=e265]
+            - heading "Organized employee documents" [level=3] [ref=e268]
+            - paragraph [ref=e269]: Keep contracts, request files, and employee records easier to locate.
+          - article [ref=e270]:
+            - img [ref=e272]
+            - heading "Approval traceability" [level=3] [ref=e277]
+            - paragraph [ref=e278]: Make every request easier to review with clear ownership and status.
+          - article [ref=e279]:
+            - img [ref=e281]
+            - heading "Reliable HR reporting" [level=3] [ref=e283]
+            - paragraph [ref=e284]: Support better decisions with structured summaries for HR and leadership.
+      - generic [ref=e286]:
+        - generic [ref=e287]:
+          - paragraph [ref=e288]: Social proof
+          - heading "Trusted by growing teams that need cleaner HR operations." [level=2] [ref=e289]
+        - generic [ref=e290]:
+          - article [ref=e291]:
+            - generic [ref=e292]:
+              - img [ref=e293]
+              - img [ref=e295]
+              - img [ref=e297]
+              - img [ref=e299]
+              - img [ref=e301]
+            - paragraph [ref=e303]: “RAKA HRIS helped our HR team reduce manual follow-ups and keep employee records easier to manage.”
+            - generic [ref=e304]:
+              - paragraph [ref=e305]: Nadia Putri
+              - paragraph [ref=e306]: HR Manager
+          - article [ref=e307]:
+            - generic [ref=e308]:
+              - img [ref=e309]
+              - img [ref=e311]
+              - img [ref=e313]
+              - img [ref=e315]
+              - img [ref=e317]
+            - paragraph [ref=e319]: “The approval flow makes attendance and leave requests much easier to monitor.”
+            - generic [ref=e320]:
+              - paragraph [ref=e321]: Arief Santoso
+              - paragraph [ref=e322]: Operations Lead
+          - article [ref=e323]:
+            - generic [ref=e324]:
+              - img [ref=e325]
+              - img [ref=e327]
+              - img [ref=e329]
+              - img [ref=e331]
+              - img [ref=e333]
+            - paragraph [ref=e335]: “We finally have a cleaner overview of employee data before payroll preparation.”
+            - generic [ref=e336]:
+              - paragraph [ref=e337]: Dewi Lestari
+              - paragraph [ref=e338]: Finance & HR
+      - generic [ref=e341]:
+        - generic [ref=e342]:
+          - paragraph [ref=e343]: Ready to modernize HR?
+          - heading "Give your HR team one reliable place to manage employees, attendance, leave, approvals, and reports." [level=2] [ref=e344]
+        - generic [ref=e345]:
+          - link "Register" [ref=e346] [cursor=pointer]:
+            - /url: /register
+            - text: Register
+            - img [ref=e347]
+          - link "Sign in" [ref=e349] [cursor=pointer]:
+            - /url: /login
+      - generic [ref=e351]:
+        - generic [ref=e352]:
+          - paragraph [ref=e353]: FAQ
+          - heading "Questions before your team gets started?" [level=2] [ref=e354]
+          - paragraph [ref=e355]: Here are quick answers about how RAKA HRIS supports daily HR operations.
+        - generic [ref=e356]:
+          - group [ref=e357]:
+            - generic "What is RAKA HRIS?" [ref=e358] [cursor=pointer]:
+              - text: What is RAKA HRIS?
+              - img [ref=e359]
+            - paragraph [ref=e361]: RAKA HRIS is a modern HR platform for managing employee data, attendance, leave, approvals, payroll preparation, and HR reporting in one workspace.
+          - group [ref=e362]:
+            - generic "Who can use RAKA HRIS?" [ref=e363] [cursor=pointer]:
+              - text: Who can use RAKA HRIS?
+              - img [ref=e364]
+          - group [ref=e366]:
+            - generic "Can employees submit requests through the system?" [ref=e367] [cursor=pointer]:
+              - text: Can employees submit requests through the system?
+              - img [ref=e368]
+          - group [ref=e370]:
+            - generic "Does RAKA HRIS support attendance and leave approval?" [ref=e371] [cursor=pointer]:
+              - text: Does RAKA HRIS support attendance and leave approval?
+              - img [ref=e372]
+          - group [ref=e374]:
+            - generic "Is RAKA HRIS suitable for growing companies?" [ref=e375] [cursor=pointer]:
+              - text: Is RAKA HRIS suitable for growing companies?
+              - img [ref=e376]
+    - contentinfo [ref=e378]:
+      - generic [ref=e380]:
+        - generic [ref=e381]:
+          - link "RAKA HRIS home" [ref=e382] [cursor=pointer]:
+            - /url: /home
+            - img "RAKA HRIS logo" [ref=e384]
+            - generic [ref=e385]: RAKA HRIS
+          - paragraph [ref=e386]: RAKA HRIS is a modern HR platform for managing employee data, attendance, leave, approvals, and HR reporting.
+          - paragraph [ref=e387]: © 2026 RAKA HRIS. All rights reserved.
+        - generic [ref=e388]:
+          - generic [ref=e389]:
+            - heading "Platform" [level=3] [ref=e390]
+            - list [ref=e391]:
+              - listitem [ref=e392]:
+                - link "Employee Database" [ref=e393] [cursor=pointer]:
+                  - /url: /home#platform
+              - listitem [ref=e394]:
+                - link "Attendance" [ref=e395] [cursor=pointer]:
+                  - /url: /home#features
+              - listitem [ref=e396]:
+                - link "Leave Management" [ref=e397] [cursor=pointer]:
+                  - /url: /home#workflow
+              - listitem [ref=e398]:
+                - link "Payroll Preparation" [ref=e399] [cursor=pointer]:
+                  - /url: /home#features
+              - listitem [ref=e400]:
+                - link "HR Reports" [ref=e401] [cursor=pointer]:
+                  - /url: /home#platform
+          - generic [ref=e402]:
+            - heading "Company" [level=3] [ref=e403]
+            - list [ref=e404]:
+              - listitem [ref=e405]:
+                - link "About" [ref=e406] [cursor=pointer]:
+                  - /url: /home#platform
+              - listitem [ref=e407]:
+                - link "Contact" [ref=e408] [cursor=pointer]:
+                  - /url: /home#contact
+              - listitem [ref=e409]:
+                - link "Careers" [ref=e410] [cursor=pointer]:
+                  - /url: /home#contact
+              - listitem [ref=e411]:
+                - link "Blog" [ref=e412] [cursor=pointer]:
+                  - /url: /home#features
+          - generic [ref=e413]:
+            - heading "Support" [level=3] [ref=e414]
+            - list [ref=e415]:
+              - listitem [ref=e416]:
+                - link "Help Center" [ref=e417] [cursor=pointer]:
+                  - /url: /home#faq
+              - listitem [ref=e418]:
+                - link "Documentation" [ref=e419] [cursor=pointer]:
+                  - /url: /home#faq
+              - listitem [ref=e420]:
+                - link "Privacy Policy" [ref=e421] [cursor=pointer]:
+                  - /url: /home#security
+              - listitem [ref=e422]:
+                - link "Terms of Service" [ref=e423] [cursor=pointer]:
+                  - /url: /home#security
+        - generic [ref=e424]:
+          - heading "Contact" [level=3] [ref=e425]
+          - generic [ref=e426]:
+            - link "hello@rakahris.com" [ref=e427] [cursor=pointer]:
+              - /url: mailto:hello@rakahris.com
+              - img [ref=e428]
+              - text: hello@rakahris.com
+            - generic [ref=e431]:
+              - img [ref=e432]
+              - text: Indonesia
+          - link "Request Demo" [ref=e435] [cursor=pointer]:
+            - /url: mailto:hello@rakahris.com
+            - text: Request Demo
+            - img [ref=e436]
+  - button "Open Next.js Dev Tools" [ref=e443] [cursor=pointer]:
+    - img [ref=e444]

@@ -1,50 +1,327 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
 :root {
-  --raka-primary: #051C50;
-  --raka-dark: #050B27;
-  --raka-blue: #2257B3;
-  --raka-blue-bright: #105BBC;
-  --raka-blue-soft: #6299D2;
-  --raka-blue-light: #A4C1DF;
+  /*
+    RAKA HRIS Brand Color
+    WCAG-friendly color system
+  */
 
-  --raka-white: #FDFEFF;
-  --raka-off-white: #EEF0EF;
+  /* Core navy */
+  --raka-primary: #051c50;
+  --raka-dark: #050b27;
 
-  --raka-accent: #DE8E46;
-  --raka-accent-soft: #F5B37F;
+  /* Blue scale */
+  --raka-blue: #2257b3;
+  --raka-blue-bright: #105bbc;
 
-  --raka-gradient: linear-gradient(135deg, #050B27 0%, #051C50 35%, #2257B3 100%);
-  --raka-accent-gradient: linear-gradient(135deg, #DE8E46 0%, #F5B37F 100%);
+  /*
+    Soft colors should be used for background, border, badge bg,
+    not for small text on light backgrounds.
+  */
+  --raka-blue-soft: #6299d2;
+  --raka-blue-light: #d9e9f8;
+  --raka-blue-lighter: #eef5ff;
 
+  /* Neutral */
+  --raka-white: #ffffff;
+  --raka-off-white: #eef0ef;
+  --raka-surface: #ffffff;
+  --raka-surface-soft: #f6f8fb;
+
+  /*
+    Accent updated:
+    Previous #DE8E46 is nice visually, but weak with white text.
+    This darker orange is safer for buttons with white text.
+  */
+  --raka-accent: #a85512;
+  --raka-accent-hover: #8f470e;
+  --raka-accent-soft: #f8dcc3;
+  --raka-accent-lighter: #fff4ea;
+
+  /* Text colors */
+  --raka-text-primary: #050b27;
+  --raka-text-secondary: #334155;
+  --raka-text-muted: #64748b;
+  --raka-text-inverse: #ffffff;
+
+  /* Border */
+  --raka-border: #d9e1ea;
+  --raka-border-soft: #e8edf3;
+
+  /* Semantic colors */
+  --raka-success: #15803d;
+  --raka-success-soft: #dcfce7;
+  --raka-warning: #92400e;
+  --raka-warning-soft: #fef3c7;
+  --raka-danger: #b91c1c;
+  --raka-danger-soft: #fee2e2;
+
+  /* Foreground pairings */
+  --raka-primary-foreground: #ffffff;
+  --raka-blue-foreground: #ffffff;
+  --raka-accent-foreground: #ffffff;
+  --raka-success-foreground: #ffffff;
+  --raka-warning-foreground: #ffffff;
+  --raka-danger-foreground: #ffffff;
+
+  /* Gradients */
+  --raka-gradient: linear-gradient(135deg, #050b27 0%, #051c50 42%, #2257b3 100%);
+
+  --raka-accent-gradient: linear-gradient(135deg, #8f470e 0%, #a85512 45%, #d97706 100%);
+
+  --raka-soft-gradient: linear-gradient(135deg, #ffffff 0%, #eef5ff 48%, #f8dcc3 100%);
+
+  /* App base */
   --background: var(--raka-off-white);
-  --foreground: var(--raka-dark);
+  --foreground: var(--raka-text-primary);
 }
 
 @theme inline {
+  /* Base */
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+
+  /* Brand */
   --color-raka-primary: var(--raka-primary);
   --color-raka-dark: var(--raka-dark);
   --color-raka-blue: var(--raka-blue);
   --color-raka-blue-bright: var(--raka-blue-bright);
   --color-raka-blue-soft: var(--raka-blue-soft);
   --color-raka-blue-light: var(--raka-blue-light);
+  --color-raka-blue-lighter: var(--raka-blue-lighter);
+
+  /* Accent */
+  --color-raka-accent: var(--raka-accent);
+  --color-raka-accent-hover: var(--raka-accent-hover);
+  --color-raka-accent-soft: var(--raka-accent-soft);
+  --color-raka-accent-lighter: var(--raka-accent-lighter);
+
+  /* Neutral */
   --color-raka-white: var(--raka-white);
   --color-raka-off-white: var(--raka-off-white);
-  --color-raka-accent: var(--raka-accent);
-  --color-raka-accent-soft: var(--raka-accent-soft);
+  --color-raka-surface: var(--raka-surface);
+  --color-raka-surface-soft: var(--raka-surface-soft);
+
+  /* Text */
+  --color-raka-text-primary: var(--raka-text-primary);
+  --color-raka-text-secondary: var(--raka-text-secondary);
+  --color-raka-text-muted: var(--raka-text-muted);
+  --color-raka-text-inverse: var(--raka-text-inverse);
+
+  /* Border */
+  --color-raka-border: var(--raka-border);
+  --color-raka-border-soft: var(--raka-border-soft);
+
+  /* Semantic */
+  --color-raka-success: var(--raka-success);
+  --color-raka-success-soft: var(--raka-success-soft);
+  --color-raka-warning: var(--raka-warning);
+  --color-raka-warning-soft: var(--raka-warning-soft);
+  --color-raka-danger: var(--raka-danger);
+  --color-raka-danger-soft: var(--raka-danger-soft);
+
+  /* Font */
   --font-sans: var(--font-poppins);
   --font-mono: var(--font-poppins);
 }
 
+* {
+  box-sizing: border-box;
+}
+
+html {
+  min-height: 100%;
+  scroll-behavior: smooth;
+}
+
 body {
+  min-height: 100%;
+  margin: 0;
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-poppins), sans-serif;
-  margin: 0;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 .ant-app {
   min-height: 100%;
+}
+
+/* Accessible focus state */
+:where(a, button, input, textarea, select, [role='button'], [tabindex]):focus-visible {
+  outline: 3px solid var(--raka-accent);
+  outline-offset: 3px;
+  border-radius: 8px;
+}
+
+.skip-link {
+  position: fixed;
+  top: 12px;
+  left: 12px;
+  z-index: 9999;
+  transform: translateY(-160%);
+  border: 2px solid var(--raka-white);
+  border-radius: 8px;
+  background: var(--raka-primary);
+  color: var(--raka-white);
+  padding: 10px 14px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: transform 120ms ease;
+}
+
+.skip-link:focus,
+.skip-link:focus-visible {
+  transform: translateY(0);
+  color: var(--raka-white);
+  outline: 3px solid var(--raka-accent);
+  outline-offset: 3px;
+}
+
+.ant-btn:focus-visible,
+.ant-menu-item:focus-within {
+  outline: 3px solid var(--raka-accent) !important;
+  outline-offset: 2px !important;
+}
+
+.ant-typography-secondary,
+.ant-list-item-meta-description,
+.ant-statistic-title,
+.ant-empty-description {
+  color: var(--raka-text-secondary) !important;
+}
+
+.ant-statistic-content,
+.ant-list-item-meta-title {
+  color: var(--raka-text-primary) !important;
+}
+
+.ant-menu-light .ant-menu-item-selected {
+  font-weight: 600;
+}
+
+.ant-tag {
+  line-height: 1.5;
+}
+
+/* Selection */
+::selection {
+  background: var(--raka-blue);
+  color: var(--raka-white);
+}
+
+/* Better default link contrast */
+a {
+  color: var(--raka-blue);
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 3px;
+}
+
+a:hover {
+  color: var(--raka-blue-bright);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Utility classes for safer usage */
+.raka-text-primary {
+  color: var(--raka-text-primary);
+}
+
+.raka-text-secondary {
+  color: var(--raka-text-secondary);
+}
+
+.raka-text-muted {
+  color: var(--raka-text-muted);
+}
+
+.raka-surface {
+  background: var(--raka-surface);
+  color: var(--raka-text-primary);
+}
+
+.raka-surface-soft {
+  background: var(--raka-surface-soft);
+  color: var(--raka-text-primary);
+}
+
+.raka-gradient {
+  background: var(--raka-gradient);
+  color: var(--raka-white);
+}
+
+.raka-soft-gradient {
+  background: var(--raka-soft-gradient);
+  color: var(--raka-text-primary);
+}
+
+/* Primary button */
+.raka-btn-primary {
+  background: var(--raka-blue);
+  color: var(--raka-blue-foreground);
+  border: 1px solid var(--raka-blue);
+}
+
+.raka-btn-primary:hover {
+  background: var(--raka-blue-bright);
+  border-color: var(--raka-blue-bright);
+}
+
+/* Accent button - now safe with white text */
+.raka-btn-accent {
+  background: var(--raka-accent);
+  color: var(--raka-accent-foreground);
+  border: 1px solid var(--raka-accent);
+}
+
+.raka-btn-accent:hover {
+  background: var(--raka-accent-hover);
+  border-color: var(--raka-accent-hover);
+}
+
+/* Soft badge examples */
+.raka-badge-blue {
+  background: var(--raka-blue-lighter);
+  color: var(--raka-primary);
+  border: 1px solid var(--raka-blue-light);
+}
+
+.raka-badge-accent {
+  background: var(--raka-accent-lighter);
+  color: var(--raka-accent-hover);
+  border: 1px solid var(--raka-accent-soft);
+}
+
+.raka-badge-success {
+  background: var(--raka-success-soft);
+  color: var(--raka-success);
+  border: 1px solid #bbf7d0;
+}
+
+.raka-badge-warning {
+  background: var(--raka-warning-soft);
+  color: var(--raka-warning);
+  border: 1px solid #fde68a;
+}
+
+.raka-badge-danger {
+  background: var(--raka-danger-soft);
+  color: var(--raka-danger);
+  border: 1px solid #fecaca;
 }

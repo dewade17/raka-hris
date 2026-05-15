@@ -4,7 +4,7 @@
 
 This project uses Next.js 16, React 19, and newer framework conventions that may differ from older assumptions. APIs, conventions, and file structure may contain breaking changes.
 
-Before writing or proposing Next.js code, read the relevant guide in `node_modules/next/dist/docs/`. Heed deprecation notices and prefer the documented Next.js 16 behavior over prior knowledge.
+Before writing or proposing Next.js code, read the relevant guide in `node_modules/next/dist/docs/`. If it is not available, use `https://nextjs.org/docs`. Heed deprecation notices and prefer the documented Next.js 16 behavior over prior knowledge.
 
 ## Project Stack
 
