@@ -1,15 +1,15 @@
-import type { Metadata } from "next";
-import { CompanyAccessOverview } from "./components_dashboard_company/CompanyAccessOverview";
-import { CompanyEmployeeOverview } from "./components_dashboard_company/CompanyEmployeeOverview";
-import { CompanyOrganizationOverview } from "./components_dashboard_company/CompanyOrganizationOverview";
-import { CompanySessionOverview } from "./components_dashboard_company/CompanySessionOverview";
-import { CompanySubscriptionOverview } from "./components_dashboard_company/CompanySubscriptionOverview";
-import { CompanySummaryCards } from "./components_dashboard_company/CompanySummaryCards";
-import { getCompanyDashboardData } from "@/features/company-dashboard/service";
-import { requireActiveCompanyMembership } from "@/server/auth";
+import type { Metadata } from 'next';
+import { CompanyAccessOverview } from './components_dashboard_company/CompanyAccessOverview';
+import { CompanyEmployeeOverview } from './components_dashboard_company/CompanyEmployeeOverview';
+import { CompanyOrganizationOverview } from './components_dashboard_company/CompanyOrganizationOverview';
+import { CompanySessionOverview } from './components_dashboard_company/CompanySessionOverview';
+import { CompanySubscriptionOverview } from './components_dashboard_company/CompanySubscriptionOverview';
+import { CompanySummaryCards } from './components_dashboard_company/CompanySummaryCards';
+import { getCompanyDashboardData } from '@/features/company/company-dashboard/service';
+import { requireActiveCompanyMembership } from '@/server/auth';
 
 export const metadata: Metadata = {
-  title: "Company Dashboard | RAKA HRIS",
+  title: 'Company Dashboard | RAKA HRIS',
 };
 
 export default async function CompanyDashboardPage() {

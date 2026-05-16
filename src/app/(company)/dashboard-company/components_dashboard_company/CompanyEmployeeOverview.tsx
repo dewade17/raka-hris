@@ -1,19 +1,13 @@
-"use client";
+'use client';
 
-import { Card, Col, List, Row, Space, Statistic, Typography, theme } from "antd";
-import { AlertTriangle, Clock3, UserRoundCheck } from "lucide-react";
-import type { ReactNode } from "react";
-import type { CompanyDashboardData } from "@/features/company-dashboard/types";
-import {
-  DashboardEmptyText,
-  DashboardSectionHeading,
-  DashboardToneTag,
-  getDashboardStatisticStyles,
-  normalizeDashboardText,
-} from "./dashboardAccessibility";
+import { Card, Col, List, Row, Space, Statistic, Typography, theme } from 'antd';
+import { AlertTriangle, Clock3, UserRoundCheck } from 'lucide-react';
+import type { ReactNode } from 'react';
+import type { CompanyDashboardData } from '@/features/company/company-dashboard/types';
+import { DashboardEmptyText, DashboardSectionHeading, DashboardToneTag, getDashboardStatisticStyles, normalizeDashboardText } from './dashboardAccessibility';
 
 type CompanyEmployeeOverviewProps = {
-  data: CompanyDashboardData["employees"];
+  data: CompanyDashboardData['employees'];
 };
 
 export function CompanyEmployeeOverview({ data }: CompanyEmployeeOverviewProps) {
@@ -21,29 +15,42 @@ export function CompanyEmployeeOverview({ data }: CompanyEmployeeOverviewProps) 
 
   return (
     <section
-      id="employees"
-      aria-labelledby="employees-heading"
+      id='employees'
+      aria-labelledby='employees-heading'
       style={{ marginTop: 28, scrollMarginTop: 96 }}
     >
       <DashboardSectionHeading
-        id="employees-heading"
-        title="Employees"
-        description="Membership and employee profile health based on available employee data."
+        id='employees-heading'
+        title='Employees'
+        description='Membership and employee profile health based on available employee data.'
       />
       <Row gutter={[16, 16]}>
         {data.statusMetrics.map((metric) => (
-          <Col xs={24} md={8} key={metric.label}>
-            <Card variant="borderless" style={{ border: `1px solid ${token.colorBorderSecondary}` }}>
+          <Col
+            xs={24}
+            md={8}
+            key={metric.label}
+          >
+            <Card
+              variant='borderless'
+              style={{ border: `1px solid ${token.colorBorderSecondary}` }}
+            >
               <Statistic
                 aria-label={`${metric.label} members: ${metric.value}`}
                 title={metric.label}
                 value={metric.value}
-                prefix={<UserRoundCheck size={18} aria-hidden="true" focusable="false" />}
+                prefix={
+                  <UserRoundCheck
+                    size={18}
+                    aria-hidden='true'
+                    focusable='false'
+                  />
+                }
                 styles={getDashboardStatisticStyles()}
               />
               <DashboardToneTag
                 tone={metric.tone}
-                label="Membership"
+                label='Membership'
                 statusText={metric.label}
                 style={{ marginTop: 12 }}
               />
@@ -52,32 +59,66 @@ export function CompanyEmployeeOverview({ data }: CompanyEmployeeOverviewProps) 
         ))}
       </Row>
 
-      <Row gutter={[16, 16]} style={{ marginTop: 16 }}>
-        <Col xs={24} lg={10}>
-          <Card variant="borderless" style={{ border: `1px solid ${token.colorBorderSecondary}` }}>
-            <Space direction="vertical" size={16} style={{ width: "100%" }}>
+      <Row
+        gutter={[16, 16]}
+        style={{ marginTop: 16 }}
+      >
+        <Col
+          xs={24}
+          lg={10}
+        >
+          <Card
+            variant='borderless'
+            style={{ border: `1px solid ${token.colorBorderSecondary}` }}
+          >
+            <Space
+              direction='vertical'
+              size={16}
+              style={{ width: '100%' }}
+            >
               <StatusLine
-                icon={<AlertTriangle size={18} aria-hidden="true" focusable="false" />}
-                label="Incomplete profiles"
+                icon={
+                  <AlertTriangle
+                    size={18}
+                    aria-hidden='true'
+                    focusable='false'
+                  />
+                }
+                label='Incomplete profiles'
                 value={data.incompleteProfiles}
               />
               <StatusLine
-                icon={<Clock3 size={18} aria-hidden="true" focusable="false" />}
-                label="New members this month"
+                icon={
+                  <Clock3
+                    size={18}
+                    aria-hidden='true'
+                    focusable='false'
+                  />
+                }
+                label='New members this month'
                 value={data.newMembersThisMonth}
               />
               <StatusLine
-                icon={<Clock3 size={18} aria-hidden="true" focusable="false" />}
-                label="Probation ending in 30 days"
+                icon={
+                  <Clock3
+                    size={18}
+                    aria-hidden='true'
+                    focusable='false'
+                  />
+                }
+                label='Probation ending in 30 days'
                 value={data.probationEndingSoon}
               />
             </Space>
           </Card>
         </Col>
-        <Col xs={24} lg={14}>
+        <Col
+          xs={24}
+          lg={14}
+        >
           <Card
-            title="Recent members"
-            variant="borderless"
+            title='Recent members'
+            variant='borderless'
             style={{ border: `1px solid ${token.colorBorderSecondary}` }}
           >
             <List
@@ -88,7 +129,7 @@ export function CompanyEmployeeOverview({ data }: CompanyEmployeeOverviewProps) 
                   <List.Item.Meta
                     title={item.title}
                     description={
-                      <Typography.Text type="secondary">
+                      <Typography.Text type='secondary'>
                         {normalizeDashboardText(item.description)} - {item.meta}
                       </Typography.Text>
                     }
@@ -111,12 +152,18 @@ type StatusLineProps = {
 
 function StatusLine({ icon, label, value }: StatusLineProps) {
   return (
-    <Space align="center" style={{ justifyContent: "space-between", width: "100%" }}>
+    <Space
+      align='center'
+      style={{ justifyContent: 'space-between', width: '100%' }}
+    >
       <Space>
         {icon}
         <Typography.Text>{label}</Typography.Text>
       </Space>
-      <Typography.Title level={4} style={{ margin: 0 }}>
+      <Typography.Title
+        level={4}
+        style={{ margin: 0 }}
+      >
         {value}
       </Typography.Title>
     </Space>

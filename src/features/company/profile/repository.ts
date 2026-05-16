@@ -1,5 +1,5 @@
-import db from "@/lib/db";
-import type { UpdateCompanyProfileInput } from "./types";
+import db from '@/lib/db';
+import type { UpdateCompanyProfileInput } from './types';
 
 export async function findCompanyProfileById(companyId: string) {
   return db.company.findFirst({
@@ -22,10 +22,7 @@ export async function findCompanyProfileById(companyId: string) {
   });
 }
 
-export async function updateCompanyProfileRecord(
-  companyId: string,
-  data: UpdateCompanyProfileInput,
-) {
+export async function updateCompanyProfileRecord(companyId: string, data: UpdateCompanyProfileInput) {
   return db.company.update({
     where: {
       companyId,

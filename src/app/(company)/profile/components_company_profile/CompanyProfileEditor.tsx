@@ -1,10 +1,10 @@
-"use client";
+'use client';
 
-import { Avatar, Card, Col, Progress, Row, Space, Typography, theme } from "antd";
-import { Building2, CheckCircle2, Clock3, Edit3, LockKeyhole, Mail, MapPinned, Phone } from "lucide-react";
-import { useMemo, type ReactNode } from "react";
-import { useUpdateCompanyProfile } from "../hooks/useUpdateCompanyProfile";
-import { CompanyProfileForm } from "./CompanyProfileForm";
+import { Avatar, Card, Col, Row, Space, Typography, theme } from 'antd';
+import { Building2, CheckCircle2, Clock3, Edit3, LockKeyhole, Mail, MapPinned, Phone } from 'lucide-react';
+import type { ReactNode } from 'react';
+import { useUpdateCompanyProfile } from '../hooks/useUpdateCompanyProfile';
+import { CompanyProfileForm } from './CompanyProfileForm';
 
 type CompanyProfileViewModel = {
   companyId: string;
@@ -24,181 +24,298 @@ type CompanyProfileEditorProps = {
   canUpdate: boolean;
 };
 
-const { Text, Title, Paragraph } = Typography;
+const { Text, Title } = Typography;
 
 export function CompanyProfileEditor({ profile, canUpdate }: CompanyProfileEditorProps) {
   const { token } = theme.useToken();
-  const {
-    errorMessage,
-    isSubmitting,
-    updateCompanyProfile,
-    clearErrorMessage,
-  } = useUpdateCompanyProfile();
-  const profileCompleteness = useMemo(() => calculateProfileCompleteness(profile), [profile]);
-  const updatedAtLabel = new Intl.DateTimeFormat("en", {
-    day: "2-digit",
-    month: "short",
-    year: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
+  const { errorMessage, isSubmitting, updateCompanyProfile, clearErrorMessage } = useUpdateCompanyProfile();
+
+  const updatedAtLabel = new Intl.DateTimeFormat('en', {
+    day: '2-digit',
+    month: 'short',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
   }).format(new Date(profile.updatedAt));
 
   return (
-    <section aria-labelledby="company-profile-page-title">
+    <section aria-labelledby='company-profile-page-title'>
       <Card
-        variant="borderless"
+        variant='borderless'
         style={{
-          overflow: "hidden",
           border: `1px solid ${token.colorBorderSecondary}`,
-          background: "var(--raka-soft-gradient)",
+          borderRadius: token.borderRadiusLG,
+          marginBottom: 16,
+          overflow: 'hidden',
         }}
-        styles={{ body: { padding: 0 } }}
+        styles={{ body: { padding: '28px 28px 24px' } }}
       >
-        <div style={{ padding: "28px 28px 26px" }}>
-          <Row gutter={[24, 24]} align="middle">
-            <Col xs={24} lg={15}>
-              <Space direction="vertical" size={14} style={{ width: "100%" }}>
-                <Space size={12} align="center">
-                  <Avatar
-                    size={64}
-                    src={profile.logoUrl || undefined}
-                    icon={<Building2 size={28} aria-hidden="true" focusable="false" />}
-                    style={{
-                      background: profile.logoUrl ? token.colorBgContainer : token.colorPrimary,
-                      color: token.colorTextLightSolid,
-                      boxShadow: "0 18px 40px rgba(5, 28, 80, 0.16)",
-                    }}
-                  />
-                  <div>
-                    <Text
-                      strong
-                      style={{
-                        display: "inline-flex",
-                        alignItems: "center",
-                        gap: 8,
-                        borderRadius: 999,
-                        padding: "6px 12px",
-                        background: "rgba(255, 255, 255, 0.7)",
-                        color: token.colorPrimary,
-                      }}
-                    >
-                      <CheckCircle2 size={15} aria-hidden="true" focusable="false" />
-                      Company workspace
-                    </Text>
-                    <Title
-                      id="company-profile-page-title"
-                      level={1}
-                      style={{ margin: "12px 0 0", fontSize: 34, lineHeight: 1.15 }}
-                    >
-                      {profile.name}
-                    </Title>
-                  </div>
-                </Space>
-                <Paragraph style={{ maxWidth: 720, marginBottom: 0, color: token.colorTextSecondary }}>
-                  Keep your company identity, contact details, logo, and operating timezone accurate for HR workflows across RAKA HRIS.
-                </Paragraph>
-                <Space size={[8, 8]} wrap>
-                  <InfoPill icon={<Clock3 size={15} />} label={`Updated ${updatedAtLabel}`} />
-                  {canUpdate ? (
-                    <InfoPill icon={<Edit3 size={15} />} label="Owner access" />
-                  ) : (
-                    <InfoPill icon={<LockKeyhole size={15} />} label="View only" />
-                  )}
-                </Space>
-              </Space>
-            </Col>
-            <Col xs={24} lg={9}>
-              <Card
-                variant="borderless"
+        <Space
+          direction='vertical'
+          size={20}
+          style={{ width: '100%' }}
+        >
+          <Space
+            size={20}
+            align='start'
+          >
+            <Avatar
+              size={72}
+              src={profile.logoUrl || undefined}
+              icon={
+                <Building2
+                  size={30}
+                  aria-hidden='true'
+                  focusable='false'
+                />
+              }
+              shape='square'
+              style={{
+                background: profile.logoUrl ? token.colorBgContainer : token.colorPrimary,
+                color: token.colorTextLightSolid,
+                borderRadius: token.borderRadiusLG,
+                flexShrink: 0,
+              }}
+            />
+            <Space
+              direction='vertical'
+              size={8}
+              style={{ minWidth: 0 }}
+            >
+              <Text
                 style={{
-                  background: "rgba(255, 255, 255, 0.82)",
-                  boxShadow: "0 18px 48px rgba(5, 28, 80, 0.08)",
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: 6,
+                  fontSize: 11,
+                  fontWeight: 600,
+                  color: token.colorPrimary,
+                  background: token.controlItemBgActive,
+                  border: `1px solid ${token.colorBorderSecondary}`,
+                  borderRadius: 999,
+                  padding: '3px 10px',
                 }}
               >
-                <Space direction="vertical" size={14} style={{ width: "100%" }}>
-                  <Space align="center" style={{ justifyContent: "space-between", width: "100%" }}>
-                    <Text strong>Profile completeness</Text>
-                    <Text strong style={{ color: token.colorPrimary }}>
-                      {profileCompleteness}%
-                    </Text>
-                  </Space>
-                  <Progress
-                    percent={profileCompleteness}
-                    strokeColor={token.colorPrimary}
-                    railColor={token.colorBorderSecondary}
-                    aria-label={`Company profile completeness is ${profileCompleteness} percent`}
+                <CheckCircle2
+                  size={13}
+                  aria-hidden='true'
+                  focusable='false'
+                />
+                Company workspace
+              </Text>
+              <Title
+                id='company-profile-page-title'
+                level={2}
+                style={{ margin: 0, fontSize: 26, lineHeight: 1.2 }}
+              >
+                {profile.name}
+              </Title>
+              <Text
+                type='secondary'
+                style={{ fontSize: 13, lineHeight: 1.6 }}
+              >
+                Manage your company identity, contact details, logo, and timezone to keep HR data accurate across RAKA HRIS.
+              </Text>
+              <Space
+                size={8}
+                wrap
+                style={{ marginTop: 4 }}
+              >
+                <InfoPill
+                  icon={
+                    <Clock3
+                      size={13}
+                      aria-hidden='true'
+                      focusable='false'
+                    />
+                  }
+                  label={`Updated ${updatedAtLabel}`}
+                />
+                {canUpdate ? (
+                  <InfoPill
+                    icon={
+                      <Edit3
+                        size={13}
+                        aria-hidden='true'
+                        focusable='false'
+                      />
+                    }
+                    label='Owner access'
                   />
-                  <Text type="secondary">
-                    Complete contact, location, logo, and timezone fields to make company data easier to trust.
-                  </Text>
-                </Space>
-              </Card>
-            </Col>
-          </Row>
-        </div>
+                ) : (
+                  <InfoPill
+                    icon={
+                      <LockKeyhole
+                        size={13}
+                        aria-hidden='true'
+                        focusable='false'
+                      />
+                    }
+                    label='View only'
+                  />
+                )}
+              </Space>
+            </Space>
+          </Space>
+        </Space>
       </Card>
 
-      <Row gutter={[16, 16]} style={{ marginTop: 18 }}>
-        <Col xs={24} md={8}>
-          <ProfileDetailCard icon={<Mail size={18} />} label="Email" value={profile.email} />
+      <Row
+        gutter={[12, 12]}
+        style={{ marginBottom: 16 }}
+      >
+        <Col
+          xs={24}
+          md={8}
+        >
+          <QuickStatCard
+            icon={
+              <Mail
+                size={17}
+                aria-hidden='true'
+                focusable='false'
+              />
+            }
+            label='Email'
+            value={profile.email}
+          />
         </Col>
-        <Col xs={24} md={8}>
-          <ProfileDetailCard icon={<Phone size={18} />} label="Phone" value={profile.phone} />
+        <Col
+          xs={24}
+          md={8}
+        >
+          <QuickStatCard
+            icon={
+              <Phone
+                size={17}
+                aria-hidden='true'
+                focusable='false'
+              />
+            }
+            label='Phone'
+            value={profile.phone}
+          />
         </Col>
-        <Col xs={24} md={8}>
-          <ProfileDetailCard icon={<MapPinned size={18} />} label="Location" value={formatLocation(profile)} />
+        <Col
+          xs={24}
+          md={8}
+        >
+          <QuickStatCard
+            icon={
+              <MapPinned
+                size={17}
+                aria-hidden='true'
+                focusable='false'
+              />
+            }
+            label='Location'
+            value={formatLocation(profile)}
+          />
         </Col>
       </Row>
 
       <Card
-        title="Edit company profile"
+        variant='borderless'
+        style={{
+          border: `1px solid ${token.colorBorderSecondary}`,
+          borderRadius: token.borderRadiusLG,
+          overflow: 'hidden',
+        }}
+        styles={{ body: { padding: 0 } }}
+        title={
+          <Space
+            size={8}
+            align='center'
+          >
+            <Edit3
+              size={15}
+              aria-hidden='true'
+              focusable='false'
+              style={{ color: token.colorPrimary }}
+            />
+            <Text
+              strong
+              style={{ fontSize: 14 }}
+            >
+              Edit company profile
+            </Text>
+          </Space>
+        }
         extra={
-          canUpdate ? null : (
-            <Text type="secondary">
+          !canUpdate ? (
+            <Text
+              type='secondary'
+              style={{ fontSize: 12 }}
+            >
               Only the company owner can make changes.
             </Text>
-          )
+          ) : null
         }
-        variant="borderless"
-        style={{ marginTop: 18, border: `1px solid ${token.colorBorderSecondary}` }}
       >
-        <CompanyProfileForm
-          canUpdate={canUpdate}
-          initialValues={profile}
-          isSubmitting={isSubmitting}
-          errorMessage={errorMessage}
-          onSubmit={updateCompanyProfile}
-          onClearError={clearErrorMessage}
-        />
+        <div style={{ padding: '20px 24px 24px' }}>
+          <CompanyProfileForm
+            canUpdate={canUpdate}
+            initialValues={profile}
+            isSubmitting={isSubmitting}
+            errorMessage={errorMessage}
+            onSubmit={updateCompanyProfile}
+            onClearError={clearErrorMessage}
+          />
+        </div>
       </Card>
     </section>
   );
 }
 
-function ProfileDetailCard({ icon, label, value }: { icon: ReactNode; label: string; value?: string | null }) {
+function QuickStatCard({ icon, label, value }: { icon: ReactNode; label: string; value?: string | null }) {
   const { token } = theme.useToken();
 
   return (
-    <Card variant="borderless" style={{ height: "100%", border: `1px solid ${token.colorBorderSecondary}` }}>
-      <Space align="start" size={12}>
+    <Card
+      variant='borderless'
+      style={{
+        height: '100%',
+        border: `1px solid ${token.colorBorderSecondary}`,
+        borderRadius: token.borderRadiusLG,
+      }}
+      styles={{ body: { padding: '14px 16px' } }}
+    >
+      <Space
+        size={12}
+        align='center'
+      >
         <span
-          aria-hidden="true"
+          aria-hidden='true'
           style={{
-            display: "inline-flex",
-            width: 38,
-            height: 38,
-            alignItems: "center",
-            justifyContent: "center",
-            borderRadius: token.borderRadiusLG,
+            display: 'inline-flex',
+            width: 36,
+            height: 36,
+            alignItems: 'center',
+            justifyContent: 'center',
+            borderRadius: token.borderRadius,
             background: token.colorBgLayout,
             color: token.colorPrimary,
+            flexShrink: 0,
           }}
         >
           {icon}
         </span>
-        <Space direction="vertical" size={2}>
-          <Text type="secondary">{label}</Text>
-          <Text strong>{value || "Not set"}</Text>
+        <Space
+          direction='vertical'
+          size={1}
+        >
+          <Text
+            type='secondary'
+            style={{ fontSize: 11, fontWeight: 500 }}
+          >
+            {label}
+          </Text>
+          <Text
+            strong
+            style={{ fontSize: 13 }}
+          >
+            {value || 'Not set'}
+          </Text>
         </Space>
       </Space>
     </Card>
@@ -206,19 +323,21 @@ function ProfileDetailCard({ icon, label, value }: { icon: ReactNode; label: str
 }
 
 function InfoPill({ icon, label }: { icon: ReactNode; label: string }) {
+  const { token } = theme.useToken();
+
   return (
     <span
       style={{
-        display: "inline-flex",
-        alignItems: "center",
-        gap: 8,
-        border: "1px solid rgba(5, 28, 80, 0.12)",
+        display: 'inline-flex',
+        alignItems: 'center',
+        gap: 6,
+        border: `1px solid ${token.colorBorderSecondary}`,
         borderRadius: 999,
-        background: "rgba(255, 255, 255, 0.72)",
-        padding: "7px 12px",
-        color: "var(--raka-text-secondary)",
-        fontSize: 13,
-        fontWeight: 600,
+        background: token.colorBgLayout,
+        padding: '4px 12px',
+        color: token.colorTextSecondary,
+        fontSize: 12,
+        fontWeight: 500,
       }}
     >
       {icon}
@@ -227,23 +346,9 @@ function InfoPill({ icon, label }: { icon: ReactNode; label: string }) {
   );
 }
 
-function calculateProfileCompleteness(profile: CompanyProfileViewModel) {
-  const completedFields = [
-    profile.email,
-    profile.phone,
-    profile.logoUrl,
-    profile.addressLine1,
-    profile.city,
-    profile.province,
-    profile.timezone,
-  ].filter(Boolean).length;
-
-  return Math.round((completedFields / 7) * 100);
-}
-
 function formatLocation(profile: CompanyProfileViewModel) {
-  const cityProvince = [profile.city, profile.province].filter(Boolean).join(", ");
-  const address = [profile.addressLine1, cityProvince].filter(Boolean).join(" - ");
+  const cityProvince = [profile.city, profile.province].filter(Boolean).join(', ');
+  const address = [profile.addressLine1, cityProvince].filter(Boolean).join(' — ');
 
-  return address || "Not set";
+  return address || null;
 }

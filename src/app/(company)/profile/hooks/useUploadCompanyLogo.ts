@@ -15,6 +15,9 @@ type CompanyLogoUploadResponse = {
   logoUrl?: string;
 };
 
+type BeforeUploadFile = Parameters<NonNullable<UploadProps["beforeUpload"]>>[0];
+type CustomRequestOptions = Parameters<NonNullable<UploadProps["customRequest"]>>[0];
+
 const companyLogoAccept = "image/png,image/jpeg,image/webp,image/svg+xml";
 const maxCompanyLogoSizeBytes = 2 * 1024 * 1024;
 const allowedCompanyLogoTypes = new Set(["image/jpeg", "image/png", "image/webp", "image/svg+xml"]);
@@ -27,7 +30,7 @@ export function useUploadCompanyLogo({
   const [isLogoUploading, setIsLogoUploading] = useState(false);
 
   const validateLogoBeforeUpload: UploadProps["beforeUpload"] = useCallback(
-    (file) => {
+    (file: BeforeUploadFile) => {
       if (!allowedCompanyLogoTypes.has(file.type)) {
         messageApi.error("Company logo must be a PNG, JPG, WebP, or SVG file.");
         return Upload.LIST_IGNORE;
@@ -43,8 +46,8 @@ export function useUploadCompanyLogo({
     [messageApi],
   );
 
-  const uploadCompanyLogo: UploadProps["customRequest"] = useCallback(
-    async ({ file, onError, onSuccess }) => {
+  const uploadLogoFile = useCallback(
+    async ({ file, onError, onSuccess }: CustomRequestOptions) => {
       if (!(file instanceof File)) {
         const uploadError = new Error("Please choose a valid logo file.");
         messageApi.error(uploadError.message);
@@ -84,6 +87,13 @@ export function useUploadCompanyLogo({
       }
     },
     [messageApi, onClearError, onLogoUploaded],
+  );
+
+  const uploadCompanyLogo: UploadProps["customRequest"] = useCallback(
+    (options: CustomRequestOptions) => {
+      void uploadLogoFile(options);
+    },
+    [uploadLogoFile],
   );
 
   return {

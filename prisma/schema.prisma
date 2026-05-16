@@ -11,38 +11,38 @@ datasource db {
 }
 
 enum PlatformRole {
-  USER       // Pengguna biasa platform
+  USER // Pengguna biasa platform
   SUPERADMIN // Admin tertinggi platform yang mengelola seluruh sistem
 }
 
 enum CompanyStatus {
-  ACTIVE    // Perusahaan aktif dan dapat menggunakan sistem
+  ACTIVE // Perusahaan aktif dan dapat menggunakan sistem
   SUSPENDED // Perusahaan dibekukan sementara oleh sistem/admin
-  CANCELED  // Perusahaan sudah membatalkan layanan
+  CANCELED // Perusahaan sudah membatalkan layanan
 }
 
 enum MembershipStatus {
-  ACTIVE     // Member bisa login dan bekerja normal
-  SUSPENDED  // Akses member dibekukan sementara karena alasan admin/compliance
+  ACTIVE // Member bisa login dan bekerja normal
+  SUSPENDED // Akses member dibekukan sementara karena alasan admin/compliance
   TERMINATED // Hubungan kerja/member sudah selesai permanen
 }
 
 enum SessionStatus {
-  ACTIVE  // Sesi login masih aktif dan dapat digunakan
+  ACTIVE // Sesi login masih aktif dan dapat digunakan
   REVOKED // Sesi login dicabut, misalnya karena logout atau alasan keamanan
 }
 
 enum BillingInterval {
   MONTHLY // Tagihan berulang setiap bulan
-  YEARLY  // Tagihan berulang setiap tahun
+  YEARLY // Tagihan berulang setiap tahun
 }
 
 enum SubscriptionStatus {
   TRIALING // Subscription sedang dalam masa trial
-  ACTIVE   // Subscription aktif dan dapat digunakan
+  ACTIVE // Subscription aktif dan dapat digunakan
   PAST_DUE // Pembayaran terlambat atau belum berhasil ditagih
   CANCELED // Subscription dibatalkan
-  EXPIRED  // Subscription sudah kedaluwarsa
+  EXPIRED // Subscription sudah kedaluwarsa
 }
 
 enum AuthProvider {
@@ -365,19 +365,15 @@ model Position {
 }
 
 model Location {
-  locationId   String    @id @default(cuid())
-  companyId    String
-  name         String    @db.VarChar(191)
-  addressLine1 String?   @db.VarChar(255)
-  city         String?   @db.VarChar(100)
-  province     String?   @db.VarChar(100)
-  timezone     String?   @db.VarChar(50)
-  latitude     Decimal?  @db.Decimal(10, 6)
-  longitude    Decimal?  @db.Decimal(10, 6)
-  isActive     Boolean   @default(true)
-  createdAt    DateTime  @default(now())
-  updatedAt    DateTime  @updatedAt
-  deletedAt    DateTime?
+  locationId String    @id @default(cuid())
+  companyId  String
+  name       String    @db.VarChar(191)
+  latitude   Decimal?  @db.Decimal(10, 6)
+  longitude  Decimal?  @db.Decimal(10, 6)
+  isActive   Boolean   @default(true)
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  deletedAt  DateTime?
 
   company Company @relation(fields: [companyId], references: [companyId], onDelete: Cascade, onUpdate: Cascade)
 

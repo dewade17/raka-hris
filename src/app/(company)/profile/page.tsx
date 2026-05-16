@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { getCompanyProfileData } from '@/features/company/service';
+import { getCompanyProfileData } from '@/features/company/profile/service';
 import { requireActiveCompanyMembership } from '@/server/auth';
 import { CompanyProfileEditor } from './components_company_profile/CompanyProfileEditor';
 

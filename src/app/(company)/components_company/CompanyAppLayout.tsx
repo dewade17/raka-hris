@@ -27,8 +27,8 @@ export function CompanyAppLayout({ children, companyName, loginId, isOwner }: Co
     >
       <Sider
         aria-label='Company sidebar'
-        width={272}
-        collapsedWidth={80}
+        width={260}
+        collapsedWidth={72}
         collapsed={collapsed}
         onCollapse={setCollapsed}
         breakpoint='lg'
@@ -47,30 +47,31 @@ export function CompanyAppLayout({ children, companyName, loginId, isOwner }: Co
           style={{
             display: 'flex',
             alignItems: 'center',
-            gap: 12,
-            minHeight: 72,
+            gap: 10,
+            minHeight: 64,
             padding: collapsed ? '16px 18px' : '16px 20px',
+            borderBottom: `1px solid ${token.colorBorderSecondary}`,
           }}
         >
           <span
             style={{
               display: 'flex',
-              width: 40,
-              height: 40,
+              width: 36,
+              height: 36,
               flex: '0 0 auto',
               alignItems: 'center',
               justifyContent: 'center',
-              borderRadius: token.borderRadiusLG,
-              background: token.colorBgLayout,
+              borderRadius: token.borderRadius,
+              background: token.colorPrimary,
               overflow: 'hidden',
             }}
           >
             <Image
               src='/RAKA HRIS solutions logo.png'
               alt='RAKA HRIS logo'
-              width={32}
-              height={32}
-              style={{ width: 32, height: 32, objectFit: 'contain' }}
+              width={24}
+              height={24}
+              style={{ width: 24, height: 24, objectFit: 'contain' }}
               priority
             />
           </span>
@@ -78,20 +79,21 @@ export function CompanyAppLayout({ children, companyName, loginId, isOwner }: Co
             <div style={{ minWidth: 0 }}>
               <Typography.Text
                 strong
-                style={{ display: 'block' }}
+                style={{ display: 'block', fontSize: 13 }}
               >
                 RAKA HRIS
               </Typography.Text>
               <Typography.Text
                 type='secondary'
-                style={{ fontSize: 12 }}
+                style={{ fontSize: 11 }}
               >
                 Company
               </Typography.Text>
             </div>
           )}
         </div>
-        <CompanySidebar />
+
+        <CompanySidebar collapsed={collapsed} />
       </Sider>
 
       <Layout style={{ minWidth: 0, background: token.colorBgLayout }}>
@@ -100,7 +102,7 @@ export function CompanyAppLayout({ children, companyName, loginId, isOwner }: Co
           loginId={loginId}
           isOwner={isOwner}
           collapsed={collapsed}
-          onToggleCollapsed={() => setCollapsed((value) => !value)}
+          onToggleCollapsed={() => setCollapsed((v) => !v)}
         />
         <Content
           id='company-main-content'

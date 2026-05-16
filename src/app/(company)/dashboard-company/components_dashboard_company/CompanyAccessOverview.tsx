@@ -1,18 +1,13 @@
-"use client";
+'use client';
 
-import { Card, Col, List, Row, Space, Statistic, Typography, theme } from "antd";
-import { KeyRound, ShieldCheck, UserRoundCog } from "lucide-react";
-import type { ReactNode } from "react";
-import type { CompanyDashboardData } from "@/features/company-dashboard/types";
-import {
-  DashboardEmptyText,
-  DashboardSectionHeading,
-  getDashboardStatisticStyles,
-  normalizeDashboardText,
-} from "./dashboardAccessibility";
+import { Card, Col, List, Row, Space, Statistic, Typography, theme } from 'antd';
+import { KeyRound, ShieldCheck, UserRoundCog } from 'lucide-react';
+import type { ReactNode } from 'react';
+import type { CompanyDashboardData } from '@/features/company/company-dashboard/types';
+import { DashboardEmptyText, DashboardSectionHeading, getDashboardStatisticStyles, normalizeDashboardText } from './dashboardAccessibility';
 
 type CompanyAccessOverviewProps = {
-  data: CompanyDashboardData["access"];
+  data: CompanyDashboardData['access'];
 };
 
 export function CompanyAccessOverview({ data }: CompanyAccessOverviewProps) {
@@ -20,55 +15,113 @@ export function CompanyAccessOverview({ data }: CompanyAccessOverviewProps) {
 
   return (
     <section
-      id="roles-access"
-      aria-labelledby="roles-access-heading"
+      id='roles-access'
+      aria-labelledby='roles-access-heading'
       style={{ marginTop: 28, scrollMarginTop: 96 }}
     >
       <DashboardSectionHeading
-        id="roles-access-heading"
-        title="Roles & Access"
-        description="Role assignments and permission coverage available for this company."
+        id='roles-access-heading'
+        title='Roles & Access'
+        description='Role assignments and permission coverage available for this company.'
       />
       <Row gutter={[16, 16]}>
-        <Col xs={24} md={8}>
+        <Col
+          xs={24}
+          md={8}
+        >
           <Metric
-            title="Roles"
+            title='Roles'
             value={data.totalRoles}
-            icon={<KeyRound size={18} aria-hidden="true" focusable="false" />}
+            icon={
+              <KeyRound
+                size={18}
+                aria-hidden='true'
+                focusable='false'
+              />
+            }
           />
         </Col>
-        <Col xs={24} md={8}>
+        <Col
+          xs={24}
+          md={8}
+        >
           <Metric
-            title="Permissions"
+            title='Permissions'
             value={data.permissions}
-            icon={<ShieldCheck size={18} aria-hidden="true" focusable="false" />}
+            icon={
+              <ShieldCheck
+                size={18}
+                aria-hidden='true'
+                focusable='false'
+              />
+            }
           />
         </Col>
-        <Col xs={24} md={8}>
+        <Col
+          xs={24}
+          md={8}
+        >
           <Metric
-            title="Assignments"
+            title='Assignments'
             value={data.memberRoleAssignments}
-            icon={<UserRoundCog size={18} aria-hidden="true" focusable="false" />}
+            icon={
+              <UserRoundCog
+                size={18}
+                aria-hidden='true'
+                focusable='false'
+              />
+            }
           />
         </Col>
       </Row>
 
-      <Row gutter={[16, 16]} style={{ marginTop: 16 }}>
-        <Col xs={24} lg={10}>
-          <Card variant="borderless" style={{ border: `1px solid ${token.colorBorderSecondary}` }}>
-            <Space direction="vertical" size={16} style={{ width: "100%" }}>
-              <InlineMetric label="System roles" value={data.systemRoles} />
-              <InlineMetric label="Default roles" value={data.defaultRoles} />
-              <InlineMetric label="Role-permission links" value={data.rolePermissionLinks} />
-              <InlineMetric label="Roles without permissions" value={data.rolesWithoutPermissions} />
-              <InlineMetric label="Members without role" value={data.membersWithoutRole} />
+      <Row
+        gutter={[16, 16]}
+        style={{ marginTop: 16 }}
+      >
+        <Col
+          xs={24}
+          lg={10}
+        >
+          <Card
+            variant='borderless'
+            style={{ border: `1px solid ${token.colorBorderSecondary}` }}
+          >
+            <Space
+              direction='vertical'
+              size={16}
+              style={{ width: '100%' }}
+            >
+              <InlineMetric
+                label='System roles'
+                value={data.systemRoles}
+              />
+              <InlineMetric
+                label='Default roles'
+                value={data.defaultRoles}
+              />
+              <InlineMetric
+                label='Role-permission links'
+                value={data.rolePermissionLinks}
+              />
+              <InlineMetric
+                label='Roles without permissions'
+                value={data.rolesWithoutPermissions}
+              />
+              <InlineMetric
+                label='Members without role'
+                value={data.membersWithoutRole}
+              />
             </Space>
           </Card>
         </Col>
-        <Col xs={24} lg={14}>
+        <Col
+          xs={24}
+          lg={14}
+        >
           <Card
-            title="Role distribution"
-            variant="borderless"
+            title='Role distribution'
+            variant='borderless'
             style={{ border: `1px solid ${token.colorBorderSecondary}` }}
           >
             <List
@@ -78,13 +131,7 @@ export function CompanyAccessOverview({ data }: CompanyAccessOverviewProps) {
                 <List.Item>
                   <List.Item.Meta
                     title={item.name}
-                    description={
-                      item.description ? (
-                        <Typography.Text type="secondary">
-                          {normalizeDashboardText(item.description)}
-                        </Typography.Text>
-                      ) : null
-                    }
+                    description={item.description ? <Typography.Text type='secondary'>{normalizeDashboardText(item.description)}</Typography.Text> : null}
                   />
                   <Typography.Text strong>{item.count} members</Typography.Text>
                 </List.Item>
@@ -96,17 +143,12 @@ export function CompanyAccessOverview({ data }: CompanyAccessOverviewProps) {
     </section>
   );
 
-  function Metric({
-    title,
-    value,
-    icon,
-  }: {
-    title: string;
-    value: number;
-    icon: ReactNode;
-  }) {
+  function Metric({ title, value, icon }: { title: string; value: number; icon: ReactNode }) {
     return (
-      <Card variant="borderless" style={{ border: `1px solid ${token.colorBorderSecondary}` }}>
+      <Card
+        variant='borderless'
+        style={{ border: `1px solid ${token.colorBorderSecondary}` }}
+      >
         <Statistic
           aria-label={`${title}: ${value}`}
           title={title}
@@ -121,7 +163,10 @@ export function CompanyAccessOverview({ data }: CompanyAccessOverviewProps) {
 
 function InlineMetric({ label, value }: { label: string; value: number }) {
   return (
-    <Space align="center" style={{ justifyContent: "space-between", width: "100%" }}>
+    <Space
+      align='center'
+      style={{ justifyContent: 'space-between', width: '100%' }}
+    >
       <Typography.Text>{label}</Typography.Text>
       <Typography.Text strong>{value}</Typography.Text>
     </Space>

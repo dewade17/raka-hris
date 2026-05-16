@@ -150,7 +150,7 @@ export async function getCompanyDashboardData(
       locations: organization.locations.map((location) => ({
         name: location.name,
         count: location.isActive ? 1 : 0,
-        description: formatLocation(location.city, location.province),
+        description: formatCoordinates(location.latitude?.toString() ?? null, location.longitude?.toString() ?? null),
       })),
     },
     access: {
@@ -262,4 +262,12 @@ function formatLocation(city?: string | null, province?: string | null) {
   const parts = [city, province].filter(Boolean);
 
   return parts.length > 0 ? parts.join(", ") : "Location not set";
+}
+
+function formatCoordinates(latitude?: string | null, longitude?: string | null) {
+  if (!latitude || !longitude) {
+    return "Coordinates not set";
+  }
+
+  return `${latitude}, ${longitude}`;
 }

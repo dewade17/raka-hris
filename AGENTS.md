@@ -127,6 +127,7 @@ A production-ready result should:
 - Use English as the default application language.
 - Do not add locale-prefixed routes, dictionary loading, or route-level internationalization unless explicitly requested.
 - Keep user-facing text clear, human, and actionable.
+- Write UI copy in production-ready, user-facing language; avoid technical wording such as API, endpoint, payload, mutation, schema, or implementation details unless the audience explicitly needs it.
 
 ## UI and Styling Rules
 

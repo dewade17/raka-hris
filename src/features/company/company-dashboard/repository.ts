@@ -267,8 +267,8 @@ export async function findCompanyOrganizationMetrics(companyId: string) {
       take: 5,
       select: {
         name: true,
-        city: true,
-        province: true,
+        latitude: true,
+        longitude: true,
         isActive: true,
       },
     }),
