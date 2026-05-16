@@ -3,14 +3,6 @@
 import { Avatar, Button, Flex, Tag, Typography, theme } from "antd";
 import { Menu, PanelLeftClose, PanelLeftOpen } from "lucide-react";
 
-const companySlugTagStyle = {
-  margin: 0,
-  backgroundColor: "#dbeafe",
-  borderColor: "#93c5fd",
-  color: "#1e3a8a",
-  fontWeight: 600,
-};
-
 const ownerTagStyle = {
   margin: 0,
   backgroundColor: "#fef3c7",
@@ -21,7 +13,6 @@ const ownerTagStyle = {
 
 type CompanyHeaderProps = {
   companyName: string;
-  companySlug: string;
   loginId: string;
   isOwner: boolean;
   collapsed: boolean;
@@ -30,7 +21,6 @@ type CompanyHeaderProps = {
 
 export function CompanyHeader({
   companyName,
-  companySlug,
   loginId,
   isOwner,
   collapsed,
@@ -89,9 +79,6 @@ export function CompanyHeader({
         wrap
         style={{ minWidth: 0, justifyContent: "flex-end" }}
       >
-        <Tag aria-label={`Company slug ${companySlug}`} style={companySlugTagStyle}>
-          {companySlug}
-        </Tag>
         {isOwner ? (
           <Tag aria-label="Current user role Owner" style={ownerTagStyle}>
             Owner

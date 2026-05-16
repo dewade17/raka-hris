@@ -22,9 +22,6 @@ export function PlatformCompanyOverview({ data }: PlatformCompanyOverviewProps) 
       render: (_, row) => (
         <div>
           <Typography.Text strong>{row.name}</Typography.Text>
-          <Typography.Text type="secondary" style={{ display: "block", fontSize: 12 }}>
-            {row.slug}
-          </Typography.Text>
         </div>
       ),
     },

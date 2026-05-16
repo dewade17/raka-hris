@@ -13,7 +13,6 @@ export async function findCompanyDashboardRecord(companyId: string) {
     select: {
       companyId: true,
       name: true,
-      slug: true,
       email: true,
       phone: true,
       logoUrl: true,

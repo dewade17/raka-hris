@@ -21,7 +21,6 @@ export type DashboardActivityItem = {
 export type CompanyDashboardData = {
   company: {
     name: string;
-    slug: string;
     status: string;
     locationLabel: string;
     timezoneLabel: string;

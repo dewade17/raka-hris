@@ -30,8 +30,8 @@ export const companySidebarItems: CompanySidebarItem[] = [
     icon: <Gauge size={18} aria-hidden="true" focusable="false" />,
   },
   {
-    key: "/dashboard-company#company-profile",
-    href: "/dashboard-company#company-profile",
+    key: "/profile",
+    href: "/profile",
     label: "Company Profile",
     title: "Company Profile",
     icon: <Building2 size={18} aria-hidden="true" focusable="false" />,

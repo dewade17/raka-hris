@@ -12,7 +12,6 @@ export default async function CompanyLayout({
   return (
     <CompanyAppLayout
       companyName={company.name}
-      companySlug={company.slug}
       loginId={membership.loginId}
       isOwner={membership.isOwner}
     >

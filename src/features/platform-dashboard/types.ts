@@ -15,7 +15,6 @@ export type DashboardNamedCount = {
 export type PlatformCompanyRow = {
   key: string;
   name: string;
-  slug: string;
   status: string;
   members: number;
   departments: number;

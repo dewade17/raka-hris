@@ -29,10 +29,6 @@ export async function createCompanyOwnerAccount(
   input: CreateCompanyOwnerAccountInput,
 ) {
   return db.$transaction(async (tx) => {
-    const companySlug = await createUniqueCompanySlug(
-      tx,
-      createCompanySlug(input.companyName),
-    );
     const subscriptionPlan = await findOrCreateDevelopmentSubscriptionPlan(tx);
 
     const user = await tx.user.create({
@@ -49,7 +45,6 @@ export async function createCompanyOwnerAccount(
     const company = await tx.company.create({
       data: {
         name: input.companyName,
-        slug: companySlug,
         email: input.email,
         phone: input.phoneNumber,
         status: CompanyStatus.ACTIVE,
@@ -107,16 +102,11 @@ export async function createWorkspaceForExistingUser(
   input: CreateWorkspaceForExistingUserInput,
 ) {
   return db.$transaction(async (tx) => {
-    const companySlug = await createUniqueCompanySlug(
-      tx,
-      createCompanySlug(input.companyName),
-    );
     const subscriptionPlan = await findOrCreateDevelopmentSubscriptionPlan(tx);
 
     const company = await tx.company.create({
       data: {
         name: input.companyName,
-        slug: companySlug,
         email: input.email,
         phone: input.phoneNumber,
         status: CompanyStatus.ACTIVE,
@@ -192,39 +182,6 @@ async function findOrCreateDevelopmentSubscriptionPlan(
       isActive: true,
     },
   });
-}
-
-async function createUniqueCompanySlug(
-  tx: Prisma.TransactionClient,
-  baseSlug: string,
-) {
-  for (let index = 0; index < 20; index += 1) {
-    const candidate = index === 0 ? baseSlug : `${baseSlug}-${index + 1}`;
-    const existingCompany = await tx.company.findUnique({
-      where: {
-        slug: candidate,
-      },
-      select: {
-        companyId: true,
-      },
-    });
-
-    if (!existingCompany) {
-      return candidate;
-    }
-  }
-
-  return `${baseSlug}-${Date.now()}`;
-}
-
-function createCompanySlug(companyName: string) {
-  const slug = companyName
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-+|-+$/g, "")
-    .slice(0, 80);
-
-  return slug || "company";
 }
 
 function createLoginId(email: string) {

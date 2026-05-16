@@ -30,11 +30,11 @@
 
   /*
     Accent updated:
-    Previous #DE8E46 is nice visually, but weak with white text.
-    This darker orange is safer for buttons with white text.
+    Kept warm, but lighter than the previous deep orange while
+    still supporting white text on accent buttons.
   */
-  --raka-accent: #a85512;
-  --raka-accent-hover: #8f470e;
+  --raka-accent: #b85d12;
+  --raka-accent-hover: #9a4d0f;
   --raka-accent-soft: #f8dcc3;
   --raka-accent-lighter: #fff4ea;
 
@@ -67,7 +67,7 @@
   /* Gradients */
   --raka-gradient: linear-gradient(135deg, #050b27 0%, #051c50 42%, #2257b3 100%);
 
-  --raka-accent-gradient: linear-gradient(135deg, #8f470e 0%, #a85512 45%, #d97706 100%);
+  --raka-accent-gradient: linear-gradient(135deg, #9a4d0f 0%, #b85d12 45%, #d97706 100%);
 
   --raka-soft-gradient: linear-gradient(135deg, #ffffff 0%, #eef5ff 48%, #f8dcc3 100%);
 

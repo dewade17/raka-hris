@@ -78,7 +78,6 @@ export async function getCompanyDashboardData(
   return {
     company: {
       name: company.name,
-      slug: company.slug,
       status: formatEnum(company.status),
       locationLabel: formatLocation(company.city, company.province),
       timezoneLabel: company.timezone ?? "Timezone not set",

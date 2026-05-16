@@ -31,7 +31,6 @@ export async function findRecentPlatformCompanies() {
     select: {
       companyId: true,
       name: true,
-      slug: true,
       status: true,
       _count: {
         select: {

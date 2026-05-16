@@ -95,7 +95,6 @@ model UserAuthProvider {
 model Company {
   companyId String @id @default(cuid())
   name      String @db.VarChar(191)
-  slug      String @unique @db.VarChar(100)
 
   email        String? @db.VarChar(191)
   phone        String? @db.VarChar(50)

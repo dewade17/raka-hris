@@ -89,7 +89,14 @@ export async function getCurrentSession() {
       user: true,
       membership: {
         include: {
-          company: true,
+          company: {
+            select: {
+              companyId: true,
+              name: true,
+              status: true,
+              deletedAt: true,
+            },
+          },
         },
       },
     },

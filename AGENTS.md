@@ -38,6 +38,36 @@ Before writing or proposing Next.js code, read the relevant guide in `node_modul
 - Keep shared route-group chrome such as headers, footers, and common page wrappers in the nearest relevant `layout.tsx`, not inside a page-specific section component folder.
 - Avoid hiding an entire page behind a single wrapper component when the `page.tsx` can clearly show the section order.
 
+## Client CRUD and Mutation Logic
+
+For route-level Client Components, avoid placing CRUD or mutation logic directly inside visual components when the logic includes fetch calls, loading state, error state, success messages, router refreshes, or upload handling.
+
+Prefer this separation:
+
+- Components should focus on layout, form fields, display state, and user interactions.
+- Route-local hooks should handle client-side mutation workflows such as `fetch`, pending state, error messages, success feedback, upload requests, and `router.refresh()`.
+- API route handlers should remain responsible for authentication, authorization, server validation, and calling feature services.
+- Feature `service.ts` and `repository.ts` files should remain responsible for business logic and database access.
+
+For route-specific mutation hooks, place them in the route's local `hooks` folder:
+
+```text
+src/app/(group)/route-name/
+├── page.tsx
+├── hooks/
+│   ├── useUpdateResource.ts
+│   └── useUploadResourceAsset.ts
+└── components_route_name/
+    ├── ResourceEditor.tsx
+    └── ResourceForm.tsx
+```
+
+Do not create unused CRUD hooks just to complete a naming set. For example, only create `useCreateResource.ts` when the route actually has a create flow or create endpoint.
+
+When a type is only used by one component and one nearby hook, it may stay close to the component and be exported from that component file. If the type is shared across several components, hooks, or route files, move it to a route-level `types.ts`.
+
+Hooks in Client Component routes must not import server-only modules such as Prisma repositories, server auth helpers, or feature services that are meant to run only on the server. Use route handlers or Server Actions as the boundary for server work.
+
 ## Project Working Rules
 
 - Use human-readable, descriptive function names.

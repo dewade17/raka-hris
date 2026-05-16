@@ -70,7 +70,6 @@ export async function getPlatformDashboardData(): Promise<PlatformDashboardData>
         return {
           key: company.companyId,
           name: company.name,
-          slug: company.slug,
           status: formatEnum(company.status),
           members: company._count.memberships,
           departments: company._count.departments,
