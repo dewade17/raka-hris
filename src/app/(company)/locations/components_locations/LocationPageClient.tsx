@@ -80,7 +80,7 @@ export function LocationPageClient({ canManage, locations, summary }: LocationPa
         style={{ marginBottom: 18 }}
       >
         <Space
-          direction='vertical'
+          orientation='vertical'
           size={4}
         >
           <Typography.Title

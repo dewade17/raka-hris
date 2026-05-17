@@ -36,7 +36,7 @@ export function CompanySubscriptionOverview({ data }: CompanySubscriptionOvervie
             lg={8}
           >
             <Space
-              direction='vertical'
+              orientation='vertical'
               size={10}
             >
               <DashboardToneTag

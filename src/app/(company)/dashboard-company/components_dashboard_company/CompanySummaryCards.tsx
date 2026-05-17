@@ -20,7 +20,7 @@ export function CompanySummaryCards({ data }: CompanySummaryCardsProps) {
       style={{ scrollMarginTop: 96 }}
     >
       <Space
-        direction='vertical'
+        orientation='vertical'
         size={4}
         style={{ width: '100%', marginBottom: 18 }}
       >

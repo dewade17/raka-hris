@@ -74,7 +74,7 @@ export function LocationCoordinatePicker({ latitude, longitude, disabled = false
   }));
   const [isDragging, setIsDragging] = useState(false);
   const [isLocating, setIsLocating] = useState(false);
-  const center = camera.selectedKey === selectedKey ? camera.center : selectedCoordinates ?? DEFAULT_CENTER;
+  const center = camera.selectedKey === selectedKey ? camera.center : (selectedCoordinates ?? DEFAULT_CENTER);
   const mapView = useMemo(() => buildMapView(center, zoom, mapSize), [center, mapSize, zoom]);
   const selectedPoint = useMemo(() => {
     if (!selectedCoordinates || mapSize.width <= 0 || mapSize.height <= 0) {
@@ -129,7 +129,7 @@ export function LocationCoordinatePicker({ latitude, longitude, disabled = false
   const setMapCenter = useCallback(
     (updater: Coordinates | ((currentCenter: Coordinates) => Coordinates)) => {
       setCamera((currentCamera) => {
-        const currentCenter = currentCamera.selectedKey === selectedKey ? currentCamera.center : selectedCoordinates ?? DEFAULT_CENTER;
+        const currentCenter = currentCamera.selectedKey === selectedKey ? currentCamera.center : (selectedCoordinates ?? DEFAULT_CENTER);
         const nextCenter = typeof updater === 'function' ? updater(currentCenter) : updater;
 
         return {
@@ -401,7 +401,7 @@ export function LocationCoordinatePicker({ latitude, longitude, disabled = false
         </div>
 
         <Space
-          direction='vertical'
+          orientation='vertical'
           size={6}
           style={{
             position: 'absolute',

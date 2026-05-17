@@ -24,7 +24,7 @@ export function CompanySidebar({ collapsed }: CompanySidebarProps) {
     return () => window.removeEventListener('hashchange', updateHash);
   }, []);
 
-  const selectedKey = hash && pathname === '/dashboard-company' ? `${pathname}${hash}` : pathname;
+  const selectedKey = pathname.startsWith('/employees') ? '/employees' : hash && pathname === '/dashboard-company' ? `${pathname}${hash}` : pathname;
 
   return (
     <nav

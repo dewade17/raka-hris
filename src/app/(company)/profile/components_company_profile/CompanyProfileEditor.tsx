@@ -51,7 +51,7 @@ export function CompanyProfileEditor({ profile, canUpdate }: CompanyProfileEdito
         styles={{ body: { padding: '28px 28px 24px' } }}
       >
         <Space
-          direction='vertical'
+          orientation='vertical'
           size={20}
           style={{ width: '100%' }}
         >
@@ -78,7 +78,7 @@ export function CompanyProfileEditor({ profile, canUpdate }: CompanyProfileEdito
               }}
             />
             <Space
-              direction='vertical'
+              orientation='vertical'
               size={8}
               style={{ minWidth: 0 }}
             >
@@ -301,7 +301,7 @@ function QuickStatCard({ icon, label, value }: { icon: ReactNode; label: string;
           {icon}
         </span>
         <Space
-          direction='vertical'
+          orientation='vertical'
           size={1}
         >
           <Text

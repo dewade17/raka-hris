@@ -21,7 +21,7 @@ export function PositionTable({ positions, canManage, archivingPositionId, onEdi
       key: 'name',
       render: (name: string, position) => (
         <Space
-          direction='vertical'
+          orientation='vertical'
           size={0}
         >
           <Typography.Text strong>{name}</Typography.Text>

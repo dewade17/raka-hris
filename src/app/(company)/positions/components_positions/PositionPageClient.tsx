@@ -48,10 +48,7 @@ export function PositionPageClient({ canManage, positions, summary }: PositionPa
 
     return positions.filter((position) => {
       const matchesQuery = !normalizedQuery || position.name.toLowerCase().includes(normalizedQuery);
-      const matchesStatus =
-        status === 'archived'
-          ? Boolean(position.deletedAt)
-          : !position.deletedAt && (status === 'all' || (status === 'active' && position.isActive) || (status === 'inactive' && !position.isActive));
+      const matchesStatus = status === 'archived' ? Boolean(position.deletedAt) : !position.deletedAt && (status === 'all' || (status === 'active' && position.isActive) || (status === 'inactive' && !position.isActive));
 
       return matchesQuery && matchesStatus;
     });
@@ -82,7 +79,7 @@ export function PositionPageClient({ canManage, positions, summary }: PositionPa
         style={{ marginBottom: 18 }}
       >
         <Space
-          direction='vertical'
+          orientation='vertical'
           size={4}
         >
           <Typography.Title
@@ -116,7 +113,7 @@ export function PositionPageClient({ canManage, positions, summary }: PositionPa
         <Alert
           showIcon
           type='info'
-          message='You can review positions, but only the company owner can make changes.'
+          title='You can review positions, but only the company owner can make changes.'
           style={{ marginBottom: 16 }}
         />
       ) : null}

@@ -33,10 +33,10 @@
     Kept warm, but lighter than the previous deep orange while
     still supporting white text on accent buttons.
   */
-  --raka-accent: #b85d12;
-  --raka-accent-hover: #9a4d0f;
-  --raka-accent-soft: #f8dcc3;
-  --raka-accent-lighter: #fff4ea;
+  --raka-accent: #f97316;
+  --raka-accent-hover: #ea580c;
+  --raka-accent-soft: #ffedd5;
+  --raka-accent-lighter: #fff7ed;
 
   /* Text colors */
   --raka-text-primary: #050b27;
@@ -51,8 +51,8 @@
   /* Semantic colors */
   --raka-success: #15803d;
   --raka-success-soft: #dcfce7;
-  --raka-warning: #92400e;
-  --raka-warning-soft: #fef3c7;
+  --raka-warning: #faad14;
+  --raka-warning-soft: #fffbe6;
   --raka-danger: #b91c1c;
   --raka-danger-soft: #fee2e2;
 

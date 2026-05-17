@@ -10,13 +10,14 @@ import { CompanySidebar } from './CompanySidebar';
 type CompanyAppLayoutProps = {
   children: ReactNode;
   companyName: string;
-  loginId: string;
+  userName: string;
+  userEmail: string | null;
   isOwner: boolean;
 };
 
 const { Content, Sider } = Layout;
 
-export function CompanyAppLayout({ children, companyName, loginId, isOwner }: CompanyAppLayoutProps) {
+export function CompanyAppLayout({ children, companyName, userName, userEmail, isOwner }: CompanyAppLayoutProps) {
   const { token } = theme.useToken();
   const [collapsed, setCollapsed] = useState(false);
 
@@ -99,7 +100,8 @@ export function CompanyAppLayout({ children, companyName, loginId, isOwner }: Co
       <Layout style={{ minWidth: 0, background: token.colorBgLayout }}>
         <CompanyHeader
           companyName={companyName}
-          loginId={loginId}
+          userName={userName}
+          userEmail={userEmail}
           isOwner={isOwner}
           collapsed={collapsed}
           onToggleCollapsed={() => setCollapsed((v) => !v)}

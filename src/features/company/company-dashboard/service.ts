@@ -120,7 +120,7 @@ export async function getCompanyDashboardData(
       newMembersThisMonth,
       probationEndingSoon,
       recentMembers: recentMembers.map((member): DashboardActivityItem => {
-        const employeeNumber = member.employeeProfile?.employeeNumber ?? member.loginId;
+        const employeeNumber = member.employeeProfile?.employeeNumber ?? member.user.email ?? "Employee number not set";
         const employmentType = member.employeeProfile?.employmentType ?? "Employment type not set";
 
         return {

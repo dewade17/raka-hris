@@ -44,7 +44,7 @@ export function DepartmentFormDrawer({ open, department, isSubmitting, errorMess
     <Drawer
       title={isUpdate ? 'Edit department' : 'New department'}
       open={open}
-      width={440}
+      size={440}
       onClose={onClose}
       footer={
         <Space style={{ display: 'flex', justifyContent: 'flex-end' }}>
@@ -82,13 +82,11 @@ export function DepartmentFormDrawer({ open, department, isSubmitting, errorMess
       }
     >
       <Space
-        direction='vertical'
+        orientation='vertical'
         size={16}
         style={{ width: '100%' }}
       >
-        <Typography.Text type='secondary'>
-          Use departments to group employees by team, function, or business unit.
-        </Typography.Text>
+        <Typography.Text type='secondary'>Use departments to group employees by team, function, or business unit.</Typography.Text>
 
         {errorMessage ? (
           <Alert

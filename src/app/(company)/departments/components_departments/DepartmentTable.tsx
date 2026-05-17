@@ -21,7 +21,7 @@ export function DepartmentTable({ departments, canManage, archivingDepartmentId,
       key: 'name',
       render: (name: string, department) => (
         <Space
-          direction='vertical'
+          orientation='vertical'
           size={0}
         >
           <Typography.Text strong>{name}</Typography.Text>

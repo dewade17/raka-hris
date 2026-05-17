@@ -7,12 +7,13 @@ export default async function CompanyLayout({
 }: Readonly<{
   children: ReactNode;
 }>) {
-  const { company, membership } = await requireActiveCompanyMembership();
+  const { company, membership, user } = await requireActiveCompanyMembership();
 
   return (
     <CompanyAppLayout
       companyName={company.name}
-      loginId={membership.loginId}
+      userName={user.name}
+      userEmail={user.email}
       isOwner={membership.isOwner}
     >
       {children}

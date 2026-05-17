@@ -1,37 +1,37 @@
-"use client";
+'use client';
 
-import { App as AntdApp, ConfigProvider, theme, type ThemeConfig } from "antd";
-import type { ReactNode } from "react";
+import { App as AntdApp, ConfigProvider, theme, type ThemeConfig } from 'antd';
+import type { ReactNode } from 'react';
 
 // Keep these values in sync with the RAKA tokens in globals.css.
 const rakaThemeColors = {
-  primary: "#051c50",
-  dark: "#050b27",
-  blue: "#2257b3",
-  blueBright: "#105bbc",
-  blueSoft: "#6299d2",
-  blueLight: "#d9e9f8",
-  blueLighter: "#eef5ff",
-  white: "#ffffff",
-  offWhite: "#eef0ef",
-  surface: "#ffffff",
-  surfaceSoft: "#f6f8fb",
-  accent: "#b85d12",
-  accentHover: "#9a4d0f",
-  accentSoft: "#f8dcc3",
-  accentLighter: "#fff4ea",
-  textPrimary: "#050b27",
-  textSecondary: "#334155",
-  textMuted: "#64748b",
-  textInverse: "#ffffff",
-  border: "#d9e1ea",
-  borderSoft: "#e8edf3",
-  success: "#15803d",
-  successSoft: "#dcfce7",
-  warning: "#92400e",
-  warningSoft: "#fef3c7",
-  danger: "#b91c1c",
-  dangerSoft: "#fee2e2",
+  primary: '#051c50',
+  dark: '#050b27',
+  blue: '#2257b3',
+  blueBright: '#105bbc',
+  blueSoft: '#6299d2',
+  blueLight: '#d9e9f8',
+  blueLighter: '#eef5ff',
+  white: '#ffffff',
+  offWhite: '#eef0ef',
+  surface: '#ffffff',
+  surfaceSoft: '#f6f8fb',
+  accent: '#f97316',
+  accentHover: '#ea580c',
+  accentSoft: '#ffedd5',
+  accentLighter: '#fff7ed',
+  textPrimary: '#050b27',
+  textSecondary: '#334155',
+  textMuted: '#64748b',
+  textInverse: '#ffffff',
+  border: '#d9e1ea',
+  borderSoft: '#e8edf3',
+  success: '#15803d',
+  successSoft: '#dcfce7',
+  warning: '#faad14',
+  warningSoft: '#fffbe6',
+  danger: '#b91c1c',
+  dangerSoft: '#fee2e2',
 } as const;
 
 const themeConfig: ThemeConfig = {
@@ -59,7 +59,7 @@ const themeConfig: ThemeConfig = {
     colorTextDescription: rakaThemeColors.textSecondary,
     colorTextTertiary: rakaThemeColors.textMuted,
     colorTextQuaternary: rakaThemeColors.textMuted,
-    colorTextDisabled: "#475569",
+    colorTextDisabled: '#475569',
     colorTextLightSolid: rakaThemeColors.textInverse,
     colorIcon: rakaThemeColors.textSecondary,
     colorIconHover: rakaThemeColors.primary,
@@ -70,14 +70,14 @@ const themeConfig: ThemeConfig = {
     controlItemBgActiveHover: rakaThemeColors.blueLight,
     borderRadius: 8,
     controlHeight: 38,
-    fontFamily: "var(--font-poppins), sans-serif",
-    fontFamilyCode: "var(--font-poppins), sans-serif",
+    fontFamily: 'var(--font-poppins), sans-serif',
+    fontFamilyCode: 'var(--font-poppins), sans-serif',
   },
   components: {
     Button: {
       borderRadius: 8,
       fontWeight: 600,
-      primaryShadow: "none",
+      primaryShadow: 'none',
     },
     Card: {
       borderRadiusLG: 8,

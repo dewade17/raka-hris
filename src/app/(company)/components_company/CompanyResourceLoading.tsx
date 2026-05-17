@@ -7,14 +7,14 @@ export function CompanyResourceLoading() {
 
   return (
     <Space
-      direction="vertical"
+      orientation="vertical"
       size={16}
       style={{ width: "100%" }}
       aria-busy="true"
       aria-live="polite"
     >
       <Flex justify="space-between" align="flex-start" gap={16} wrap="wrap">
-        <Space direction="vertical" size={8}>
+        <Space orientation="vertical" size={8}>
           <Skeleton.Input active size="large" style={{ width: 220 }} />
           <Skeleton.Input active style={{ width: 360, maxWidth: "100%" }} />
         </Space>

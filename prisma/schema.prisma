@@ -127,7 +127,6 @@ model Membership {
   membershipId String           @id @default(cuid())
   companyId    String
   userId       String
-  loginId      String           @db.VarChar(100)
   status       MembershipStatus @default(ACTIVE)
   isOwner      Boolean          @default(false)
   joinedAt     DateTime         @default(now())
@@ -152,7 +151,6 @@ model Membership {
   employeePositions   EmployeePosition[]
 
   @@unique([companyId, userId])
-  @@unique([companyId, loginId])
   @@index([companyId, status])
   @@index([userId, status])
   @@index([terminatedByUserId])

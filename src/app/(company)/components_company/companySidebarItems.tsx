@@ -54,8 +54,8 @@ export const companySidebarGroups: CompanySidebarGroup[] = [
     groupLabel: 'Workforce',
     items: [
       {
-        key: '/dashboard-company#employees',
-        href: '/dashboard-company#employees',
+        key: '/employees',
+        href: '/employees',
         label: 'Employees',
         title: 'Employees',
         icon: (

@@ -66,7 +66,6 @@ export async function createCompanyOwnerAccount(
       data: {
         companyId: company.companyId,
         userId: user.userId,
-        loginId: createLoginId(input.email),
         status: MembershipStatus.ACTIVE,
         isOwner: true,
       },
@@ -128,7 +127,6 @@ export async function createWorkspaceForExistingUser(
       data: {
         companyId: company.companyId,
         userId: input.userId,
-        loginId: createLoginId(input.email ?? input.userId),
         status: MembershipStatus.ACTIVE,
         isOwner: true,
       },
@@ -182,8 +180,4 @@ async function findOrCreateDevelopmentSubscriptionPlan(
       isActive: true,
     },
   });
-}
-
-function createLoginId(email: string) {
-  return email.split("@")[0]?.slice(0, 100) || email.slice(0, 100);
 }

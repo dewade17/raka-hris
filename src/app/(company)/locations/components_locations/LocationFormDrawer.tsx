@@ -57,7 +57,7 @@ export function LocationFormDrawer({ open, location, isSubmitting, errorMessage,
     <Drawer
       title={isUpdate ? 'Edit location' : 'New location'}
       open={open}
-      width={480}
+      size={480}
       onClose={onClose}
       footer={
         <Space style={{ display: 'flex', justifyContent: 'flex-end' }}>
@@ -95,13 +95,11 @@ export function LocationFormDrawer({ open, location, isSubmitting, errorMessage,
       }
     >
       <Space
-        direction='vertical'
+        orientation='vertical'
         size={16}
         style={{ width: '100%' }}
       >
-        <Typography.Text type='secondary'>
-          Set the work site name and choose a point on the map when coordinates are needed.
-        </Typography.Text>
+        <Typography.Text type='secondary'>Set the work site name and choose a point on the map when coordinates are needed.</Typography.Text>
 
         {errorMessage ? (
           <Alert

@@ -28,13 +28,14 @@ const INITIAL_NOTIFICATIONS: NotificationItem[] = [
 
 type CompanyHeaderProps = {
   companyName: string;
-  loginId: string;
+  userName: string;
+  userEmail: string | null;
   isOwner: boolean;
   collapsed: boolean;
   onToggleCollapsed: () => void;
 };
 
-export function CompanyHeader({ companyName, loginId, isOwner, collapsed, onToggleCollapsed }: CompanyHeaderProps) {
+export function CompanyHeader({ companyName, userName, userEmail, isOwner, collapsed, onToggleCollapsed }: CompanyHeaderProps) {
   const { token } = theme.useToken();
   const { message } = App.useApp();
   const router = useRouter();
@@ -79,8 +80,16 @@ export function CompanyHeader({ companyName, loginId, isOwner, collapsed, onTogg
             strong
             style={{ fontSize: 13 }}
           >
-            {loginId}
+            {userName}
           </Typography.Text>
+          {userEmail ? (
+            <Typography.Text
+              type='secondary'
+              style={{ fontSize: 12 }}
+            >
+              {userEmail}
+            </Typography.Text>
+          ) : null}
           {isOwner && (
             <Tag
               aria-label='Current user role: Owner'
@@ -195,8 +204,8 @@ export function CompanyHeader({ companyName, loginId, isOwner, collapsed, onTogg
       : []),
   ];
 
-  const avatarInitials = loginId
-    .split(/[@._]/)
+  const avatarInitials = userName
+    .split(/\s+/)
     .filter(Boolean)
     .slice(0, 2)
     .map((s) => s[0]?.toUpperCase() ?? '')
@@ -347,7 +356,7 @@ export function CompanyHeader({ companyName, loginId, isOwner, collapsed, onTogg
                   lineHeight: 1.4,
                 }}
               >
-                {loginId}
+                {userName}
               </Typography.Text>
               {isOwner && (
                 <Typography.Text

@@ -71,7 +71,7 @@ export function CompanyProfileForm({ initialValues, canUpdate, isSubmitting, err
 
   return (
     <Space
-      direction='vertical'
+      orientation='vertical'
       size={0}
       style={{ width: '100%' }}
     >
@@ -238,7 +238,7 @@ export function CompanyProfileForm({ initialValues, canUpdate, isSubmitting, err
                   }}
                 />
                 <Space
-                  direction='vertical'
+                  orientation='vertical'
                   size={2}
                   style={{ flex: 1, minWidth: 0 }}
                 >

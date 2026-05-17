@@ -48,11 +48,7 @@ export function DepartmentPageClient({ canManage, departments, summary }: Depart
 
     return departments.filter((department) => {
       const matchesQuery = !normalizedQuery || department.name.toLowerCase().includes(normalizedQuery);
-      const matchesStatus =
-        status === 'archived'
-          ? Boolean(department.deletedAt)
-          : !department.deletedAt &&
-            (status === 'all' || (status === 'active' && department.isActive) || (status === 'inactive' && !department.isActive));
+      const matchesStatus = status === 'archived' ? Boolean(department.deletedAt) : !department.deletedAt && (status === 'all' || (status === 'active' && department.isActive) || (status === 'inactive' && !department.isActive));
 
       return matchesQuery && matchesStatus;
     });
@@ -83,7 +79,7 @@ export function DepartmentPageClient({ canManage, departments, summary }: Depart
         style={{ marginBottom: 18 }}
       >
         <Space
-          direction='vertical'
+          orientation='vertical'
           size={4}
         >
           <Typography.Title

@@ -21,7 +21,7 @@ export function LocationTable({ locations, canManage, archivingLocationId, onEdi
       key: 'name',
       render: (name: string, location) => (
         <Space
-          direction='vertical'
+          orientation='vertical'
           size={0}
         >
           <Typography.Text strong>{name}</Typography.Text>

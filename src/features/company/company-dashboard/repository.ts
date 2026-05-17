@@ -148,7 +148,6 @@ export async function findRecentCompanyMembers(companyId: string) {
     },
     take: 5,
     select: {
-      loginId: true,
       status: true,
       joinedAt: true,
       user: {

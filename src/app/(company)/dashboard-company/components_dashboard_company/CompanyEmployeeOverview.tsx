@@ -72,7 +72,7 @@ export function CompanyEmployeeOverview({ data }: CompanyEmployeeOverviewProps) 
             style={{ border: `1px solid ${token.colorBorderSecondary}` }}
           >
             <Space
-              direction='vertical'
+              orientation='vertical'
               size={16}
               style={{ width: '100%' }}
             >

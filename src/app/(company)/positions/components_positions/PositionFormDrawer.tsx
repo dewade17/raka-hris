@@ -44,7 +44,7 @@ export function PositionFormDrawer({ open, position, isSubmitting, errorMessage,
     <Drawer
       title={isUpdate ? 'Edit position' : 'New position'}
       open={open}
-      width={440}
+      size={440}
       onClose={onClose}
       footer={
         <Space style={{ display: 'flex', justifyContent: 'flex-end' }}>
@@ -82,13 +82,11 @@ export function PositionFormDrawer({ open, position, isSubmitting, errorMessage,
       }
     >
       <Space
-        direction='vertical'
+        orientation='vertical'
         size={16}
         style={{ width: '100%' }}
       >
-        <Typography.Text type='secondary'>
-          Use positions to define employee roles in the company.
-        </Typography.Text>
+        <Typography.Text type='secondary'>Use positions to define employee roles in the company.</Typography.Text>
 
         {errorMessage ? (
           <Alert
