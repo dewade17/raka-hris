@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
+import { hasResolvedPermission, resolveMembershipPermissionKeys } from '@/features/auth/permissions/service';
 import { getCompanyPositions } from '@/features/company/positions/service';
-import { requireActiveCompanyMembership } from '@/server/auth';
+import { requirePermission } from '@/server/auth';
 import { PositionPageClient, type PositionViewModel } from './components_positions/PositionPageClient';
 
 export const metadata: Metadata = {
@@ -8,12 +9,21 @@ export const metadata: Metadata = {
 };
 
 export default async function PositionsPage() {
-  const { company, membership } = await requireActiveCompanyMembership();
-  const data = await getCompanyPositions(company.companyId);
+  const { company, membership } = await requirePermission('positions', 'view');
+  const [data, permissionKeys] = await Promise.all([
+    getCompanyPositions(company.companyId),
+    resolveMembershipPermissionKeys({
+      companyId: company.companyId,
+      membershipId: membership.membershipId,
+      isOwner: membership.isOwner,
+    }),
+  ]);
 
   return (
     <PositionPageClient
-      canManage={membership.isOwner}
+      canArchive={hasResolvedPermission(permissionKeys, 'positions', 'archive')}
+      canCreate={hasResolvedPermission(permissionKeys, 'positions', 'create')}
+      canUpdate={hasResolvedPermission(permissionKeys, 'positions', 'update')}
       summary={data.summary}
       positions={data.positions.map(
         (position): PositionViewModel => ({

@@ -15,16 +15,18 @@ import { EmployeeProfileSummaryCard } from './EmployeeProfileSummaryCard';
 
 type EmployeeProfilePageClientProps = {
   employee: EmployeeProfileViewModel;
-  canManage: boolean;
+  canAssign: boolean;
+  canTerminate: boolean;
+  canUpdate: boolean;
   departmentOptions: EmployeeAssignmentOption[];
   positionOptions: EmployeeAssignmentOption[];
 };
 
-export function EmployeeProfilePageClient({ employee, canManage, departmentOptions, positionOptions }: EmployeeProfilePageClientProps) {
+export function EmployeeProfilePageClient({ employee, canAssign, canTerminate, canUpdate, departmentOptions, positionOptions }: EmployeeProfilePageClientProps) {
   const [editDrawerOpen, setEditDrawerOpen] = useState(false);
   const { clearErrorMessage, errorMessage, isSubmitting, updateEmployeeProfile } = useUpdateEmployeeProfile(employee.membershipId);
   const { isSubmitting: isTerminating, terminateEmployee } = useTerminateEmployee(employee.membershipId);
-  const canMutateEmployee = canManage && !employee.isOwner && employee.status !== 'TERMINATED';
+  const canUpdateAssignment = canAssign && !employee.isOwner && employee.status !== 'TERMINATED';
 
   const handleSubmit = async (values: EmployeeProfileEditFormValues) => {
     const success = await updateEmployeeProfile(values);
@@ -38,7 +40,8 @@ export function EmployeeProfilePageClient({ employee, canManage, departmentOptio
     <section aria-labelledby='employee-profile-page-title'>
       <EmployeeProfileHeader
         employee={employee}
-        canManage={canManage}
+        canUpdate={canUpdate}
+        canTerminate={canTerminate}
         isTerminating={isTerminating}
         onEdit={() => {
           clearErrorMessage();
@@ -135,7 +138,7 @@ export function EmployeeProfilePageClient({ employee, canManage, departmentOptio
 
       <EmployeeAssignmentCard
         employee={employee}
-        canManage={canMutateEmployee}
+        canManage={canUpdateAssignment}
         departmentOptions={departmentOptions}
         positionOptions={positionOptions}
       />

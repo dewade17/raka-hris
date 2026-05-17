@@ -13,11 +13,12 @@ type CompanyAppLayoutProps = {
   userName: string;
   userEmail: string | null;
   isOwner: boolean;
+  permissionKeys: string[];
 };
 
 const { Content, Sider } = Layout;
 
-export function CompanyAppLayout({ children, companyName, userName, userEmail, isOwner }: CompanyAppLayoutProps) {
+export function CompanyAppLayout({ children, companyName, userName, userEmail, isOwner, permissionKeys }: CompanyAppLayoutProps) {
   const { token } = theme.useToken();
   const [collapsed, setCollapsed] = useState(false);
 
@@ -94,7 +95,10 @@ export function CompanyAppLayout({ children, companyName, userName, userEmail, i
           )}
         </div>
 
-        <CompanySidebar collapsed={collapsed} />
+        <CompanySidebar
+          collapsed={collapsed}
+          permissionKeys={permissionKeys}
+        />
       </Sider>
 
       <Layout style={{ minWidth: 0, background: token.colorBgLayout }}>

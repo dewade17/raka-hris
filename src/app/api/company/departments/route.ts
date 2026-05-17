@@ -1,10 +1,10 @@
 import { NextResponse } from 'next/server';
 import { createDepartment, getCompanyDepartments } from '@/features/company/departments/service';
 import { validateUpsertDepartmentRequest } from '@/features/company/departments/validation';
-import { createOwnerRequiredResponse, getActiveCompanyApiContext } from '../_utils/companyApiAuth';
+import { getCompanyApiPermissionContext } from '../_utils/companyApiAuth';
 
 export async function GET() {
-  const context = await getActiveCompanyApiContext();
+  const context = await getCompanyApiPermissionContext('departments', 'view');
 
   if (!context.success) {
     return context.response;
@@ -19,14 +19,14 @@ export async function GET() {
 }
 
 export async function POST(request: Request) {
-  const context = await getActiveCompanyApiContext();
+  const context = await getCompanyApiPermissionContext(
+    'departments',
+    'create',
+    'You do not have permission to create departments.',
+  );
 
   if (!context.success) {
     return context.response;
-  }
-
-  if (!context.membership.isOwner) {
-    return createOwnerRequiredResponse();
   }
 
   const payload = await request.json().catch(() => null);

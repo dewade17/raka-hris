@@ -5,6 +5,7 @@ import {
   getStorageObject,
   uploadStorageObject,
 } from "@/lib/supabase-storage";
+import { membershipHasPermission } from "@/features/auth/permissions/service";
 import { getCurrentAuthContext } from "@/server/auth";
 
 const MAX_COMPANY_LOGO_SIZE_BYTES = 2 * 1024 * 1024;
@@ -81,7 +82,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json(
       {
         success: false,
-        message: "Only the company owner can upload a company logo.",
+        message: "You do not have permission to upload a company logo.",
       },
       { status: 403 },
     );
@@ -187,7 +188,14 @@ async function validateCompanyLogoAccess(): Promise<CompanyLogoAccessResult> {
 
   return {
     success: true,
-    canUpdate: authContext.membership.isOwner,
+    canUpdate:
+      authContext.membership.isOwner ||
+      (await membershipHasPermission(
+        authContext.membership.membershipId,
+        "companyProfile",
+        "uploadLogo",
+        authContext.company.companyId,
+      )),
     companyId: authContext.company.companyId,
   };
 }

@@ -11,6 +11,8 @@ export type CompanySidebarItem = {
   label: string;
   title: string;
   icon: ReactNode;
+  permissionKey: string;
+  additionalPermissionKeys?: string[];
 };
 
 type CompanySidebarGroup = {
@@ -27,6 +29,7 @@ export const companySidebarGroups: CompanySidebarGroup[] = [
         href: '/dashboard-company',
         label: 'Dashboard',
         title: 'Dashboard',
+        permissionKey: 'dashboard:view',
         icon: (
           <Gauge
             size={18}
@@ -40,6 +43,7 @@ export const companySidebarGroups: CompanySidebarGroup[] = [
         href: '/profile',
         label: 'Company Profile',
         title: 'Company Profile',
+        permissionKey: 'companyProfile:view',
         icon: (
           <Building2
             size={18}
@@ -58,6 +62,7 @@ export const companySidebarGroups: CompanySidebarGroup[] = [
         href: '/employees',
         label: 'Employees',
         title: 'Employees',
+        permissionKey: 'employees:view',
         icon: (
           <UsersRound
             size={18}
@@ -71,6 +76,7 @@ export const companySidebarGroups: CompanySidebarGroup[] = [
         href: '/departments',
         label: 'Departments',
         title: 'Departments',
+        permissionKey: 'departments:view',
         icon: (
           <Building2
             size={18}
@@ -84,6 +90,7 @@ export const companySidebarGroups: CompanySidebarGroup[] = [
         href: '/positions',
         label: 'Positions',
         title: 'Positions',
+        permissionKey: 'positions:view',
         icon: (
           <Briefcase
             size={18}
@@ -97,6 +104,7 @@ export const companySidebarGroups: CompanySidebarGroup[] = [
         href: '/locations',
         label: 'Locations',
         title: 'Locations',
+        permissionKey: 'locations:view',
         icon: (
           <MapPinned
             size={18}
@@ -106,10 +114,11 @@ export const companySidebarGroups: CompanySidebarGroup[] = [
         ),
       },
       {
-        key: '/dashboard-company#roles-access',
-        href: '/dashboard-company#roles-access',
+        key: '/roles-access',
+        href: '/roles-access',
         label: 'Roles & Access',
         title: 'Roles & Access',
+        permissionKey: 'access:view',
         icon: (
           <KeyRound
             size={18}
@@ -128,6 +137,8 @@ export const companySidebarGroups: CompanySidebarGroup[] = [
         href: '/dashboard-company#sessions',
         label: 'Sessions',
         title: 'Sessions',
+        permissionKey: 'dashboard:view',
+        additionalPermissionKeys: ['sessions:view'],
         icon: (
           <MonitorCheck
             size={18}
@@ -141,6 +152,8 @@ export const companySidebarGroups: CompanySidebarGroup[] = [
         href: '/dashboard-company#subscription',
         label: 'Subscription',
         title: 'Subscription',
+        permissionKey: 'dashboard:view',
+        additionalPermissionKeys: ['subscription:view'],
         icon: (
           <CreditCard
             size={18}
@@ -155,18 +168,26 @@ export const companySidebarGroups: CompanySidebarGroup[] = [
 
 export const companySidebarItems: CompanySidebarItem[] = companySidebarGroups.flatMap((g) => g.items);
 
-export function getCompanyMenuItems(): MenuProps['items'] {
-  return companySidebarGroups.flatMap((group) => [
-    {
-      key: `group-${group.groupLabel}`,
-      type: 'group' as const,
-      label: group.groupLabel,
-      children: group.items.map((item) => ({
-        key: item.key,
-        title: item.title,
-        icon: item.icon,
-        label: <Link href={item.href}>{item.label}</Link>,
-      })),
-    },
-  ]);
+export function getCompanyMenuItems(permissionKeys: string[]): MenuProps['items'] {
+  const permissionSet = new Set(permissionKeys);
+
+  return companySidebarGroups
+    .map((group) => ({
+      ...group,
+      items: group.items.filter((item) => permissionSet.has(item.permissionKey) && (item.additionalPermissionKeys ?? []).every((permissionKey) => permissionSet.has(permissionKey))),
+    }))
+    .filter((group) => group.items.length > 0)
+    .flatMap((group) => [
+      {
+        key: `group-${group.groupLabel}`,
+        type: 'group' as const,
+        label: group.groupLabel,
+        children: group.items.map((item) => ({
+          key: item.key,
+          title: item.title,
+          icon: item.icon,
+          label: <Link href={item.href}>{item.label}</Link>,
+        })),
+      },
+    ]);
 }

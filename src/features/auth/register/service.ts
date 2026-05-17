@@ -2,6 +2,7 @@ import { Prisma } from "@/generated/prisma/client";
 import { getCurrentAuthContext } from "@/server/auth";
 import { hashPassword } from "@/server/password";
 import { createUserSession } from "@/server/session";
+import { ensureCompanyAccessDefaults } from "../permissions/service";
 import {
   dashboardCompanyUrl,
   dashboardPlatformUrl,
@@ -35,10 +36,14 @@ export async function registerCompanyOwner(
   try {
     const passwordHash = await hashPassword(input.password);
 
-    await createCompanyOwnerAccount({
+    const account = await createCompanyOwnerAccount({
       ...input,
       passwordHash,
     });
+    await ensureCompanyAccessDefaults(
+      account.company.companyId,
+      account.membership.membershipId,
+    ).catch(() => null);
 
     return {
       success: true,
@@ -110,6 +115,11 @@ export async function completeGoogleWorkspaceSetup(
       userId: context.user.userId,
       email: context.user.email,
     });
+
+    await ensureCompanyAccessDefaults(
+      workspace.company.companyId,
+      workspace.membership.membershipId,
+    ).catch(() => null);
 
     await createUserSession({
       userId: context.user.userId,

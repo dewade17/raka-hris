@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { terminateCompanyEmployee, updateCompanyEmployee } from '@/features/company/employees/service';
 import { validateTerminateCompanyEmployeeRequest, validateUpdateCompanyEmployeeRequest } from '@/features/company/employees/validation';
-import { getActiveCompanyApiContext } from '../../_utils/companyApiAuth';
+import { getCompanyApiPermissionContext } from '../../_utils/companyApiAuth';
 
 type EmployeeRouteContext = {
   params: Promise<{
@@ -10,20 +10,14 @@ type EmployeeRouteContext = {
 };
 
 export async function PATCH(request: Request, context: EmployeeRouteContext) {
-  const authContext = await getActiveCompanyApiContext();
+  const authContext = await getCompanyApiPermissionContext(
+    'employees',
+    'update',
+    'You do not have permission to update employees.',
+  );
 
   if (!authContext.success) {
     return authContext.response;
-  }
-
-  if (!authContext.membership.isOwner) {
-    return NextResponse.json(
-      {
-        success: false,
-        message: 'Only the company owner can update employees.',
-      },
-      { status: 403 },
-    );
   }
 
   const payload = await request.json().catch(() => null);
@@ -52,20 +46,14 @@ export async function PATCH(request: Request, context: EmployeeRouteContext) {
 }
 
 export async function DELETE(request: Request, context: EmployeeRouteContext) {
-  const authContext = await getActiveCompanyApiContext();
+  const authContext = await getCompanyApiPermissionContext(
+    'employees',
+    'terminate',
+    'You do not have permission to terminate employees.',
+  );
 
   if (!authContext.success) {
     return authContext.response;
-  }
-
-  if (!authContext.membership.isOwner) {
-    return NextResponse.json(
-      {
-        success: false,
-        message: 'Only the company owner can terminate employees.',
-      },
-      { status: 403 },
-    );
   }
 
   const payload = await request.json().catch(() => null);

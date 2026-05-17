@@ -68,6 +68,18 @@ When a type is only used by one component and one nearby hook, it may stay close
 
 Hooks in Client Component routes must not import server-only modules such as Prisma repositories, server auth helpers, or feature services that are meant to run only on the server. Use route handlers or Server Actions as the boundary for server work.
 
+## RBAC Rules
+
+- Company access uses permission-based RBAC through `Permission`, `CompanyRole`, `CompanyRolePermission`, and `MembershipRole`.
+- Do not add company module pages or company API mutations without defining the required permission in `src/features/auth/permissions/catalog.ts`.
+- New company modules must add at least a `module:view` permission when the module has a page or sidebar item.
+- New company API mutations must use `getCompanyApiPermissionContext(module, action, message)` instead of checking `membership.isOwner` directly.
+- Server-rendered company pages must use `requirePermission(module, 'view')` instead of only `requireActiveCompanyMembership()` when the page belongs to a protected module.
+- Owner access is a permanent bypass through `membership.isOwner`; do not make owner access depend on editable role permissions.
+- Do not convert company roles to enums. Company role names are database records and may be created or renamed by the company owner.
+- Employee accounts may be created without `MembershipRole`; lack of role means no module access until the owner assigns one.
+- When adding a new module, also update the company sidebar item with the matching `permissionKey` if the module has navigation.
+
 ## Project Working Rules
 
 - Use human-readable, descriptive function names.

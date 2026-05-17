@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
+import { hasResolvedPermission, resolveMembershipPermissionKeys } from '@/features/auth/permissions/service';
 import { getCompanyDepartments } from '@/features/company/departments/service';
-import { requireActiveCompanyMembership } from '@/server/auth';
+import { requirePermission } from '@/server/auth';
 import { DepartmentPageClient, type DepartmentViewModel } from './components_departments/DepartmentPageClient';
 
 export const metadata: Metadata = {
@@ -8,12 +9,21 @@ export const metadata: Metadata = {
 };
 
 export default async function DepartmentsPage() {
-  const { company, membership } = await requireActiveCompanyMembership();
-  const data = await getCompanyDepartments(company.companyId);
+  const { company, membership } = await requirePermission('departments', 'view');
+  const [data, permissionKeys] = await Promise.all([
+    getCompanyDepartments(company.companyId),
+    resolveMembershipPermissionKeys({
+      companyId: company.companyId,
+      membershipId: membership.membershipId,
+      isOwner: membership.isOwner,
+    }),
+  ]);
 
   return (
     <DepartmentPageClient
-      canManage={membership.isOwner}
+      canArchive={hasResolvedPermission(permissionKeys, 'departments', 'archive')}
+      canCreate={hasResolvedPermission(permissionKeys, 'departments', 'create')}
+      canUpdate={hasResolvedPermission(permissionKeys, 'departments', 'update')}
       summary={data.summary}
       departments={data.departments.map(
         (department): DepartmentViewModel => ({

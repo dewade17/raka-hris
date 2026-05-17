@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
+import { hasResolvedPermission, resolveMembershipPermissionKeys } from '@/features/auth/permissions/service';
 import { getCompanyLocations } from '@/features/company/locations/service';
-import { requireActiveCompanyMembership } from '@/server/auth';
+import { requirePermission } from '@/server/auth';
 import { LocationPageClient, type LocationViewModel } from './components_locations/LocationPageClient';
 
 export const metadata: Metadata = {
@@ -8,12 +9,21 @@ export const metadata: Metadata = {
 };
 
 export default async function LocationsPage() {
-  const { company, membership } = await requireActiveCompanyMembership();
-  const data = await getCompanyLocations(company.companyId);
+  const { company, membership } = await requirePermission('locations', 'view');
+  const [data, permissionKeys] = await Promise.all([
+    getCompanyLocations(company.companyId),
+    resolveMembershipPermissionKeys({
+      companyId: company.companyId,
+      membershipId: membership.membershipId,
+      isOwner: membership.isOwner,
+    }),
+  ]);
 
   return (
     <LocationPageClient
-      canManage={membership.isOwner}
+      canArchive={hasResolvedPermission(permissionKeys, 'locations', 'archive')}
+      canCreate={hasResolvedPermission(permissionKeys, 'locations', 'create')}
+      canUpdate={hasResolvedPermission(permissionKeys, 'locations', 'update')}
       summary={data.summary}
       locations={data.locations.map(
         (location): LocationViewModel => ({

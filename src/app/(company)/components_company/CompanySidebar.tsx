@@ -7,13 +7,14 @@ import { getCompanyMenuItems } from './companySidebarItems';
 
 type CompanySidebarProps = {
   collapsed: boolean;
+  permissionKeys: string[];
 };
 
-export function CompanySidebar({ collapsed }: CompanySidebarProps) {
+export function CompanySidebar({ collapsed, permissionKeys }: CompanySidebarProps) {
   const pathname = usePathname();
   const { token } = theme.useToken();
   const [hash, setHash] = useState('');
-  const menuItems = useMemo(() => getCompanyMenuItems(), []);
+  const menuItems = useMemo(() => getCompanyMenuItems(permissionKeys), [permissionKeys]);
 
   useEffect(() => {
     const updateHash = () => setHash(window.location.hash);

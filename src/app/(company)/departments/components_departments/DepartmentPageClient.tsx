@@ -20,7 +20,9 @@ export type DepartmentViewModel = {
 };
 
 type DepartmentPageClientProps = {
-  canManage: boolean;
+  canArchive: boolean;
+  canCreate: boolean;
+  canUpdate: boolean;
   departments: DepartmentViewModel[];
   summary: DepartmentListData['summary'];
 };
@@ -34,8 +36,9 @@ const statusOptions: Array<{ label: string; value: StatusFilter }> = [
   { label: 'Archived', value: 'archived' },
 ];
 
-export function DepartmentPageClient({ canManage, departments, summary }: DepartmentPageClientProps) {
+export function DepartmentPageClient({ canArchive, canCreate, canUpdate, departments, summary }: DepartmentPageClientProps) {
   const { token } = theme.useToken();
+  const canMutate = canArchive || canCreate || canUpdate;
   const [query, setQuery] = useState('');
   const [status, setStatus] = useState<StatusFilter>('all');
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -92,7 +95,7 @@ export function DepartmentPageClient({ canManage, departments, summary }: Depart
           <Typography.Text type='secondary'>Create and organize departments for employee assignments and reports.</Typography.Text>
         </Space>
 
-        {canManage ? (
+        {canCreate ? (
           <Button
             type='primary'
             icon={
@@ -109,11 +112,11 @@ export function DepartmentPageClient({ canManage, departments, summary }: Depart
         ) : null}
       </Flex>
 
-      {!canManage ? (
+      {!canMutate ? (
         <Alert
           showIcon
           type='info'
-          message='You can review departments, but only the company owner can make changes.'
+          message='You can review departments, but you do not have permission to make changes.'
           style={{ marginBottom: 16 }}
         />
       ) : null}
@@ -176,7 +179,8 @@ export function DepartmentPageClient({ canManage, departments, summary }: Depart
 
         <DepartmentTable
           departments={filteredDepartments}
-          canManage={canManage}
+          canArchive={canArchive}
+          canUpdate={canUpdate}
           archivingDepartmentId={archivingDepartmentId}
           onEdit={(department) => {
             setEditingDepartment(department);

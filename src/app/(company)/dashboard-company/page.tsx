@@ -5,25 +5,37 @@ import { CompanyOrganizationOverview } from './components_dashboard_company/Comp
 import { CompanySessionOverview } from './components_dashboard_company/CompanySessionOverview';
 import { CompanySubscriptionOverview } from './components_dashboard_company/CompanySubscriptionOverview';
 import { CompanySummaryCards } from './components_dashboard_company/CompanySummaryCards';
+import { hasResolvedPermission, resolveMembershipPermissionKeys } from '@/features/auth/permissions/service';
 import { getCompanyDashboardData } from '@/features/company/company-dashboard/service';
-import { requireActiveCompanyMembership } from '@/server/auth';
+import { requirePermission } from '@/server/auth';
 
 export const metadata: Metadata = {
   title: 'Company Dashboard | RAKA HRIS',
 };
 
 export default async function CompanyDashboardPage() {
-  const { company } = await requireActiveCompanyMembership();
-  const dashboardData = await getCompanyDashboardData(company.companyId);
+  const { company, membership } = await requirePermission('dashboard', 'view');
+  const [dashboardData, permissionKeys] = await Promise.all([
+    getCompanyDashboardData(company.companyId),
+    resolveMembershipPermissionKeys({
+      companyId: company.companyId,
+      membershipId: membership.membershipId,
+      isOwner: membership.isOwner,
+    }),
+  ]);
+  const canViewOrganization =
+    hasResolvedPermission(permissionKeys, 'departments', 'view') ||
+    hasResolvedPermission(permissionKeys, 'positions', 'view') ||
+    hasResolvedPermission(permissionKeys, 'locations', 'view');
 
   return (
     <>
       <CompanySummaryCards data={dashboardData} />
-      <CompanyEmployeeOverview data={dashboardData.employees} />
-      <CompanyOrganizationOverview data={dashboardData.organization} />
-      <CompanyAccessOverview data={dashboardData.access} />
-      <CompanySessionOverview data={dashboardData.sessions} />
-      <CompanySubscriptionOverview data={dashboardData.subscription} />
+      {hasResolvedPermission(permissionKeys, 'employees', 'view') ? <CompanyEmployeeOverview data={dashboardData.employees} /> : null}
+      {canViewOrganization ? <CompanyOrganizationOverview data={dashboardData.organization} /> : null}
+      {hasResolvedPermission(permissionKeys, 'access', 'view') ? <CompanyAccessOverview data={dashboardData.access} /> : null}
+      {hasResolvedPermission(permissionKeys, 'sessions', 'view') ? <CompanySessionOverview data={dashboardData.sessions} /> : null}
+      {hasResolvedPermission(permissionKeys, 'subscription', 'view') ? <CompanySubscriptionOverview data={dashboardData.subscription} /> : null}
     </>
   );
 }

@@ -21,7 +21,9 @@ export type LocationViewModel = {
 };
 
 type LocationPageClientProps = {
-  canManage: boolean;
+  canArchive: boolean;
+  canCreate: boolean;
+  canUpdate: boolean;
   locations: LocationViewModel[];
   summary: LocationListData['summary'];
 };
@@ -35,8 +37,9 @@ const statusOptions: Array<{ label: string; value: StatusFilter }> = [
   { label: 'Archived', value: 'archived' },
 ];
 
-export function LocationPageClient({ canManage, locations, summary }: LocationPageClientProps) {
+export function LocationPageClient({ canArchive, canCreate, canUpdate, locations, summary }: LocationPageClientProps) {
   const { token } = theme.useToken();
+  const canMutate = canArchive || canCreate || canUpdate;
   const [query, setQuery] = useState('');
   const [status, setStatus] = useState<StatusFilter>('all');
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -93,7 +96,7 @@ export function LocationPageClient({ canManage, locations, summary }: LocationPa
           <Typography.Text type='secondary'>Manage company work sites for attendance and operational records.</Typography.Text>
         </Space>
 
-        {canManage ? (
+        {canCreate ? (
           <Button
             type='primary'
             icon={
@@ -110,11 +113,11 @@ export function LocationPageClient({ canManage, locations, summary }: LocationPa
         ) : null}
       </Flex>
 
-      {!canManage ? (
+      {!canMutate ? (
         <Alert
           showIcon
           type='info'
-          message='You can review locations, but only the company owner can make changes.'
+          message='You can review locations, but you do not have permission to make changes.'
           style={{ marginBottom: 16 }}
         />
       ) : null}
@@ -177,7 +180,8 @@ export function LocationPageClient({ canManage, locations, summary }: LocationPa
 
         <LocationTable
           locations={filteredLocations}
-          canManage={canManage}
+          canArchive={canArchive}
+          canUpdate={canUpdate}
           archivingLocationId={archivingLocationId}
           onEdit={(location) => {
             setEditingLocation(location);

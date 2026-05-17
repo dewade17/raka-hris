@@ -148,6 +148,36 @@ export async function findCompanyEmployeeList(companyId: string) {
   });
 }
 
+export async function findCompanySeatUsage(companyId: string) {
+  const [subscription, usedSeats] = await Promise.all([
+    db.subscription.findFirst({
+      where: {
+        companyId,
+      },
+      orderBy: {
+        createdAt: 'desc',
+      },
+      select: {
+        seatLimit: true,
+      },
+    }),
+    db.membership.count({
+      where: {
+        companyId,
+        status: {
+          in: [MembershipStatus.ACTIVE, MembershipStatus.SUSPENDED],
+        },
+      },
+    }),
+  ]);
+
+  return {
+    seatLimit: subscription?.seatLimit ?? 0,
+    usedSeats,
+    hasSubscription: Boolean(subscription),
+  };
+}
+
 export async function findCompanyEmployeeMembership(companyId: string, membershipId: string) {
   return db.membership.findFirst({
     where: {

@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
+import { hasResolvedPermission, resolveMembershipPermissionKeys } from '@/features/auth/permissions/service';
 import { getCompanyProfileData } from '@/features/company/profile/service';
-import { requireActiveCompanyMembership } from '@/server/auth';
+import { requirePermission } from '@/server/auth';
 import { CompanyProfileEditor } from './components_company_profile/CompanyProfileEditor';
 
 export const metadata: Metadata = {
@@ -8,12 +9,19 @@ export const metadata: Metadata = {
 };
 
 export default async function CompanyProfilePage() {
-  const { company, membership } = await requireActiveCompanyMembership();
-  const profile = await getCompanyProfileData(company.companyId);
+  const { company, membership } = await requirePermission('companyProfile', 'view');
+  const [profile, permissionKeys] = await Promise.all([
+    getCompanyProfileData(company.companyId),
+    resolveMembershipPermissionKeys({
+      companyId: company.companyId,
+      membershipId: membership.membershipId,
+      isOwner: membership.isOwner,
+    }),
+  ]);
 
   return (
     <CompanyProfileEditor
-      canUpdate={membership.isOwner}
+      canUpdate={hasResolvedPermission(permissionKeys, 'companyProfile', 'update')}
       profile={{
         companyId: profile.companyId,
         name: profile.name,

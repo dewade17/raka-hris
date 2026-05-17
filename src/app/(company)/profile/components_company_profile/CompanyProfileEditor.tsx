@@ -140,7 +140,7 @@ export function CompanyProfileEditor({ profile, canUpdate }: CompanyProfileEdito
                         focusable='false'
                       />
                     }
-                    label='Owner access'
+                    label='Edit access'
                   />
                 ) : (
                   <InfoPill
@@ -247,7 +247,7 @@ export function CompanyProfileEditor({ profile, canUpdate }: CompanyProfileEdito
               type='secondary'
               style={{ fontSize: 12 }}
             >
-              Only the company owner can make changes.
+              You do not have permission to make changes.
             </Text>
           ) : null
         }

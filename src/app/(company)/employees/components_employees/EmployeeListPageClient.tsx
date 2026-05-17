@@ -116,7 +116,7 @@ export function EmployeeListPageClient({ canManage, departmentOptions, employees
         <Alert
           showIcon
           type='info'
-          message='You can review employees, but only the company owner can create employee accounts.'
+          message='You can review employees, but you do not have permission to create employee accounts.'
           style={{ marginBottom: 16 }}
         />
       ) : null}

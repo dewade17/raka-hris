@@ -7,13 +7,14 @@ import type { DepartmentViewModel } from './DepartmentPageClient';
 
 type DepartmentTableProps = {
   departments: DepartmentViewModel[];
-  canManage: boolean;
+  canArchive: boolean;
+  canUpdate: boolean;
   archivingDepartmentId?: string;
   onEdit: (department: DepartmentViewModel) => void;
   onArchive: (departmentId: string) => void;
 };
 
-export function DepartmentTable({ departments, canManage, archivingDepartmentId, onEdit, onArchive }: DepartmentTableProps) {
+export function DepartmentTable({ departments, canArchive, canUpdate, archivingDepartmentId, onEdit, onArchive }: DepartmentTableProps) {
   const columns: ColumnsType<DepartmentViewModel> = [
     {
       title: 'Name',
@@ -51,7 +52,7 @@ export function DepartmentTable({ departments, canManage, archivingDepartmentId,
     },
   ];
 
-  if (canManage) {
+  if (canArchive || canUpdate) {
     columns.push({
       title: 'Actions',
       key: 'actions',
@@ -61,45 +62,49 @@ export function DepartmentTable({ departments, canManage, archivingDepartmentId,
 
         return (
           <Space size={6}>
-            <Button
-              size='small'
-              disabled={archived}
-              icon={
-                <Edit3
-                  size={14}
-                  aria-hidden='true'
-                  focusable='false'
-                />
-              }
-              onClick={() => onEdit(department)}
-            >
-              Edit
-            </Button>
-            <Popconfirm
-              title='Archive department?'
-              description='This hides the department from active use but keeps employee history intact.'
-              okText='Archive'
-              okType='danger'
-              cancelText='Cancel'
-              disabled={archived}
-              onConfirm={() => onArchive(department.departmentId)}
-            >
+            {canUpdate ? (
               <Button
                 size='small'
-                danger
                 disabled={archived}
-                loading={archivingDepartmentId === department.departmentId}
                 icon={
-                  <Archive
+                  <Edit3
                     size={14}
                     aria-hidden='true'
                     focusable='false'
                   />
                 }
+                onClick={() => onEdit(department)}
               >
-                Archive
+                Edit
               </Button>
-            </Popconfirm>
+            ) : null}
+            {canArchive ? (
+              <Popconfirm
+                title='Archive department?'
+                description='This hides the department from active use but keeps employee history intact.'
+                okText='Archive'
+                okType='danger'
+                cancelText='Cancel'
+                disabled={archived}
+                onConfirm={() => onArchive(department.departmentId)}
+              >
+                <Button
+                  size='small'
+                  danger
+                  disabled={archived}
+                  loading={archivingDepartmentId === department.departmentId}
+                  icon={
+                    <Archive
+                      size={14}
+                      aria-hidden='true'
+                      focusable='false'
+                    />
+                  }
+                >
+                  Archive
+                </Button>
+              </Popconfirm>
+            ) : null}
           </Space>
         );
       },

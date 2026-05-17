@@ -1,25 +1,19 @@
 import { NextResponse } from 'next/server';
 import { createCompanyEmployee } from '@/features/company/employees/service';
 import { validateCreateCompanyEmployeeRequest } from '@/features/company/employees/validation';
-import { getActiveCompanyApiContext } from '../_utils/companyApiAuth';
+import { getCompanyApiPermissionContext } from '../_utils/companyApiAuth';
 
 export const runtime = 'nodejs';
 
 export async function POST(request: Request) {
-  const context = await getActiveCompanyApiContext();
+  const context = await getCompanyApiPermissionContext(
+    'employees',
+    'create',
+    'You do not have permission to create employees.',
+  );
 
   if (!context.success) {
     return context.response;
-  }
-
-  if (!context.membership.isOwner) {
-    return NextResponse.json(
-      {
-        success: false,
-        message: 'Only the company owner can create employees.',
-      },
-      { status: 403 },
-    );
   }
 
   const payload = await request.json().catch(() => null);

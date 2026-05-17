@@ -88,7 +88,7 @@ export function CompanyProfileForm({ initialValues, canUpdate, isSubmitting, err
         <Alert
           showIcon
           type='info'
-          message='You can review the company profile, but only the owner can update it.'
+          message='You can review the company profile, but you do not have permission to update it.'
           style={{ marginBottom: 20 }}
         />
       ) : null}

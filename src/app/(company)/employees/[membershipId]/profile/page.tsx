@@ -1,9 +1,10 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
+import { hasResolvedPermission, resolveMembershipPermissionKeys } from '@/features/auth/permissions/service';
 import { getCompanyDepartments } from '@/features/company/departments/service';
 import { getCompanyEmployeeProfile } from '@/features/company/employees/service';
 import { getCompanyPositions } from '@/features/company/positions/service';
-import { requireActiveCompanyMembership } from '@/server/auth';
+import { requirePermission } from '@/server/auth';
 import { EmployeeProfilePageClient } from './components_employee_profile/EmployeeProfilePageClient';
 import type { EmployeeAssignmentOption, EmployeeAssignmentViewModel, EmployeeProfileViewModel } from './types';
 
@@ -19,11 +20,16 @@ type EmployeeProfilePageProps = {
 
 export default async function EmployeeProfilePage({ params }: EmployeeProfilePageProps) {
   const { membershipId } = await params;
-  const { company, membership } = await requireActiveCompanyMembership();
-  const [employee, departmentsData, positionsData] = await Promise.all([
+  const { company, membership } = await requirePermission('employees', 'view');
+  const [employee, departmentsData, positionsData, permissionKeys] = await Promise.all([
     getCompanyEmployeeProfile(company.companyId, membershipId),
     getCompanyDepartments(company.companyId),
     getCompanyPositions(company.companyId),
+    resolveMembershipPermissionKeys({
+      companyId: company.companyId,
+      membershipId: membership.membershipId,
+      isOwner: membership.isOwner,
+    }),
   ]);
 
   if (!employee) {
@@ -35,7 +41,9 @@ export default async function EmployeeProfilePage({ params }: EmployeeProfilePag
   return (
     <EmployeeProfilePageClient
       employee={employeeViewModel}
-      canManage={membership.isOwner}
+      canAssign={hasResolvedPermission(permissionKeys, 'employees', 'assign')}
+      canTerminate={hasResolvedPermission(permissionKeys, 'employees', 'terminate')}
+      canUpdate={hasResolvedPermission(permissionKeys, 'employees', 'update')}
       departmentOptions={includeCurrentAssignmentOption(
         departmentsData.departments
           .filter((department) => department.isActive && !department.deletedAt)

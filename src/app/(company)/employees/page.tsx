@@ -1,8 +1,9 @@
 import type { Metadata } from 'next';
+import { hasResolvedPermission, resolveMembershipPermissionKeys } from '@/features/auth/permissions/service';
 import { getCompanyDepartments } from '@/features/company/departments/service';
 import { getCompanyEmployeeList } from '@/features/company/employees/service';
 import { getCompanyPositions } from '@/features/company/positions/service';
-import { requireActiveCompanyMembership } from '@/server/auth';
+import { requirePermission } from '@/server/auth';
 import { EmployeeListPageClient } from './components_employees/EmployeeListPageClient';
 import type { EmployeeCreateAssignmentOption, EmployeeListAssignmentViewModel, EmployeeListViewModel } from './types';
 
@@ -11,16 +12,21 @@ export const metadata: Metadata = {
 };
 
 export default async function EmployeesPage() {
-  const { company, membership } = await requireActiveCompanyMembership();
-  const [data, departmentsData, positionsData] = await Promise.all([
+  const { company, membership } = await requirePermission('employees', 'view');
+  const [data, departmentsData, positionsData, permissionKeys] = await Promise.all([
     getCompanyEmployeeList(company.companyId),
     getCompanyDepartments(company.companyId),
     getCompanyPositions(company.companyId),
+    resolveMembershipPermissionKeys({
+      companyId: company.companyId,
+      membershipId: membership.membershipId,
+      isOwner: membership.isOwner,
+    }),
   ]);
 
   return (
     <EmployeeListPageClient
-      canManage={membership.isOwner}
+      canManage={hasResolvedPermission(permissionKeys, 'employees', 'create')}
       summary={data.summary}
       departmentOptions={departmentsData.departments
         .filter((department) => department.isActive && !department.deletedAt)

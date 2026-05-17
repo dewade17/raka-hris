@@ -20,7 +20,9 @@ export type PositionViewModel = {
 };
 
 type PositionPageClientProps = {
-  canManage: boolean;
+  canArchive: boolean;
+  canCreate: boolean;
+  canUpdate: boolean;
   positions: PositionViewModel[];
   summary: PositionListData['summary'];
 };
@@ -34,8 +36,9 @@ const statusOptions: Array<{ label: string; value: StatusFilter }> = [
   { label: 'Archived', value: 'archived' },
 ];
 
-export function PositionPageClient({ canManage, positions, summary }: PositionPageClientProps) {
+export function PositionPageClient({ canArchive, canCreate, canUpdate, positions, summary }: PositionPageClientProps) {
   const { token } = theme.useToken();
+  const canMutate = canArchive || canCreate || canUpdate;
   const [query, setQuery] = useState('');
   const [status, setStatus] = useState<StatusFilter>('all');
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -92,7 +95,7 @@ export function PositionPageClient({ canManage, positions, summary }: PositionPa
           <Typography.Text type='secondary'>Create and manage job positions used in employee profiles and reports.</Typography.Text>
         </Space>
 
-        {canManage ? (
+        {canCreate ? (
           <Button
             type='primary'
             icon={
@@ -109,11 +112,11 @@ export function PositionPageClient({ canManage, positions, summary }: PositionPa
         ) : null}
       </Flex>
 
-      {!canManage ? (
+      {!canMutate ? (
         <Alert
           showIcon
           type='info'
-          title='You can review positions, but only the company owner can make changes.'
+          title='You can review positions, but you do not have permission to make changes.'
           style={{ marginBottom: 16 }}
         />
       ) : null}
@@ -176,7 +179,8 @@ export function PositionPageClient({ canManage, positions, summary }: PositionPa
 
         <PositionTable
           positions={filteredPositions}
-          canManage={canManage}
+          canArchive={canArchive}
+          canUpdate={canUpdate}
           archivingPositionId={archivingPositionId}
           onEdit={(position) => {
             setEditingPosition(position);

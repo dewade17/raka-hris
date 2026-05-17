@@ -5,7 +5,7 @@ import {
   uploadStorageObject,
 } from '@/lib/supabase-storage';
 import { findCompanyEmployeeForManagement } from '@/features/company/employees/repository';
-import { getActiveCompanyApiContext } from '../../../_utils/companyApiAuth';
+import { getCompanyApiPermissionContext } from '../../../_utils/companyApiAuth';
 
 const MAX_EMPLOYEE_PHOTO_SIZE_BYTES = 2 * 1024 * 1024;
 const allowedEmployeePhotoMimeTypes = new Map([
@@ -23,7 +23,7 @@ type EmployeePhotoRouteContext = {
 export const runtime = 'nodejs';
 
 export async function GET(request: NextRequest, context: EmployeePhotoRouteContext) {
-  const authContext = await getActiveCompanyApiContext();
+  const authContext = await getCompanyApiPermissionContext('employees', 'view');
 
   if (!authContext.success) {
     return authContext.response;
@@ -66,20 +66,14 @@ export async function GET(request: NextRequest, context: EmployeePhotoRouteConte
 }
 
 export async function POST(request: NextRequest, context: EmployeePhotoRouteContext) {
-  const authContext = await getActiveCompanyApiContext();
+  const authContext = await getCompanyApiPermissionContext(
+    'employees',
+    'uploadPhoto',
+    'You do not have permission to upload employee photos.',
+  );
 
   if (!authContext.success) {
     return authContext.response;
-  }
-
-  if (!authContext.membership.isOwner) {
-    return NextResponse.json(
-      {
-        success: false,
-        message: 'Only the company owner can upload employee photos.',
-      },
-      { status: 403 },
-    );
   }
 
   const { membershipId } = await context.params;

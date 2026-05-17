@@ -7,13 +7,14 @@ import type { LocationViewModel } from './LocationPageClient';
 
 type LocationTableProps = {
   locations: LocationViewModel[];
-  canManage: boolean;
+  canArchive: boolean;
+  canUpdate: boolean;
   archivingLocationId?: string;
   onEdit: (location: LocationViewModel) => void;
   onArchive: (locationId: string) => void;
 };
 
-export function LocationTable({ locations, canManage, archivingLocationId, onEdit, onArchive }: LocationTableProps) {
+export function LocationTable({ locations, canArchive, canUpdate, archivingLocationId, onEdit, onArchive }: LocationTableProps) {
   const columns: ColumnsType<LocationViewModel> = [
     {
       title: 'Name',
@@ -49,7 +50,7 @@ export function LocationTable({ locations, canManage, archivingLocationId, onEdi
     },
   ];
 
-  if (canManage) {
+  if (canArchive || canUpdate) {
     columns.push({
       title: 'Actions',
       key: 'actions',
@@ -59,45 +60,49 @@ export function LocationTable({ locations, canManage, archivingLocationId, onEdi
 
         return (
           <Space size={6}>
-            <Button
-              size='small'
-              disabled={archived}
-              icon={
-                <Edit3
-                  size={14}
-                  aria-hidden='true'
-                  focusable='false'
-                />
-              }
-              onClick={() => onEdit(location)}
-            >
-              Edit
-            </Button>
-            <Popconfirm
-              title='Archive location?'
-              description='This hides the location from active use but keeps existing records intact.'
-              okText='Archive'
-              okType='danger'
-              cancelText='Cancel'
-              disabled={archived}
-              onConfirm={() => onArchive(location.locationId)}
-            >
+            {canUpdate ? (
               <Button
                 size='small'
-                danger
                 disabled={archived}
-                loading={archivingLocationId === location.locationId}
                 icon={
-                  <Archive
+                  <Edit3
                     size={14}
                     aria-hidden='true'
                     focusable='false'
                   />
                 }
+                onClick={() => onEdit(location)}
               >
-                Archive
+                Edit
               </Button>
-            </Popconfirm>
+            ) : null}
+            {canArchive ? (
+              <Popconfirm
+                title='Archive location?'
+                description='This hides the location from active use but keeps existing records intact.'
+                okText='Archive'
+                okType='danger'
+                cancelText='Cancel'
+                disabled={archived}
+                onConfirm={() => onArchive(location.locationId)}
+              >
+                <Button
+                  size='small'
+                  danger
+                  disabled={archived}
+                  loading={archivingLocationId === location.locationId}
+                  icon={
+                    <Archive
+                      size={14}
+                      aria-hidden='true'
+                      focusable='false'
+                    />
+                  }
+                >
+                  Archive
+                </Button>
+              </Popconfirm>
+            ) : null}
           </Space>
         );
       },

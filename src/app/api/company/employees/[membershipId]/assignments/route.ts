@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { updateCompanyEmployeeAssignment } from '@/features/company/employees/service';
 import { validateUpdateEmployeeAssignmentRequest } from '@/features/company/employees/validation';
-import { getActiveCompanyApiContext } from '../../../_utils/companyApiAuth';
+import { getCompanyApiPermissionContext } from '../../../_utils/companyApiAuth';
 
 type EmployeeAssignmentRouteContext = {
   params: Promise<{
@@ -10,20 +10,14 @@ type EmployeeAssignmentRouteContext = {
 };
 
 export async function PATCH(request: Request, context: EmployeeAssignmentRouteContext) {
-  const authContext = await getActiveCompanyApiContext();
+  const authContext = await getCompanyApiPermissionContext(
+    'employees',
+    'assign',
+    'You do not have permission to update employee assignments.',
+  );
 
   if (!authContext.success) {
     return authContext.response;
-  }
-
-  if (!authContext.membership.isOwner) {
-    return NextResponse.json(
-      {
-        success: false,
-        message: 'Only the company owner can update employee assignments.',
-      },
-      { status: 403 },
-    );
   }
 
   const payload = await request.json().catch(() => null);

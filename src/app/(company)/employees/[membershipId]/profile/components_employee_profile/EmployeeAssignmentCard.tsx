@@ -127,7 +127,7 @@ export function EmployeeAssignmentCard({ employee, canManage, departmentOptions,
         <Alert
           showIcon
           type={canManage ? 'info' : 'warning'}
-          message={canManage ? 'Save changes to update this employee primary department or position.' : 'You can review assignments, but only the company owner can update them.'}
+          message={canManage ? 'Save changes to update this employee primary department or position.' : 'You can review assignments, but you do not have permission to update them.'}
         />
 
         {errorMessage ? (

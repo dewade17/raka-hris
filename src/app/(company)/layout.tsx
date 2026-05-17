@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { resolveMembershipPermissionKeys } from "@/features/auth/permissions/service";
 import { requireActiveCompanyMembership } from "@/server/auth";
 import { CompanyAppLayout } from "./components_company/CompanyAppLayout";
 
@@ -8,6 +9,11 @@ export default async function CompanyLayout({
   children: ReactNode;
 }>) {
   const { company, membership, user } = await requireActiveCompanyMembership();
+  const permissionKeys = await resolveMembershipPermissionKeys({
+    companyId: company.companyId,
+    membershipId: membership.membershipId,
+    isOwner: membership.isOwner,
+  });
 
   return (
     <CompanyAppLayout
@@ -15,6 +21,7 @@ export default async function CompanyLayout({
       userName={user.name}
       userEmail={user.email}
       isOwner={membership.isOwner}
+      permissionKeys={permissionKeys}
     >
       {children}
     </CompanyAppLayout>

@@ -9,17 +9,19 @@ const { Text, Title } = Typography;
 
 type EmployeeProfileHeaderProps = {
   employee: EmployeeProfileViewModel;
-  canManage: boolean;
+  canUpdate: boolean;
+  canTerminate: boolean;
   isTerminating?: boolean;
   onEdit: () => void;
   onTerminate: () => void;
 };
 
-export function EmployeeProfileHeader({ employee, canManage, isTerminating, onEdit, onTerminate }: EmployeeProfileHeaderProps) {
+export function EmployeeProfileHeader({ employee, canUpdate, canTerminate, isTerminating, onEdit, onTerminate }: EmployeeProfileHeaderProps) {
   const { token } = theme.useToken();
   const employeeNumber = employee.profile?.employeeNumber ?? 'Employee number not set';
-  const canEditEmployee = canManage && employee.status !== 'TERMINATED';
-  const canTerminateEmployee = canManage && !employee.isOwner && employee.status !== 'TERMINATED';
+  const canManage = canUpdate || canTerminate;
+  const canEditEmployee = canUpdate && employee.status !== 'TERMINATED';
+  const canTerminateEmployee = canTerminate && !employee.isOwner && employee.status !== 'TERMINATED';
 
   return (
     <Card
@@ -135,7 +137,7 @@ export function EmployeeProfileHeader({ employee, canManage, isTerminating, onEd
                   />
                 )
               }
-              label={canManage ? 'Owner access' : 'View only'}
+              label={canManage ? 'Edit access' : 'View only'}
             />
           </Space>
         </Space>

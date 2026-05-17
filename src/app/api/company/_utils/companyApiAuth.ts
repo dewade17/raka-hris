@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { CompanyStatus, MembershipStatus } from '@/generated/prisma/client';
+import { membershipHasPermission } from '@/features/auth/permissions/service';
 import { getCurrentAuthContext } from '@/server/auth';
 
 export async function getActiveCompanyApiContext() {
@@ -42,8 +43,42 @@ export function createOwnerRequiredResponse() {
   return NextResponse.json(
     {
       success: false,
-      message: 'Only the company owner can manage organization master data.',
+      message: 'You do not have permission to manage organization master data.',
     },
     { status: 403 },
   );
+}
+
+export async function getCompanyApiPermissionContext(module: string, action: string, forbiddenMessage?: string) {
+  const context = await getActiveCompanyApiContext();
+
+  if (!context.success) {
+    return context;
+  }
+
+  if (context.membership.isOwner) {
+    return context;
+  }
+
+  const canAccess = await membershipHasPermission(
+    context.membership.membershipId,
+    module,
+    action,
+    context.company.companyId,
+  );
+
+  if (!canAccess) {
+    return {
+      success: false as const,
+      response: NextResponse.json(
+        {
+          success: false,
+          message: forbiddenMessage ?? 'You do not have permission to perform this action.',
+        },
+        { status: 403 },
+      ),
+    };
+  }
+
+  return context;
 }

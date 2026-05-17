@@ -7,13 +7,14 @@ import type { PositionViewModel } from './PositionPageClient';
 
 type PositionTableProps = {
   positions: PositionViewModel[];
-  canManage: boolean;
+  canArchive: boolean;
+  canUpdate: boolean;
   archivingPositionId?: string;
   onEdit: (position: PositionViewModel) => void;
   onArchive: (positionId: string) => void;
 };
 
-export function PositionTable({ positions, canManage, archivingPositionId, onEdit, onArchive }: PositionTableProps) {
+export function PositionTable({ positions, canArchive, canUpdate, archivingPositionId, onEdit, onArchive }: PositionTableProps) {
   const columns: ColumnsType<PositionViewModel> = [
     {
       title: 'Name',
@@ -51,7 +52,7 @@ export function PositionTable({ positions, canManage, archivingPositionId, onEdi
     },
   ];
 
-  if (canManage) {
+  if (canArchive || canUpdate) {
     columns.push({
       title: 'Actions',
       key: 'actions',
@@ -61,45 +62,49 @@ export function PositionTable({ positions, canManage, archivingPositionId, onEdi
 
         return (
           <Space size={6}>
-            <Button
-              size='small'
-              disabled={archived}
-              icon={
-                <Edit3
-                  size={14}
-                  aria-hidden='true'
-                  focusable='false'
-                />
-              }
-              onClick={() => onEdit(position)}
-            >
-              Edit
-            </Button>
-            <Popconfirm
-              title='Archive position?'
-              description='This hides the position from active use but keeps employee history intact.'
-              okText='Archive'
-              okType='danger'
-              cancelText='Cancel'
-              disabled={archived}
-              onConfirm={() => onArchive(position.positionId)}
-            >
+            {canUpdate ? (
               <Button
                 size='small'
-                danger
                 disabled={archived}
-                loading={archivingPositionId === position.positionId}
                 icon={
-                  <Archive
+                  <Edit3
                     size={14}
                     aria-hidden='true'
                     focusable='false'
                   />
                 }
+                onClick={() => onEdit(position)}
               >
-                Archive
+                Edit
               </Button>
-            </Popconfirm>
+            ) : null}
+            {canArchive ? (
+              <Popconfirm
+                title='Archive position?'
+                description='This hides the position from active use but keeps employee history intact.'
+                okText='Archive'
+                okType='danger'
+                cancelText='Cancel'
+                disabled={archived}
+                onConfirm={() => onArchive(position.positionId)}
+              >
+                <Button
+                  size='small'
+                  danger
+                  disabled={archived}
+                  loading={archivingPositionId === position.positionId}
+                  icon={
+                    <Archive
+                      size={14}
+                      aria-hidden='true'
+                      focusable='false'
+                    />
+                  }
+                >
+                  Archive
+                </Button>
+              </Popconfirm>
+            ) : null}
           </Space>
         );
       },

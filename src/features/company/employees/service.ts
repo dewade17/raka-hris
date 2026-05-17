@@ -9,6 +9,7 @@ import {
   findCompanyEmployeeForManagement,
   findCompanyEmployeeList,
   findCompanyEmployeeProfile,
+  findCompanySeatUsage,
   terminateCompanyEmployeeRecord,
   updateCompanyEmployeeRecord,
   updateEmployeeAssignmentRecords,
@@ -32,6 +33,24 @@ type EmployeeDepartmentAssignmentRecord = CompanyEmployeeProfileRecord['employee
 type EmployeePositionAssignmentRecord = CompanyEmployeeProfileRecord['employeePositions'][number];
 
 export async function createCompanyEmployee(companyId: string, companyName: string, input: CreateCompanyEmployeeInput): Promise<EmployeeCreateMutationResult> {
+  const seatUsage = await findCompanySeatUsage(companyId);
+
+  if (!seatUsage.hasSubscription) {
+    return {
+      success: false,
+      status: 400,
+      message: 'Employee account could not be created because this company does not have an active seat allocation.',
+    };
+  }
+
+  if (seatUsage.usedSeats >= seatUsage.seatLimit) {
+    return {
+      success: false,
+      status: 409,
+      message: 'Your company has reached the current seat limit. Increase the seat limit before adding another employee.',
+    };
+  }
+
   try {
     assertEmailDeliveryConfigured();
   } catch {

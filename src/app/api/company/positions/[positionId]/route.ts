@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { archivePosition, updatePosition } from '@/features/company/positions/service';
 import { validateUpsertPositionRequest } from '@/features/company/positions/validation';
-import { createOwnerRequiredResponse, getActiveCompanyApiContext } from '../../_utils/companyApiAuth';
+import { getCompanyApiPermissionContext } from '../../_utils/companyApiAuth';
 
 type PositionRouteContext = {
   params: Promise<{
@@ -10,14 +10,14 @@ type PositionRouteContext = {
 };
 
 export async function PATCH(request: Request, context: PositionRouteContext) {
-  const authContext = await getActiveCompanyApiContext();
+  const authContext = await getCompanyApiPermissionContext(
+    'positions',
+    'update',
+    'You do not have permission to update positions.',
+  );
 
   if (!authContext.success) {
     return authContext.response;
-  }
-
-  if (!authContext.membership.isOwner) {
-    return createOwnerRequiredResponse();
   }
 
   const payload = await request.json().catch(() => null);
@@ -47,14 +47,14 @@ export async function PATCH(request: Request, context: PositionRouteContext) {
 }
 
 export async function DELETE(_request: Request, context: PositionRouteContext) {
-  const authContext = await getActiveCompanyApiContext();
+  const authContext = await getCompanyApiPermissionContext(
+    'positions',
+    'archive',
+    'You do not have permission to archive positions.',
+  );
 
   if (!authContext.success) {
     return authContext.response;
-  }
-
-  if (!authContext.membership.isOwner) {
-    return createOwnerRequiredResponse();
   }
 
   const { positionId } = await context.params;
