@@ -37,6 +37,9 @@ Before writing or proposing Next.js code, read the relevant guide in `node_modul
 - Import section components explicitly from their files. Do not add barrel files such as `index.ts` unless the user explicitly asks for one.
 - Keep shared route-group chrome such as headers, footers, and common page wrappers in the nearest relevant `layout.tsx`, not inside a page-specific section component folder.
 - Avoid hiding an entire page behind a single wrapper component when the `page.tsx` can clearly show the section order.
+- Keep simple route-level `loading.tsx`, `error.tsx`, and `not-found.tsx` files self-contained in the route segment.
+- Do not create a new shared component only to remove small duplication between simple route-level loading, error, or not-found files.
+- Use a shared route-level fallback component only when there is an existing established pattern or the shared UI contains meaningful complexity.
 
 ## Client CRUD and Mutation Logic
 
@@ -140,6 +143,11 @@ A production-ready result should:
 - Do not add locale-prefixed routes, dictionary loading, or route-level internationalization unless explicitly requested.
 - Keep user-facing text clear, human, and actionable.
 - Write UI copy in production-ready, user-facing language; avoid technical wording such as API, endpoint, payload, mutation, schema, or implementation details unless the audience explicitly needs it.
+- Even when the implementation uses soft delete or `deletedAt`, all user-facing text must use delete terminology.
+- Use "Delete", "Deleted", and "could not be deleted" in UI labels, dialogs, toast messages, API response messages, permission names, and permission descriptions.
+- Do not expose terms such as "Archive", "Archived", "Soft delete", "Deactivate", "Restore", or similar wording to clients unless the user explicitly requests that product behavior.
+- Internal code names, route-local hooks, service functions, repository functions, props, and summary fields for delete behavior should use delete terminology, such as `useDeleteDepartment`, `deleteDepartment`, `deleteDepartmentRecord`, `canDelete`, and `summary.deleted`.
+- Database fields may keep existing names such as `deletedAt` when changing them would affect contracts or migrations. Do not add legacy archive aliases for delete behavior unless the user explicitly asks for migration compatibility.
 
 ## UI and Styling Rules
 

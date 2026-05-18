@@ -68,7 +68,7 @@ export async function updateDepartmentRecord(companyId: string, departmentId: st
   return findCompanyDepartmentById(companyId, departmentId);
 }
 
-export async function archiveDepartmentRecord(companyId: string, departmentId: string) {
+export async function deleteDepartmentRecord(companyId: string, departmentId: string) {
   return db.department.updateMany({
     where: {
       companyId,

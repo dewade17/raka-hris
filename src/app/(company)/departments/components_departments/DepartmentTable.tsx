@@ -1,20 +1,20 @@
 'use client';
 
 import { Button, Popconfirm, Space, Table, Tag, Typography } from 'antd';
-import { Archive, Edit3 } from 'lucide-react';
+import { Edit3, Trash2 } from 'lucide-react';
 import type { ColumnsType } from 'antd/es/table';
 import type { DepartmentViewModel } from './DepartmentPageClient';
 
 type DepartmentTableProps = {
   departments: DepartmentViewModel[];
-  canArchive: boolean;
+  canDelete: boolean;
   canUpdate: boolean;
-  archivingDepartmentId?: string;
+  deletingDepartmentId?: string;
   onEdit: (department: DepartmentViewModel) => void;
-  onArchive: (departmentId: string) => void;
+  onDelete: (departmentId: string) => void;
 };
 
-export function DepartmentTable({ departments, canArchive, canUpdate, archivingDepartmentId, onEdit, onArchive }: DepartmentTableProps) {
+export function DepartmentTable({ departments, canDelete, canUpdate, deletingDepartmentId, onEdit, onDelete }: DepartmentTableProps) {
   const columns: ColumnsType<DepartmentViewModel> = [
     {
       title: 'Name',
@@ -26,7 +26,7 @@ export function DepartmentTable({ departments, canArchive, canUpdate, archivingD
           size={0}
         >
           <Typography.Text strong>{name}</Typography.Text>
-          {department.deletedAt ? <Typography.Text type='secondary'>Archived</Typography.Text> : null}
+          {department.deletedAt ? <Typography.Text type='secondary'>Deleted</Typography.Text> : null}
         </Space>
       ),
     },
@@ -52,20 +52,20 @@ export function DepartmentTable({ departments, canArchive, canUpdate, archivingD
     },
   ];
 
-  if (canArchive || canUpdate) {
+  if (canDelete || canUpdate) {
     columns.push({
       title: 'Actions',
       key: 'actions',
       width: 180,
       render: (_, department) => {
-        const archived = Boolean(department.deletedAt);
+        const deleted = Boolean(department.deletedAt);
 
         return (
           <Space size={6}>
             {canUpdate ? (
               <Button
                 size='small'
-                disabled={archived}
+                disabled={deleted}
                 icon={
                   <Edit3
                     size={14}
@@ -78,30 +78,30 @@ export function DepartmentTable({ departments, canArchive, canUpdate, archivingD
                 Edit
               </Button>
             ) : null}
-            {canArchive ? (
+            {canDelete ? (
               <Popconfirm
-                title='Archive department?'
-                description='This hides the department from active use but keeps employee history intact.'
-                okText='Archive'
+                title='Delete department?'
+                description='This department will no longer be available for use.'
+                okText='Delete'
                 okType='danger'
                 cancelText='Cancel'
-                disabled={archived}
-                onConfirm={() => onArchive(department.departmentId)}
+                disabled={deleted}
+                onConfirm={() => onDelete(department.departmentId)}
               >
                 <Button
                   size='small'
                   danger
-                  disabled={archived}
-                  loading={archivingDepartmentId === department.departmentId}
+                  disabled={deleted}
+                  loading={deletingDepartmentId === department.departmentId}
                   icon={
-                    <Archive
+                    <Trash2
                       size={14}
                       aria-hidden='true'
                       focusable='false'
                     />
                   }
                 >
-                  Archive
+                  Delete
                 </Button>
               </Popconfirm>
             ) : null}
@@ -125,7 +125,7 @@ export function DepartmentTable({ departments, canArchive, canUpdate, archivingD
 
 function renderStatus(department: DepartmentViewModel) {
   if (department.deletedAt) {
-    return <Tag>Archived</Tag>;
+    return <Tag>Deleted</Tag>;
   }
 
   return department.isActive ? <Tag color='success'>Active</Tag> : <Tag color='warning'>Inactive</Tag>;

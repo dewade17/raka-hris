@@ -4,7 +4,7 @@ import { Alert, Button, Card, Col, Flex, Input, Row, Select, Space, Statistic, T
 import { Plus, Search } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import type { PositionListData } from '@/features/company/positions/types';
-import { useArchivePosition } from '../hooks/useArchivePosition';
+import { useDeletePosition } from '../hooks/useDeletePosition';
 import { useUpsertPosition } from '../hooks/useUpsertPosition';
 import { PositionFormDrawer, type PositionFormValues } from './PositionFormDrawer';
 import { PositionTable } from './PositionTable';
@@ -20,30 +20,30 @@ export type PositionViewModel = {
 };
 
 type PositionPageClientProps = {
-  canArchive: boolean;
   canCreate: boolean;
+  canDelete: boolean;
   canUpdate: boolean;
   positions: PositionViewModel[];
   summary: PositionListData['summary'];
 };
 
-type StatusFilter = 'all' | 'active' | 'inactive' | 'archived';
+type StatusFilter = 'all' | 'active' | 'inactive' | 'deleted';
 
 const statusOptions: Array<{ label: string; value: StatusFilter }> = [
   { label: 'Current records', value: 'all' },
   { label: 'Active', value: 'active' },
   { label: 'Inactive', value: 'inactive' },
-  { label: 'Archived', value: 'archived' },
+  { label: 'Deleted', value: 'deleted' },
 ];
 
-export function PositionPageClient({ canArchive, canCreate, canUpdate, positions, summary }: PositionPageClientProps) {
+export function PositionPageClient({ canCreate, canDelete, canUpdate, positions, summary }: PositionPageClientProps) {
   const { token } = theme.useToken();
-  const canMutate = canArchive || canCreate || canUpdate;
+  const canMutate = canCreate || canDelete || canUpdate;
   const [query, setQuery] = useState('');
   const [status, setStatus] = useState<StatusFilter>('all');
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [editingPosition, setEditingPosition] = useState<PositionViewModel>();
-  const { archivePosition, archivingPositionId } = useArchivePosition();
+  const { deletePosition, deletingPositionId } = useDeletePosition();
   const { clearErrorMessage, errorMessage, isSubmitting, upsertPosition } = useUpsertPosition();
 
   const filteredPositions = useMemo(() => {
@@ -51,7 +51,7 @@ export function PositionPageClient({ canArchive, canCreate, canUpdate, positions
 
     return positions.filter((position) => {
       const matchesQuery = !normalizedQuery || position.name.toLowerCase().includes(normalizedQuery);
-      const matchesStatus = status === 'archived' ? Boolean(position.deletedAt) : !position.deletedAt && (status === 'all' || (status === 'active' && position.isActive) || (status === 'inactive' && !position.isActive));
+      const matchesStatus = status === 'deleted' ? Boolean(position.deletedAt) : !position.deletedAt && (status === 'all' || (status === 'active' && position.isActive) || (status === 'inactive' && !position.isActive));
 
       return matchesQuery && matchesStatus;
     });
@@ -138,8 +138,8 @@ export function PositionPageClient({ canArchive, canCreate, canUpdate, positions
           value={summary.inactive}
         />
         <SummaryCard
-          label='Archived'
-          value={summary.archived}
+          label='Deleted'
+          value={summary.deleted}
         />
       </Row>
 
@@ -179,16 +179,16 @@ export function PositionPageClient({ canArchive, canCreate, canUpdate, positions
 
         <PositionTable
           positions={filteredPositions}
-          canArchive={canArchive}
+          canDelete={canDelete}
           canUpdate={canUpdate}
-          archivingPositionId={archivingPositionId}
+          deletingPositionId={deletingPositionId}
           onEdit={(position) => {
             setEditingPosition(position);
             clearErrorMessage();
             setDrawerOpen(true);
           }}
-          onArchive={(positionId) => {
-            void archivePosition(positionId);
+          onDelete={(positionId) => {
+            void deletePosition(positionId);
           }}
         />
       </Card>

@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { archivePosition, updatePosition } from '@/features/company/positions/service';
+import { deletePosition, updatePosition } from '@/features/company/positions/service';
 import { validateUpsertPositionRequest } from '@/features/company/positions/validation';
 import { getCompanyApiPermissionContext } from '../../_utils/companyApiAuth';
 
@@ -49,8 +49,8 @@ export async function PATCH(request: Request, context: PositionRouteContext) {
 export async function DELETE(_request: Request, context: PositionRouteContext) {
   const authContext = await getCompanyApiPermissionContext(
     'positions',
-    'archive',
-    'You do not have permission to archive positions.',
+    'delete',
+    'You do not have permission to delete positions.',
   );
 
   if (!authContext.success) {
@@ -58,7 +58,7 @@ export async function DELETE(_request: Request, context: PositionRouteContext) {
   }
 
   const { positionId } = await context.params;
-  const result = await archivePosition(authContext.company.companyId, positionId);
+  const result = await deletePosition(authContext.company.companyId, positionId);
 
   return NextResponse.json(
     {

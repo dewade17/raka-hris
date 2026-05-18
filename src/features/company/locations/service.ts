@@ -1,6 +1,6 @@
 import { Prisma } from '@/generated/prisma/client';
-import { archiveLocationRecord, createLocationRecord, findCompanyLocations, updateLocationRecord } from './repository';
-import type { LocationArchiveResult, LocationListData, LocationMutationResult, UpsertLocationInput } from './types';
+import { createLocationRecord, deleteLocationRecord, findCompanyLocations, updateLocationRecord } from './repository';
+import type { LocationDeleteResult, LocationListData, LocationMutationResult, UpsertLocationInput } from './types';
 
 export async function getCompanyLocations(companyId: string): Promise<LocationListData> {
   const locations = (await findCompanyLocations(companyId)).map(mapLocationRecord);
@@ -11,7 +11,7 @@ export async function getCompanyLocations(companyId: string): Promise<LocationLi
       total: locations.filter((location) => !location.deletedAt).length,
       active: locations.filter((location) => !location.deletedAt && location.isActive).length,
       inactive: locations.filter((location) => !location.deletedAt && !location.isActive).length,
-      archived: locations.filter((location) => location.deletedAt).length,
+      deleted: locations.filter((location) => location.deletedAt).length,
     },
   };
 }
@@ -78,9 +78,9 @@ export async function updateLocation(companyId: string, locationId: string, inpu
   }
 }
 
-export async function archiveLocation(companyId: string, locationId: string): Promise<LocationArchiveResult> {
+export async function deleteLocation(companyId: string, locationId: string): Promise<LocationDeleteResult> {
   try {
-    const result = await archiveLocationRecord(companyId, locationId);
+    const result = await deleteLocationRecord(companyId, locationId);
 
     if (result.count === 0) {
       return {
@@ -93,13 +93,13 @@ export async function archiveLocation(companyId: string, locationId: string): Pr
     return {
       success: true,
       status: 200,
-      message: 'Location archived successfully.',
+      message: 'Location deleted successfully.',
     };
   } catch {
     return {
       success: false,
       status: 500,
-      message: 'Location could not be archived right now. Please try again.',
+      message: 'Location could not be deleted right now. Please try again.',
     };
   }
 }

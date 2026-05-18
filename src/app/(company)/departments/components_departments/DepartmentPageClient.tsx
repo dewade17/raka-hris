@@ -4,7 +4,7 @@ import { Alert, Button, Card, Col, Flex, Input, Row, Select, Space, Statistic, T
 import { Plus, Search } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import type { DepartmentListData } from '@/features/company/departments/types';
-import { useArchiveDepartment } from '../hooks/useArchiveDepartment';
+import { useDeleteDepartment } from '../hooks/useDeleteDepartment';
 import { useUpsertDepartment } from '../hooks/useUpsertDepartment';
 import { DepartmentFormDrawer, type DepartmentFormValues } from './DepartmentFormDrawer';
 import { DepartmentTable } from './DepartmentTable';
@@ -20,30 +20,30 @@ export type DepartmentViewModel = {
 };
 
 type DepartmentPageClientProps = {
-  canArchive: boolean;
   canCreate: boolean;
+  canDelete: boolean;
   canUpdate: boolean;
   departments: DepartmentViewModel[];
   summary: DepartmentListData['summary'];
 };
 
-type StatusFilter = 'all' | 'active' | 'inactive' | 'archived';
+type StatusFilter = 'all' | 'active' | 'inactive' | 'deleted';
 
 const statusOptions: Array<{ label: string; value: StatusFilter }> = [
   { label: 'Current records', value: 'all' },
   { label: 'Active', value: 'active' },
   { label: 'Inactive', value: 'inactive' },
-  { label: 'Archived', value: 'archived' },
+  { label: 'Deleted', value: 'deleted' },
 ];
 
-export function DepartmentPageClient({ canArchive, canCreate, canUpdate, departments, summary }: DepartmentPageClientProps) {
+export function DepartmentPageClient({ canCreate, canDelete, canUpdate, departments, summary }: DepartmentPageClientProps) {
   const { token } = theme.useToken();
-  const canMutate = canArchive || canCreate || canUpdate;
+  const canMutate = canCreate || canDelete || canUpdate;
   const [query, setQuery] = useState('');
   const [status, setStatus] = useState<StatusFilter>('all');
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [editingDepartment, setEditingDepartment] = useState<DepartmentViewModel>();
-  const { archiveDepartment, archivingDepartmentId } = useArchiveDepartment();
+  const { deleteDepartment, deletingDepartmentId } = useDeleteDepartment();
   const { clearErrorMessage, errorMessage, isSubmitting, upsertDepartment } = useUpsertDepartment();
 
   const filteredDepartments = useMemo(() => {
@@ -51,7 +51,7 @@ export function DepartmentPageClient({ canArchive, canCreate, canUpdate, departm
 
     return departments.filter((department) => {
       const matchesQuery = !normalizedQuery || department.name.toLowerCase().includes(normalizedQuery);
-      const matchesStatus = status === 'archived' ? Boolean(department.deletedAt) : !department.deletedAt && (status === 'all' || (status === 'active' && department.isActive) || (status === 'inactive' && !department.isActive));
+      const matchesStatus = status === 'deleted' ? Boolean(department.deletedAt) : !department.deletedAt && (status === 'all' || (status === 'active' && department.isActive) || (status === 'inactive' && !department.isActive));
 
       return matchesQuery && matchesStatus;
     });
@@ -138,8 +138,8 @@ export function DepartmentPageClient({ canArchive, canCreate, canUpdate, departm
           value={summary.inactive}
         />
         <SummaryCard
-          label='Archived'
-          value={summary.archived}
+          label='Deleted'
+          value={summary.deleted}
         />
       </Row>
 
@@ -179,16 +179,16 @@ export function DepartmentPageClient({ canArchive, canCreate, canUpdate, departm
 
         <DepartmentTable
           departments={filteredDepartments}
-          canArchive={canArchive}
+          canDelete={canDelete}
           canUpdate={canUpdate}
-          archivingDepartmentId={archivingDepartmentId}
+          deletingDepartmentId={deletingDepartmentId}
           onEdit={(department) => {
             setEditingDepartment(department);
             clearErrorMessage();
             setDrawerOpen(true);
           }}
-          onArchive={(departmentId) => {
-            void archiveDepartment(departmentId);
+          onDelete={(departmentId) => {
+            void deleteDepartment(departmentId);
           }}
         />
       </Card>

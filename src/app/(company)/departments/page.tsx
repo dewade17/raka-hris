@@ -21,7 +21,7 @@ export default async function DepartmentsPage() {
 
   return (
     <DepartmentPageClient
-      canArchive={hasResolvedPermission(permissionKeys, 'departments', 'archive')}
+      canDelete={hasResolvedPermission(permissionKeys, 'departments', 'delete')}
       canCreate={hasResolvedPermission(permissionKeys, 'departments', 'create')}
       canUpdate={hasResolvedPermission(permissionKeys, 'departments', 'update')}
       summary={data.summary}

@@ -14,7 +14,7 @@ export type DepartmentListData = {
     total: number;
     active: number;
     inactive: number;
-    archived: number;
+    deleted: number;
   };
 };
 
@@ -36,7 +36,7 @@ export type DepartmentMutationResult =
       message: string;
     };
 
-export type DepartmentArchiveResult =
+export type DepartmentDeleteResult =
   | {
       success: true;
       status: 200;

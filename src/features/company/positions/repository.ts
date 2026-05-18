@@ -68,7 +68,7 @@ export async function updatePositionRecord(companyId: string, positionId: string
   return findCompanyPositionById(companyId, positionId);
 }
 
-export async function archivePositionRecord(companyId: string, positionId: string) {
+export async function deletePositionRecord(companyId: string, positionId: string) {
   return db.position.updateMany({
     where: {
       companyId,

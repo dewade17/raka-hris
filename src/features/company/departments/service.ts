@@ -1,11 +1,11 @@
 import { Prisma } from '@/generated/prisma/client';
 import {
-  archiveDepartmentRecord,
   createDepartmentRecord,
+  deleteDepartmentRecord,
   findCompanyDepartments,
   updateDepartmentRecord,
 } from './repository';
-import type { DepartmentArchiveResult, DepartmentListData, DepartmentMutationResult, UpsertDepartmentInput } from './types';
+import type { DepartmentDeleteResult, DepartmentListData, DepartmentMutationResult, UpsertDepartmentInput } from './types';
 
 export async function getCompanyDepartments(companyId: string): Promise<DepartmentListData> {
   const departments = (await findCompanyDepartments(companyId)).map(mapDepartmentRecord);
@@ -16,7 +16,7 @@ export async function getCompanyDepartments(companyId: string): Promise<Departme
       total: departments.filter((department) => !department.deletedAt).length,
       active: departments.filter((department) => !department.deletedAt && department.isActive).length,
       inactive: departments.filter((department) => !department.deletedAt && !department.isActive).length,
-      archived: departments.filter((department) => department.deletedAt).length,
+      deleted: departments.filter((department) => department.deletedAt).length,
     },
   };
 }
@@ -83,9 +83,9 @@ export async function updateDepartment(companyId: string, departmentId: string, 
   }
 }
 
-export async function archiveDepartment(companyId: string, departmentId: string): Promise<DepartmentArchiveResult> {
+export async function deleteDepartment(companyId: string, departmentId: string): Promise<DepartmentDeleteResult> {
   try {
-    const result = await archiveDepartmentRecord(companyId, departmentId);
+    const result = await deleteDepartmentRecord(companyId, departmentId);
 
     if (result.count === 0) {
       return {
@@ -98,13 +98,13 @@ export async function archiveDepartment(companyId: string, departmentId: string)
     return {
       success: true,
       status: 200,
-      message: 'Department archived successfully.',
+      message: 'Department deleted successfully.',
     };
   } catch {
     return {
       success: false,
       status: 500,
-      message: 'Department could not be archived right now. Please try again.',
+      message: 'Department could not be deleted right now. Please try again.',
     };
   }
 }

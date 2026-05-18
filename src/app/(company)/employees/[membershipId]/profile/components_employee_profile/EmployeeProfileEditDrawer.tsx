@@ -327,7 +327,7 @@ export function EmployeeProfileEditDrawer({
                           onClearError();
                         }}
                       >
-                        Remove
+                        Delete
                       </Button>
                     ) : null}
                   </Space>

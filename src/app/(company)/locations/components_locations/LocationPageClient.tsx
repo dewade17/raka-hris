@@ -4,7 +4,7 @@ import { Alert, Button, Card, Col, Flex, Input, Row, Select, Space, Statistic, T
 import { Plus, Search } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import type { LocationListData } from '@/features/company/locations/types';
-import { useArchiveLocation } from '../hooks/useArchiveLocation';
+import { useDeleteLocation } from '../hooks/useDeleteLocation';
 import { useUpsertLocation } from '../hooks/useUpsertLocation';
 import { LocationFormDrawer, type LocationFormValues } from './LocationFormDrawer';
 import { LocationTable } from './LocationTable';
@@ -21,30 +21,30 @@ export type LocationViewModel = {
 };
 
 type LocationPageClientProps = {
-  canArchive: boolean;
   canCreate: boolean;
+  canDelete: boolean;
   canUpdate: boolean;
   locations: LocationViewModel[];
   summary: LocationListData['summary'];
 };
 
-type StatusFilter = 'all' | 'active' | 'inactive' | 'archived';
+type StatusFilter = 'all' | 'active' | 'inactive' | 'deleted';
 
 const statusOptions: Array<{ label: string; value: StatusFilter }> = [
   { label: 'Current records', value: 'all' },
   { label: 'Active', value: 'active' },
   { label: 'Inactive', value: 'inactive' },
-  { label: 'Archived', value: 'archived' },
+  { label: 'Deleted', value: 'deleted' },
 ];
 
-export function LocationPageClient({ canArchive, canCreate, canUpdate, locations, summary }: LocationPageClientProps) {
+export function LocationPageClient({ canCreate, canDelete, canUpdate, locations, summary }: LocationPageClientProps) {
   const { token } = theme.useToken();
-  const canMutate = canArchive || canCreate || canUpdate;
+  const canMutate = canCreate || canDelete || canUpdate;
   const [query, setQuery] = useState('');
   const [status, setStatus] = useState<StatusFilter>('all');
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [editingLocation, setEditingLocation] = useState<LocationViewModel>();
-  const { archiveLocation, archivingLocationId } = useArchiveLocation();
+  const { deleteLocation, deletingLocationId } = useDeleteLocation();
   const { clearErrorMessage, errorMessage, isSubmitting, upsertLocation } = useUpsertLocation();
 
   const filteredLocations = useMemo(() => {
@@ -52,7 +52,7 @@ export function LocationPageClient({ canArchive, canCreate, canUpdate, locations
 
     return locations.filter((location) => {
       const matchesQuery = !normalizedQuery || location.name.toLowerCase().includes(normalizedQuery);
-      const matchesStatus = status === 'archived' ? Boolean(location.deletedAt) : !location.deletedAt && (status === 'all' || (status === 'active' && location.isActive) || (status === 'inactive' && !location.isActive));
+      const matchesStatus = status === 'deleted' ? Boolean(location.deletedAt) : !location.deletedAt && (status === 'all' || (status === 'active' && location.isActive) || (status === 'inactive' && !location.isActive));
 
       return matchesQuery && matchesStatus;
     });
@@ -139,8 +139,8 @@ export function LocationPageClient({ canArchive, canCreate, canUpdate, locations
           value={summary.inactive}
         />
         <SummaryCard
-          label='Archived'
-          value={summary.archived}
+          label='Deleted'
+          value={summary.deleted}
         />
       </Row>
 
@@ -180,16 +180,16 @@ export function LocationPageClient({ canArchive, canCreate, canUpdate, locations
 
         <LocationTable
           locations={filteredLocations}
-          canArchive={canArchive}
+          canDelete={canDelete}
           canUpdate={canUpdate}
-          archivingLocationId={archivingLocationId}
+          deletingLocationId={deletingLocationId}
           onEdit={(location) => {
             setEditingLocation(location);
             clearErrorMessage();
             setDrawerOpen(true);
           }}
-          onArchive={(locationId) => {
-            void archiveLocation(locationId);
+          onDelete={(locationId) => {
+            void deleteLocation(locationId);
           }}
         />
       </Card>

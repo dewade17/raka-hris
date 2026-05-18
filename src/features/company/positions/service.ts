@@ -1,6 +1,6 @@
 import { Prisma } from '@/generated/prisma/client';
-import { archivePositionRecord, createPositionRecord, findCompanyPositions, updatePositionRecord } from './repository';
-import type { PositionArchiveResult, PositionListData, PositionMutationResult, UpsertPositionInput } from './types';
+import { createPositionRecord, deletePositionRecord, findCompanyPositions, updatePositionRecord } from './repository';
+import type { PositionDeleteResult, PositionListData, PositionMutationResult, UpsertPositionInput } from './types';
 
 export async function getCompanyPositions(companyId: string): Promise<PositionListData> {
   const positions = (await findCompanyPositions(companyId)).map(mapPositionRecord);
@@ -11,7 +11,7 @@ export async function getCompanyPositions(companyId: string): Promise<PositionLi
       total: positions.filter((position) => !position.deletedAt).length,
       active: positions.filter((position) => !position.deletedAt && position.isActive).length,
       inactive: positions.filter((position) => !position.deletedAt && !position.isActive).length,
-      archived: positions.filter((position) => position.deletedAt).length,
+      deleted: positions.filter((position) => position.deletedAt).length,
     },
   };
 }
@@ -78,9 +78,9 @@ export async function updatePosition(companyId: string, positionId: string, inpu
   }
 }
 
-export async function archivePosition(companyId: string, positionId: string): Promise<PositionArchiveResult> {
+export async function deletePosition(companyId: string, positionId: string): Promise<PositionDeleteResult> {
   try {
-    const result = await archivePositionRecord(companyId, positionId);
+    const result = await deletePositionRecord(companyId, positionId);
 
     if (result.count === 0) {
       return {
@@ -93,13 +93,13 @@ export async function archivePosition(companyId: string, positionId: string): Pr
     return {
       success: true,
       status: 200,
-      message: 'Position archived successfully.',
+      message: 'Position deleted successfully.',
     };
   } catch {
     return {
       success: false,
       status: 500,
-      message: 'Position could not be archived right now. Please try again.',
+      message: 'Position could not be deleted right now. Please try again.',
     };
   }
 }

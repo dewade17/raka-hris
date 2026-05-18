@@ -21,7 +21,7 @@ export default async function PositionsPage() {
 
   return (
     <PositionPageClient
-      canArchive={hasResolvedPermission(permissionKeys, 'positions', 'archive')}
+      canDelete={hasResolvedPermission(permissionKeys, 'positions', 'delete')}
       canCreate={hasResolvedPermission(permissionKeys, 'positions', 'create')}
       canUpdate={hasResolvedPermission(permissionKeys, 'positions', 'update')}
       summary={data.summary}

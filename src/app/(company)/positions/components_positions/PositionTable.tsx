@@ -1,20 +1,20 @@
 'use client';
 
 import { Button, Popconfirm, Space, Table, Tag, Typography } from 'antd';
-import { Archive, Edit3 } from 'lucide-react';
+import { Edit3, Trash2 } from 'lucide-react';
 import type { ColumnsType } from 'antd/es/table';
 import type { PositionViewModel } from './PositionPageClient';
 
 type PositionTableProps = {
   positions: PositionViewModel[];
-  canArchive: boolean;
+  canDelete: boolean;
   canUpdate: boolean;
-  archivingPositionId?: string;
+  deletingPositionId?: string;
   onEdit: (position: PositionViewModel) => void;
-  onArchive: (positionId: string) => void;
+  onDelete: (positionId: string) => void;
 };
 
-export function PositionTable({ positions, canArchive, canUpdate, archivingPositionId, onEdit, onArchive }: PositionTableProps) {
+export function PositionTable({ positions, canDelete, canUpdate, deletingPositionId, onEdit, onDelete }: PositionTableProps) {
   const columns: ColumnsType<PositionViewModel> = [
     {
       title: 'Name',
@@ -26,7 +26,7 @@ export function PositionTable({ positions, canArchive, canUpdate, archivingPosit
           size={0}
         >
           <Typography.Text strong>{name}</Typography.Text>
-          {position.deletedAt ? <Typography.Text type='secondary'>Archived</Typography.Text> : null}
+          {position.deletedAt ? <Typography.Text type='secondary'>Deleted</Typography.Text> : null}
         </Space>
       ),
     },
@@ -52,20 +52,20 @@ export function PositionTable({ positions, canArchive, canUpdate, archivingPosit
     },
   ];
 
-  if (canArchive || canUpdate) {
+  if (canDelete || canUpdate) {
     columns.push({
       title: 'Actions',
       key: 'actions',
       width: 180,
       render: (_, position) => {
-        const archived = Boolean(position.deletedAt);
+        const deleted = Boolean(position.deletedAt);
 
         return (
           <Space size={6}>
             {canUpdate ? (
               <Button
                 size='small'
-                disabled={archived}
+                disabled={deleted}
                 icon={
                   <Edit3
                     size={14}
@@ -78,30 +78,30 @@ export function PositionTable({ positions, canArchive, canUpdate, archivingPosit
                 Edit
               </Button>
             ) : null}
-            {canArchive ? (
+            {canDelete ? (
               <Popconfirm
-                title='Archive position?'
-                description='This hides the position from active use but keeps employee history intact.'
-                okText='Archive'
+                title='Delete position?'
+                description='This position will no longer be available for use.'
+                okText='Delete'
                 okType='danger'
                 cancelText='Cancel'
-                disabled={archived}
-                onConfirm={() => onArchive(position.positionId)}
+                disabled={deleted}
+                onConfirm={() => onDelete(position.positionId)}
               >
                 <Button
                   size='small'
                   danger
-                  disabled={archived}
-                  loading={archivingPositionId === position.positionId}
+                  disabled={deleted}
+                  loading={deletingPositionId === position.positionId}
                   icon={
-                    <Archive
+                    <Trash2
                       size={14}
                       aria-hidden='true'
                       focusable='false'
                     />
                   }
                 >
-                  Archive
+                  Delete
                 </Button>
               </Popconfirm>
             ) : null}
@@ -125,7 +125,7 @@ export function PositionTable({ positions, canArchive, canUpdate, archivingPosit
 
 function renderStatus(position: PositionViewModel) {
   if (position.deletedAt) {
-    return <Tag>Archived</Tag>;
+    return <Tag>Deleted</Tag>;
   }
 
   return position.isActive ? <Tag color='success'>Active</Tag> : <Tag color='warning'>Inactive</Tag>;

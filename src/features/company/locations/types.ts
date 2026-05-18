@@ -15,7 +15,7 @@ export type LocationListData = {
     total: number;
     active: number;
     inactive: number;
-    archived: number;
+    deleted: number;
   };
 };
 
@@ -39,7 +39,7 @@ export type LocationMutationResult =
       message: string;
     };
 
-export type LocationArchiveResult =
+export type LocationDeleteResult =
   | {
       success: true;
       status: 200;

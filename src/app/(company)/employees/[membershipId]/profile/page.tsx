@@ -127,7 +127,7 @@ function includeCurrentAssignmentOption(options: EmployeeAssignmentOption[], cur
   return [
     ...options,
     {
-      label: `${currentAssignment.name} (${currentAssignment.deletedAt ? 'archived' : 'inactive'})`,
+      label: `${currentAssignment.name} (${currentAssignment.deletedAt ? 'deleted' : 'inactive'})`,
       value: currentAssignment.sourceId,
       disabled: true,
     },

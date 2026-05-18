@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { archiveLocation, updateLocation } from '@/features/company/locations/service';
+import { deleteLocation, updateLocation } from '@/features/company/locations/service';
 import { validateUpsertLocationRequest } from '@/features/company/locations/validation';
 import { getCompanyApiPermissionContext } from '../../_utils/companyApiAuth';
 
@@ -49,8 +49,8 @@ export async function PATCH(request: Request, context: LocationRouteContext) {
 export async function DELETE(_request: Request, context: LocationRouteContext) {
   const authContext = await getCompanyApiPermissionContext(
     'locations',
-    'archive',
-    'You do not have permission to archive locations.',
+    'delete',
+    'You do not have permission to delete locations.',
   );
 
   if (!authContext.success) {
@@ -58,7 +58,7 @@ export async function DELETE(_request: Request, context: LocationRouteContext) {
   }
 
   const { locationId } = await context.params;
-  const result = await archiveLocation(authContext.company.companyId, locationId);
+  const result = await deleteLocation(authContext.company.companyId, locationId);
 
   return NextResponse.json(
     {

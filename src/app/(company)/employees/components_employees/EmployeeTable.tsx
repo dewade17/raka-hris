@@ -108,7 +108,7 @@ function renderAssignment(name?: string, isActive?: boolean, deletedAt?: string 
     return <Typography.Text type='secondary'>Not assigned</Typography.Text>;
   }
 
-  const archived = Boolean(deletedAt);
+  const deleted = Boolean(deletedAt);
 
   return (
     <Space
@@ -116,7 +116,7 @@ function renderAssignment(name?: string, isActive?: boolean, deletedAt?: string 
       size={0}
     >
       <Typography.Text>{name}</Typography.Text>
-      <Typography.Text type='secondary'>{archived ? 'Archived' : isActive ? 'Active' : 'Inactive'}</Typography.Text>
+      <Typography.Text type='secondary'>{deleted ? 'Deleted' : isActive ? 'Active' : 'Inactive'}</Typography.Text>
     </Space>
   );
 }

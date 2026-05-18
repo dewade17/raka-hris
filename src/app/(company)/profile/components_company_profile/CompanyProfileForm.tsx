@@ -303,7 +303,7 @@ export function CompanyProfileForm({ initialValues, canUpdate, isSubmitting, err
                         onClearError();
                       }}
                     >
-                      Remove
+                      Delete
                     </Button>
                   ) : null}
                 </Space>

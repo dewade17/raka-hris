@@ -9,14 +9,14 @@ type PositionApiResponse = {
   message?: string;
 };
 
-export function useArchivePosition() {
+export function useDeletePosition() {
   const router = useRouter();
   const { message } = App.useApp();
-  const [archivingPositionId, setArchivingPositionId] = useState<string>();
+  const [deletingPositionId, setDeletingPositionId] = useState<string>();
 
-  const archivePosition = useCallback(
+  const deletePosition = useCallback(
     async (positionId: string) => {
-      setArchivingPositionId(positionId);
+      setDeletingPositionId(positionId);
 
       try {
         const response = await fetch(`/api/company/positions/${encodeURIComponent(positionId)}`, {
@@ -25,25 +25,25 @@ export function useArchivePosition() {
         const payload = (await response.json().catch(() => ({}))) as PositionApiResponse;
 
         if (!response.ok) {
-          message.error(payload.message ?? 'Position could not be archived. Please try again.');
+          message.error(payload.message ?? 'Position could not be deleted. Please try again.');
           return false;
         }
 
-        message.success(payload.message ?? 'Position archived successfully.');
+        message.success(payload.message ?? 'Position deleted successfully.');
         router.refresh();
         return true;
       } catch {
-        message.error('Position could not be archived. Please check your connection and try again.');
+        message.error('Position could not be deleted. Please check your connection and try again.');
         return false;
       } finally {
-        setArchivingPositionId(undefined);
+        setDeletingPositionId(undefined);
       }
     },
     [message, router],
   );
 
   return {
-    archivePosition,
-    archivingPositionId,
+    deletePosition,
+    deletingPositionId,
   };
 }

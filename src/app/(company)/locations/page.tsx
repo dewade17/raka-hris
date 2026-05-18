@@ -21,7 +21,7 @@ export default async function LocationsPage() {
 
   return (
     <LocationPageClient
-      canArchive={hasResolvedPermission(permissionKeys, 'locations', 'archive')}
+      canDelete={hasResolvedPermission(permissionKeys, 'locations', 'delete')}
       canCreate={hasResolvedPermission(permissionKeys, 'locations', 'create')}
       canUpdate={hasResolvedPermission(permissionKeys, 'locations', 'update')}
       summary={data.summary}

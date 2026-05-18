@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { archiveDepartment, updateDepartment } from '@/features/company/departments/service';
+import { deleteDepartment, updateDepartment } from '@/features/company/departments/service';
 import { validateUpsertDepartmentRequest } from '@/features/company/departments/validation';
 import { getCompanyApiPermissionContext } from '../../_utils/companyApiAuth';
 
@@ -49,8 +49,8 @@ export async function PATCH(request: Request, context: DepartmentRouteContext) {
 export async function DELETE(_request: Request, context: DepartmentRouteContext) {
   const authContext = await getCompanyApiPermissionContext(
     'departments',
-    'archive',
-    'You do not have permission to archive departments.',
+    'delete',
+    'You do not have permission to delete departments.',
   );
 
   if (!authContext.success) {
@@ -58,7 +58,7 @@ export async function DELETE(_request: Request, context: DepartmentRouteContext)
   }
 
   const { departmentId } = await context.params;
-  const result = await archiveDepartment(authContext.company.companyId, departmentId);
+  const result = await deleteDepartment(authContext.company.companyId, departmentId);
 
   return NextResponse.json(
     {

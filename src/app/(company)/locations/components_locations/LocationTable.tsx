@@ -1,20 +1,20 @@
 'use client';
 
 import { Button, Popconfirm, Space, Table, Tag, Typography } from 'antd';
-import { Archive, Edit3, ExternalLink } from 'lucide-react';
+import { Edit3, ExternalLink, Trash2 } from 'lucide-react';
 import type { ColumnsType } from 'antd/es/table';
 import type { LocationViewModel } from './LocationPageClient';
 
 type LocationTableProps = {
   locations: LocationViewModel[];
-  canArchive: boolean;
+  canDelete: boolean;
   canUpdate: boolean;
-  archivingLocationId?: string;
+  deletingLocationId?: string;
   onEdit: (location: LocationViewModel) => void;
-  onArchive: (locationId: string) => void;
+  onDelete: (locationId: string) => void;
 };
 
-export function LocationTable({ locations, canArchive, canUpdate, archivingLocationId, onEdit, onArchive }: LocationTableProps) {
+export function LocationTable({ locations, canDelete, canUpdate, deletingLocationId, onEdit, onDelete }: LocationTableProps) {
   const columns: ColumnsType<LocationViewModel> = [
     {
       title: 'Name',
@@ -26,7 +26,7 @@ export function LocationTable({ locations, canArchive, canUpdate, archivingLocat
           size={0}
         >
           <Typography.Text strong>{name}</Typography.Text>
-          {location.deletedAt ? <Typography.Text type='secondary'>Archived</Typography.Text> : null}
+          {location.deletedAt ? <Typography.Text type='secondary'>Deleted</Typography.Text> : null}
         </Space>
       ),
     },
@@ -50,20 +50,20 @@ export function LocationTable({ locations, canArchive, canUpdate, archivingLocat
     },
   ];
 
-  if (canArchive || canUpdate) {
+  if (canDelete || canUpdate) {
     columns.push({
       title: 'Actions',
       key: 'actions',
       width: 180,
       render: (_, location) => {
-        const archived = Boolean(location.deletedAt);
+        const deleted = Boolean(location.deletedAt);
 
         return (
           <Space size={6}>
             {canUpdate ? (
               <Button
                 size='small'
-                disabled={archived}
+                disabled={deleted}
                 icon={
                   <Edit3
                     size={14}
@@ -76,30 +76,30 @@ export function LocationTable({ locations, canArchive, canUpdate, archivingLocat
                 Edit
               </Button>
             ) : null}
-            {canArchive ? (
+            {canDelete ? (
               <Popconfirm
-                title='Archive location?'
-                description='This hides the location from active use but keeps existing records intact.'
-                okText='Archive'
+                title='Delete location?'
+                description='This location will no longer be available for use.'
+                okText='Delete'
                 okType='danger'
                 cancelText='Cancel'
-                disabled={archived}
-                onConfirm={() => onArchive(location.locationId)}
+                disabled={deleted}
+                onConfirm={() => onDelete(location.locationId)}
               >
                 <Button
                   size='small'
                   danger
-                  disabled={archived}
-                  loading={archivingLocationId === location.locationId}
+                  disabled={deleted}
+                  loading={deletingLocationId === location.locationId}
                   icon={
-                    <Archive
+                    <Trash2
                       size={14}
                       aria-hidden='true'
                       focusable='false'
                     />
                   }
                 >
-                  Archive
+                  Delete
                 </Button>
               </Popconfirm>
             ) : null}
@@ -150,7 +150,7 @@ function renderCoordinates(location: LocationViewModel) {
 
 function renderStatus(location: LocationViewModel) {
   if (location.deletedAt) {
-    return <Tag>Archived</Tag>;
+    return <Tag>Deleted</Tag>;
   }
 
   return location.isActive ? <Tag color='success'>Active</Tag> : <Tag color='warning'>Inactive</Tag>;

@@ -14,7 +14,7 @@ export type PositionListData = {
     total: number;
     active: number;
     inactive: number;
-    archived: number;
+    deleted: number;
   };
 };
 
@@ -36,7 +36,7 @@ export type PositionMutationResult =
       message: string;
     };
 
-export type PositionArchiveResult =
+export type PositionDeleteResult =
   | {
       success: true;
       status: 200;

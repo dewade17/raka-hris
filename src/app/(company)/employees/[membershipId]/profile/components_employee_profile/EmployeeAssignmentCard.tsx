@@ -223,9 +223,9 @@ function AssignmentTag({ label, assignment }: { label: string; assignment: Emplo
     return <Tag>{label}: Not assigned</Tag>;
   }
 
-  const archived = Boolean(assignment.deletedAt);
-  const color = archived ? 'red' : assignment.isActive ? 'blue' : 'orange';
-  const suffix = archived ? 'archived' : assignment.isActive ? 'active' : 'inactive';
+  const deleted = Boolean(assignment.deletedAt);
+  const color = deleted ? 'red' : assignment.isActive ? 'blue' : 'orange';
+  const suffix = deleted ? 'deleted' : assignment.isActive ? 'active' : 'inactive';
 
   return (
     <Tag color={color}>

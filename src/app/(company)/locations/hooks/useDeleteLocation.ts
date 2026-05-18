@@ -9,14 +9,14 @@ type LocationApiResponse = {
   message?: string;
 };
 
-export function useArchiveLocation() {
+export function useDeleteLocation() {
   const router = useRouter();
   const { message } = App.useApp();
-  const [archivingLocationId, setArchivingLocationId] = useState<string>();
+  const [deletingLocationId, setDeletingLocationId] = useState<string>();
 
-  const archiveLocation = useCallback(
+  const deleteLocation = useCallback(
     async (locationId: string) => {
-      setArchivingLocationId(locationId);
+      setDeletingLocationId(locationId);
 
       try {
         const response = await fetch(`/api/company/locations/${encodeURIComponent(locationId)}`, {
@@ -25,25 +25,25 @@ export function useArchiveLocation() {
         const payload = (await response.json().catch(() => ({}))) as LocationApiResponse;
 
         if (!response.ok) {
-          message.error(payload.message ?? 'Location could not be archived. Please try again.');
+          message.error(payload.message ?? 'Location could not be deleted. Please try again.');
           return false;
         }
 
-        message.success(payload.message ?? 'Location archived successfully.');
+        message.success(payload.message ?? 'Location deleted successfully.');
         router.refresh();
         return true;
       } catch {
-        message.error('Location could not be archived. Please check your connection and try again.');
+        message.error('Location could not be deleted. Please check your connection and try again.');
         return false;
       } finally {
-        setArchivingLocationId(undefined);
+        setDeletingLocationId(undefined);
       }
     },
     [message, router],
   );
 
   return {
-    archiveLocation,
-    archivingLocationId,
+    deleteLocation,
+    deletingLocationId,
   };
 }
