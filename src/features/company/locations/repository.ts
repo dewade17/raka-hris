@@ -1,5 +1,6 @@
 import db from '@/lib/db';
-import type { UpsertLocationInput } from './types';
+import type { Prisma } from '@/generated/prisma/client';
+import type { LocationListQuery, UpsertLocationInput } from './types';
 
 const locationSelect = {
   locationId: true,
@@ -12,16 +13,64 @@ const locationSelect = {
   deletedAt: true,
 } as const;
 
-export async function findCompanyLocations(companyId: string) {
+export async function findCompanyLocations(companyId: string, query?: LocationListQuery) {
   return db.location.findMany({
-    where: {
-      companyId,
-    },
-    orderBy: {
-      name: 'asc',
-    },
+    where: query ? buildLocationListWhere(companyId, query) : { companyId },
+    orderBy: [{ name: 'asc' }, { locationId: 'asc' }],
+    ...(query
+      ? {
+          skip: (query.page - 1) * query.pageSize,
+          take: query.pageSize,
+        }
+      : {}),
     select: locationSelect,
   });
+}
+
+export async function countCompanyLocations(companyId: string, query: LocationListQuery) {
+  return db.location.count({
+    where: buildLocationListWhere(companyId, query),
+  });
+}
+
+export async function countCompanyLocationsSummary(companyId: string) {
+  const [total, active, inactive, deleted] = await Promise.all([
+    db.location.count({
+      where: {
+        companyId,
+        deletedAt: null,
+      },
+    }),
+    db.location.count({
+      where: {
+        companyId,
+        deletedAt: null,
+        isActive: true,
+      },
+    }),
+    db.location.count({
+      where: {
+        companyId,
+        deletedAt: null,
+        isActive: false,
+      },
+    }),
+    db.location.count({
+      where: {
+        companyId,
+        deletedAt: {
+          not: null,
+        },
+      },
+    }),
+  ]);
+
+  return {
+    total,
+    active,
+    inactive,
+    deleted,
+  };
 }
 
 export async function findCompanyLocationById(companyId: string, locationId: string) {
@@ -81,4 +130,34 @@ export async function deleteLocationRecord(companyId: string, locationId: string
       deletedAt: new Date(),
     },
   });
+}
+
+function buildLocationListWhere(companyId: string, query: LocationListQuery): Prisma.LocationWhereInput {
+  const where: Prisma.LocationWhereInput = {
+    companyId,
+  };
+
+  if (query.query) {
+    where.name = {
+      contains: query.query,
+    };
+  }
+
+  if (query.status === 'deleted') {
+    where.deletedAt = {
+      not: null,
+    };
+  } else {
+    where.deletedAt = null;
+
+    if (query.status === 'active') {
+      where.isActive = true;
+    }
+
+    if (query.status === 'inactive') {
+      where.isActive = false;
+    }
+  }
+
+  return where;
 }

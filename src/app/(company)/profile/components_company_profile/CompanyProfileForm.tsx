@@ -79,7 +79,7 @@ export function CompanyProfileForm({ initialValues, canUpdate, isSubmitting, err
         <Alert
           showIcon
           type='error'
-          message={errorMessage}
+          title={errorMessage}
           style={{ marginBottom: 20 }}
         />
       ) : null}
@@ -88,7 +88,7 @@ export function CompanyProfileForm({ initialValues, canUpdate, isSubmitting, err
         <Alert
           showIcon
           type='info'
-          message='You can review the company profile, but you do not have permission to update it.'
+          title='You can review the company profile, but you do not have permission to update it.'
           style={{ marginBottom: 20 }}
         />
       ) : null}

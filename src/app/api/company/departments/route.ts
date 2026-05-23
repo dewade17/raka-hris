@@ -1,16 +1,17 @@
-import { NextResponse } from 'next/server';
+import { NextResponse, type NextRequest } from 'next/server';
 import { createDepartment, getCompanyDepartments } from '@/features/company/departments/service';
-import { validateUpsertDepartmentRequest } from '@/features/company/departments/validation';
+import { validateDepartmentListQuery, validateUpsertDepartmentRequest } from '@/features/company/departments/validation';
 import { getCompanyApiPermissionContext } from '../_utils/companyApiAuth';
 
-export async function GET() {
+export async function GET(request: NextRequest) {
   const context = await getCompanyApiPermissionContext('departments', 'view');
 
   if (!context.success) {
     return context.response;
   }
 
-  const data = await getCompanyDepartments(context.company.companyId);
+  const listQuery = validateDepartmentListQuery(request.nextUrl.searchParams);
+  const data = await getCompanyDepartments(context.company.companyId, listQuery);
 
   return NextResponse.json({
     success: true,

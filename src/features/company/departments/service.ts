@@ -1,23 +1,32 @@
 import { Prisma } from '@/generated/prisma/client';
 import {
+  countCompanyDepartments,
+  countCompanyDepartmentsSummary,
   createDepartmentRecord,
   deleteDepartmentRecord,
   findCompanyDepartments,
   updateDepartmentRecord,
 } from './repository';
-import type { DepartmentDeleteResult, DepartmentListData, DepartmentMutationResult, UpsertDepartmentInput } from './types';
+import type { DepartmentDeleteResult, DepartmentListData, DepartmentListQuery, DepartmentMutationResult, UpsertDepartmentInput } from './types';
 
-export async function getCompanyDepartments(companyId: string): Promise<DepartmentListData> {
-  const departments = (await findCompanyDepartments(companyId)).map(mapDepartmentRecord);
+export async function getCompanyDepartments(companyId: string, query?: DepartmentListQuery): Promise<DepartmentListData> {
+  if (!query) {
+    const [departmentRecords, summary] = await Promise.all([findCompanyDepartments(companyId), countCompanyDepartmentsSummary(companyId)]);
+
+    return {
+      departments: departmentRecords.map(mapDepartmentRecord),
+      summary,
+    };
+  }
+
+  const [totalItems, summary] = await Promise.all([countCompanyDepartments(companyId, query), countCompanyDepartmentsSummary(companyId)]);
+  const pagination = createPaginationMeta(query, totalItems);
+  const departments = (await findCompanyDepartments(companyId, { ...query, page: pagination.page })).map(mapDepartmentRecord);
 
   return {
     departments,
-    summary: {
-      total: departments.filter((department) => !department.deletedAt).length,
-      active: departments.filter((department) => !department.deletedAt && department.isActive).length,
-      inactive: departments.filter((department) => !department.deletedAt && !department.isActive).length,
-      deleted: departments.filter((department) => department.deletedAt).length,
-    },
+    summary,
+    pagination,
   };
 }
 
@@ -123,4 +132,16 @@ function mapDepartmentRecord(department: Awaited<ReturnType<typeof findCompanyDe
 
 function isUniqueConstraintError(error: unknown) {
   return error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2002';
+}
+
+function createPaginationMeta(query: DepartmentListQuery, totalItems: number) {
+  const totalPages = Math.max(1, Math.ceil(totalItems / query.pageSize));
+  const page = Math.min(query.page, totalPages);
+
+  return {
+    page,
+    pageSize: query.pageSize,
+    totalItems,
+    totalPages,
+  };
 }

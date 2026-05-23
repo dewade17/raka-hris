@@ -103,11 +103,7 @@ export function RegisterFormCard({ mode = 'standard', googleWorkspaceUser }: Reg
         return;
       }
 
-      setSuccessMessage(
-        isGoogleWorkspaceSetup
-          ? 'Workspace perusahaan berhasil dibuat. Anda akan diarahkan ke dashboard.'
-          : 'Akun Anda berhasil dibuat. Anda akan diarahkan ke halaman masuk.',
-      );
+      setSuccessMessage(isGoogleWorkspaceSetup ? 'Workspace perusahaan berhasil dibuat. Anda akan diarahkan ke dashboard.' : 'Akun Anda berhasil dibuat. Anda akan diarahkan ke halaman masuk.');
       window.location.href = getRegisterRedirectUrl(payload, isGoogleWorkspaceSetup ? '/dashboard-company' : '/login');
     } catch {
       setGeneralErrorMessage('Layanan pendaftaran belum dapat dihubungi. Periksa koneksi Anda, lalu coba lagi.');
@@ -148,11 +144,7 @@ export function RegisterFormCard({ mode = 'standard', googleWorkspaceUser }: Reg
                 {isGoogleWorkspaceSetup ? 'Lengkapi Workspace' : 'Buat Akun Baru'}
               </Title>
 
-              <Text className='mt-3 block !text-sm !leading-7 !text-slate-600'>
-                {isGoogleWorkspaceSetup
-                  ? 'Daftarkan company untuk akun Google Anda.'
-                  : 'Daftarkan perusahaan Anda untuk mulai menggunakan Raka HRIS.'}
-              </Text>
+              <Text className='mt-3 block !text-sm !leading-7 !text-slate-600'>{isGoogleWorkspaceSetup ? 'Daftarkan company untuk akun Google Anda.' : 'Daftarkan perusahaan Anda untuk mulai menggunakan Raka HRIS.'}</Text>
             </div>
 
             <span className='hidden h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-[#f8fafc] text-base font-bold tracking-tight text-raka-primary ring-1 ring-slate-200 sm:flex'>RH</span>
@@ -475,13 +467,7 @@ export function RegisterFormCard({ mode = 'standard', googleWorkspaceUser }: Reg
               iconPlacement='end'
               className='!min-h-[3.25rem] !rounded-2xl !border-raka-accent !bg-raka-accent !text-sm !font-semibold !shadow-lg !shadow-raka-accent/20 transition hover:!-translate-y-0.5 hover:!border-raka-accent-soft hover:!bg-raka-accent-soft'
             >
-              {isSubmitting
-                ? isGoogleWorkspaceSetup
-                  ? 'Membuat workspace...'
-                  : 'Mendaftarkan akun...'
-                : isGoogleWorkspaceSetup
-                  ? 'Buat Workspace'
-                  : 'Daftar Sekarang'}
+              {isSubmitting ? (isGoogleWorkspaceSetup ? 'Membuat workspace...' : 'Mendaftarkan akun...') : isGoogleWorkspaceSetup ? 'Buat Workspace' : 'Daftar Sekarang'}
             </Button>
 
             {!isGoogleWorkspaceSetup ? (

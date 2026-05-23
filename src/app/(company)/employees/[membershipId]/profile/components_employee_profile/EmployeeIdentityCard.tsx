@@ -40,7 +40,7 @@ export function EmployeeIdentityCard({ employee }: EmployeeIdentityCardProps) {
         <Alert
           showIcon
           type='warning'
-          message='Employee profile details have not been completed yet.'
+          title='Employee profile details have not been completed yet.'
         />
       ) : null}
 

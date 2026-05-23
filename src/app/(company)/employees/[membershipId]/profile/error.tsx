@@ -20,7 +20,7 @@ export default function EmployeeProfileError({ reset }: { reset: () => void }) {
       <Alert
         showIcon
         type='error'
-        message='The employee profile page is unavailable right now.'
+        title='The employee profile page is unavailable right now.'
       />
     </Result>
   );

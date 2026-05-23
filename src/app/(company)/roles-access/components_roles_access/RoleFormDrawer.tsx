@@ -92,7 +92,7 @@ export function RoleFormDrawer({ open, role, isSubmitting, errorMessage, onClose
           <Alert
             showIcon
             type='error'
-            message={errorMessage}
+            title={errorMessage}
           />
         ) : null}
 

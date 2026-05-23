@@ -28,7 +28,7 @@ export default function DepartmentsError({
       <Alert
         showIcon
         type="error"
-        message="The department list is unavailable right now."
+        title="The department list is unavailable right now."
       />
     </Result>
   );

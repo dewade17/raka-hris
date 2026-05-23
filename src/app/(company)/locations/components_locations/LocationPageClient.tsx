@@ -2,8 +2,9 @@
 
 import { Alert, Button, Card, Col, Flex, Input, Row, Select, Space, Statistic, Typography, theme } from 'antd';
 import { Plus, Search } from 'lucide-react';
-import { useMemo, useState } from 'react';
-import type { LocationListData } from '@/features/company/locations/types';
+import { usePathname, useRouter } from 'next/navigation';
+import { useCallback, useEffect, useState, useTransition } from 'react';
+import type { LocationListData, LocationListQuery, LocationListStatus } from '@/features/company/locations/types';
 import { useDeleteLocation } from '../hooks/useDeleteLocation';
 import { useUpsertLocation } from '../hooks/useUpsertLocation';
 import { LocationFormDrawer, type LocationFormValues } from './LocationFormDrawer';
@@ -25,38 +26,82 @@ type LocationPageClientProps = {
   canDelete: boolean;
   canUpdate: boolean;
   locations: LocationViewModel[];
+  listQuery: LocationListQuery;
+  pagination: NonNullable<LocationListData['pagination']>;
   summary: LocationListData['summary'];
 };
 
-type StatusFilter = 'all' | 'active' | 'inactive' | 'deleted';
-
-const statusOptions: Array<{ label: string; value: StatusFilter }> = [
+const statusOptions: Array<{ label: string; value: LocationListStatus }> = [
   { label: 'Current records', value: 'all' },
   { label: 'Active', value: 'active' },
   { label: 'Inactive', value: 'inactive' },
   { label: 'Deleted', value: 'deleted' },
 ];
 
-export function LocationPageClient({ canCreate, canDelete, canUpdate, locations, summary }: LocationPageClientProps) {
+export function LocationPageClient({ canCreate, canDelete, canUpdate, locations, listQuery, pagination, summary }: LocationPageClientProps) {
+  const router = useRouter();
+  const pathname = usePathname();
   const { token } = theme.useToken();
   const canMutate = canCreate || canDelete || canUpdate;
-  const [query, setQuery] = useState('');
-  const [status, setStatus] = useState<StatusFilter>('all');
+  const [isPending, startTransition] = useTransition();
+  const [query, setQuery] = useState(listQuery.query);
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [editingLocation, setEditingLocation] = useState<LocationViewModel>();
   const { deleteLocation, deletingLocationId } = useDeleteLocation();
   const { clearErrorMessage, errorMessage, isSubmitting, upsertLocation } = useUpsertLocation();
 
-  const filteredLocations = useMemo(() => {
-    const normalizedQuery = query.trim().toLowerCase();
+  const updateListQuery = useCallback(
+    (updates: Partial<LocationListQuery>) => {
+      const nextListQuery: LocationListQuery = {
+        ...listQuery,
+        ...updates,
+      };
+      const params = new URLSearchParams();
+      const normalizedQuery = nextListQuery.query.trim().replace(/\s+/g, ' ');
 
-    return locations.filter((location) => {
-      const matchesQuery = !normalizedQuery || location.name.toLowerCase().includes(normalizedQuery);
-      const matchesStatus = status === 'deleted' ? Boolean(location.deletedAt) : !location.deletedAt && (status === 'all' || (status === 'active' && location.isActive) || (status === 'inactive' && !location.isActive));
+      if (nextListQuery.page > 1) {
+        params.set('page', String(nextListQuery.page));
+      }
 
-      return matchesQuery && matchesStatus;
-    });
-  }, [locations, query, status]);
+      if (nextListQuery.pageSize !== 10) {
+        params.set('pageSize', String(nextListQuery.pageSize));
+      }
+
+      if (normalizedQuery) {
+        params.set('query', normalizedQuery);
+      }
+
+      if (nextListQuery.status !== 'all') {
+        params.set('status', nextListQuery.status);
+      }
+
+      const search = params.toString();
+
+      startTransition(() => {
+        router.replace(search ? `${pathname}?${search}` : pathname, { scroll: false });
+      });
+    },
+    [listQuery, pathname, router, startTransition],
+  );
+
+  useEffect(() => {
+    const normalizedQuery = query.trim().replace(/\s+/g, ' ');
+
+    if (normalizedQuery === listQuery.query) {
+      return;
+    }
+
+    const timeoutId = window.setTimeout(() => {
+      updateListQuery({
+        page: 1,
+        query: normalizedQuery,
+      });
+    }, 350);
+
+    return () => {
+      window.clearTimeout(timeoutId);
+    };
+  }, [listQuery.query, query, updateListQuery]);
 
   const handleOpenCreate = () => {
     setEditingLocation(undefined);
@@ -117,7 +162,7 @@ export function LocationPageClient({ canCreate, canDelete, canUpdate, locations,
         <Alert
           showIcon
           type='info'
-          message='You can review locations, but you do not have permission to make changes.'
+          title='You can review locations, but you do not have permission to make changes.'
           style={{ marginBottom: 16 }}
         />
       ) : null}
@@ -170,16 +215,23 @@ export function LocationPageClient({ canCreate, canDelete, canUpdate, locations,
             }
             style={{ maxWidth: 320 }}
           />
-          <Select<StatusFilter>
-            value={status}
+          <Select<LocationListStatus>
+            value={listQuery.status}
             options={statusOptions}
-            onChange={setStatus}
+            onChange={(nextStatus) => {
+              updateListQuery({
+                page: 1,
+                status: nextStatus,
+              });
+            }}
             style={{ width: 190 }}
           />
         </Flex>
 
         <LocationTable
-          locations={filteredLocations}
+          locations={locations}
+          loading={isPending}
+          pagination={pagination}
           canDelete={canDelete}
           canUpdate={canUpdate}
           deletingLocationId={deletingLocationId}
@@ -190,6 +242,12 @@ export function LocationPageClient({ canCreate, canDelete, canUpdate, locations,
           }}
           onDelete={(locationId) => {
             void deleteLocation(locationId);
+          }}
+          onPaginationChange={(page, pageSize) => {
+            updateListQuery({
+              page,
+              pageSize,
+            });
           }}
         />
       </Card>

@@ -134,7 +134,7 @@ export function EmployeeAssignmentCard({ employee, canManage, departmentOptions,
           <Alert
             showIcon
             type='error'
-            message={errorMessage}
+            title={errorMessage}
             closable
             onClose={clearErrorMessage}
           />

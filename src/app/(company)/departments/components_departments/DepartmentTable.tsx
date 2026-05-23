@@ -2,19 +2,25 @@
 
 import { Button, Popconfirm, Space, Table, Tag, Typography } from 'antd';
 import { Edit3, Trash2 } from 'lucide-react';
-import type { ColumnsType } from 'antd/es/table';
+import type { ColumnsType, TablePaginationConfig } from 'antd/es/table';
+import type { DepartmentListData } from '@/features/company/departments/types';
 import type { DepartmentViewModel } from './DepartmentPageClient';
 
 type DepartmentTableProps = {
   departments: DepartmentViewModel[];
+  loading?: boolean;
+  pagination: NonNullable<DepartmentListData['pagination']>;
   canDelete: boolean;
   canUpdate: boolean;
   deletingDepartmentId?: string;
   onEdit: (department: DepartmentViewModel) => void;
   onDelete: (departmentId: string) => void;
+  onPaginationChange: (page: number, pageSize: number) => void;
 };
 
-export function DepartmentTable({ departments, canDelete, canUpdate, deletingDepartmentId, onEdit, onDelete }: DepartmentTableProps) {
+const pageSizeOptions = [10, 20, 50];
+
+export function DepartmentTable({ departments, loading, pagination, canDelete, canUpdate, deletingDepartmentId, onEdit, onDelete, onPaginationChange }: DepartmentTableProps) {
   const columns: ColumnsType<DepartmentViewModel> = [
     {
       title: 'Name',
@@ -116,11 +122,31 @@ export function DepartmentTable({ departments, canDelete, canUpdate, deletingDep
       rowKey='departmentId'
       columns={columns}
       dataSource={departments}
-      pagination={{ pageSize: 10, showSizeChanger: true }}
+      loading={loading}
+      pagination={{
+        current: pagination.page,
+        pageSize: pagination.pageSize,
+        pageSizeOptions,
+        showSizeChanger: true,
+        showTotal: (total, range) => (total === 0 ? 'No departments' : `${range[0]}-${range[1]} of ${total} departments`),
+        total: pagination.totalItems,
+      }}
       locale={{ emptyText: 'No departments match your filters.' }}
+      onChange={(nextPagination) => {
+        handlePaginationChange(nextPagination, pagination, onPaginationChange);
+      }}
       scroll={{ x: 760 }}
     />
   );
+}
+
+function handlePaginationChange(currentPagination: TablePaginationConfig, previousPagination: NonNullable<DepartmentListData['pagination']>, onPaginationChange: (page: number, pageSize: number) => void) {
+  const nextPageSize = currentPagination.pageSize ?? previousPagination.pageSize;
+  const nextPage = nextPageSize === previousPagination.pageSize ? currentPagination.current ?? previousPagination.page : 1;
+
+  if (nextPage !== previousPagination.page || nextPageSize !== previousPagination.pageSize) {
+    onPaginationChange(nextPage, nextPageSize);
+  }
 }
 
 function renderStatus(department: DepartmentViewModel) {

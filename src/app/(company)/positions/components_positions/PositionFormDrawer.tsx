@@ -92,7 +92,7 @@ export function PositionFormDrawer({ open, position, isSubmitting, errorMessage,
           <Alert
             showIcon
             type='error'
-            message={errorMessage}
+            title={errorMessage}
           />
         ) : null}
 

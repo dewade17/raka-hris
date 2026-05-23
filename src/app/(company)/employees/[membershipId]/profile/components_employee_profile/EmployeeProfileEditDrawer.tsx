@@ -36,15 +36,7 @@ const maritalStatusOptions = [
   { label: 'Widowed', value: 'Widowed' },
 ];
 
-export function EmployeeProfileEditDrawer({
-  open,
-  employee,
-  isSubmitting,
-  errorMessage,
-  onClose,
-  onClearError,
-  onSubmit,
-}: EmployeeProfileEditDrawerProps) {
+export function EmployeeProfileEditDrawer({ open, employee, isSubmitting, errorMessage, onClose, onClearError, onSubmit }: EmployeeProfileEditDrawerProps) {
   const { token } = theme.useToken();
   const [form] = Form.useForm<EmployeeProfileEditFormValues>();
   const photoUrl = Form.useWatch('photoUrl', form);
@@ -119,7 +111,7 @@ export function EmployeeProfileEditDrawer({
       }
     >
       <Space
-        direction='vertical'
+        orientation='vertical'
         size={16}
         style={{ width: '100%' }}
       >
@@ -129,7 +121,7 @@ export function EmployeeProfileEditDrawer({
           <Alert
             showIcon
             type='error'
-            message={errorMessage}
+            title={errorMessage}
           />
         ) : null}
 

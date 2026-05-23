@@ -1,18 +1,25 @@
 import { Prisma } from '@/generated/prisma/client';
-import { createLocationRecord, deleteLocationRecord, findCompanyLocations, updateLocationRecord } from './repository';
-import type { LocationDeleteResult, LocationListData, LocationMutationResult, UpsertLocationInput } from './types';
+import { countCompanyLocations, countCompanyLocationsSummary, createLocationRecord, deleteLocationRecord, findCompanyLocations, updateLocationRecord } from './repository';
+import type { LocationDeleteResult, LocationListData, LocationListQuery, LocationMutationResult, UpsertLocationInput } from './types';
 
-export async function getCompanyLocations(companyId: string): Promise<LocationListData> {
-  const locations = (await findCompanyLocations(companyId)).map(mapLocationRecord);
+export async function getCompanyLocations(companyId: string, query?: LocationListQuery): Promise<LocationListData> {
+  if (!query) {
+    const [locationRecords, summary] = await Promise.all([findCompanyLocations(companyId), countCompanyLocationsSummary(companyId)]);
+
+    return {
+      locations: locationRecords.map(mapLocationRecord),
+      summary,
+    };
+  }
+
+  const [totalItems, summary] = await Promise.all([countCompanyLocations(companyId, query), countCompanyLocationsSummary(companyId)]);
+  const pagination = createPaginationMeta(query, totalItems);
+  const locations = (await findCompanyLocations(companyId, { ...query, page: pagination.page })).map(mapLocationRecord);
 
   return {
     locations,
-    summary: {
-      total: locations.filter((location) => !location.deletedAt).length,
-      active: locations.filter((location) => !location.deletedAt && location.isActive).length,
-      inactive: locations.filter((location) => !location.deletedAt && !location.isActive).length,
-      deleted: locations.filter((location) => location.deletedAt).length,
-    },
+    summary,
+    pagination,
   };
 }
 
@@ -119,4 +126,16 @@ function mapLocationRecord(location: Awaited<ReturnType<typeof findCompanyLocati
 
 function isUniqueConstraintError(error: unknown) {
   return error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2002';
+}
+
+function createPaginationMeta(query: LocationListQuery, totalItems: number) {
+  const totalPages = Math.max(1, Math.ceil(totalItems / query.pageSize));
+  const page = Math.min(query.page, totalPages);
+
+  return {
+    page,
+    pageSize: query.pageSize,
+    totalItems,
+    totalPages,
+  };
 }

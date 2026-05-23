@@ -2,8 +2,9 @@
 
 import { Alert, Button, Card, Col, Flex, Input, Row, Select, Space, Statistic, Typography, theme } from 'antd';
 import { Plus, Search } from 'lucide-react';
-import { useMemo, useState } from 'react';
-import type { DepartmentListData } from '@/features/company/departments/types';
+import { usePathname, useRouter } from 'next/navigation';
+import { useCallback, useEffect, useState, useTransition } from 'react';
+import type { DepartmentListData, DepartmentListQuery, DepartmentListStatus } from '@/features/company/departments/types';
 import { useDeleteDepartment } from '../hooks/useDeleteDepartment';
 import { useUpsertDepartment } from '../hooks/useUpsertDepartment';
 import { DepartmentFormDrawer, type DepartmentFormValues } from './DepartmentFormDrawer';
@@ -24,38 +25,82 @@ type DepartmentPageClientProps = {
   canDelete: boolean;
   canUpdate: boolean;
   departments: DepartmentViewModel[];
+  listQuery: DepartmentListQuery;
+  pagination: NonNullable<DepartmentListData['pagination']>;
   summary: DepartmentListData['summary'];
 };
 
-type StatusFilter = 'all' | 'active' | 'inactive' | 'deleted';
-
-const statusOptions: Array<{ label: string; value: StatusFilter }> = [
+const statusOptions: Array<{ label: string; value: DepartmentListStatus }> = [
   { label: 'Current records', value: 'all' },
   { label: 'Active', value: 'active' },
   { label: 'Inactive', value: 'inactive' },
   { label: 'Deleted', value: 'deleted' },
 ];
 
-export function DepartmentPageClient({ canCreate, canDelete, canUpdate, departments, summary }: DepartmentPageClientProps) {
+export function DepartmentPageClient({ canCreate, canDelete, canUpdate, departments, listQuery, pagination, summary }: DepartmentPageClientProps) {
+  const router = useRouter();
+  const pathname = usePathname();
   const { token } = theme.useToken();
   const canMutate = canCreate || canDelete || canUpdate;
-  const [query, setQuery] = useState('');
-  const [status, setStatus] = useState<StatusFilter>('all');
+  const [isPending, startTransition] = useTransition();
+  const [query, setQuery] = useState(listQuery.query);
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [editingDepartment, setEditingDepartment] = useState<DepartmentViewModel>();
   const { deleteDepartment, deletingDepartmentId } = useDeleteDepartment();
   const { clearErrorMessage, errorMessage, isSubmitting, upsertDepartment } = useUpsertDepartment();
 
-  const filteredDepartments = useMemo(() => {
-    const normalizedQuery = query.trim().toLowerCase();
+  const updateListQuery = useCallback(
+    (updates: Partial<DepartmentListQuery>) => {
+      const nextListQuery: DepartmentListQuery = {
+        ...listQuery,
+        ...updates,
+      };
+      const params = new URLSearchParams();
+      const normalizedQuery = nextListQuery.query.trim().replace(/\s+/g, ' ');
 
-    return departments.filter((department) => {
-      const matchesQuery = !normalizedQuery || department.name.toLowerCase().includes(normalizedQuery);
-      const matchesStatus = status === 'deleted' ? Boolean(department.deletedAt) : !department.deletedAt && (status === 'all' || (status === 'active' && department.isActive) || (status === 'inactive' && !department.isActive));
+      if (nextListQuery.page > 1) {
+        params.set('page', String(nextListQuery.page));
+      }
 
-      return matchesQuery && matchesStatus;
-    });
-  }, [departments, query, status]);
+      if (nextListQuery.pageSize !== 10) {
+        params.set('pageSize', String(nextListQuery.pageSize));
+      }
+
+      if (normalizedQuery) {
+        params.set('query', normalizedQuery);
+      }
+
+      if (nextListQuery.status !== 'all') {
+        params.set('status', nextListQuery.status);
+      }
+
+      const search = params.toString();
+
+      startTransition(() => {
+        router.replace(search ? `${pathname}?${search}` : pathname, { scroll: false });
+      });
+    },
+    [listQuery, pathname, router, startTransition],
+  );
+
+  useEffect(() => {
+    const normalizedQuery = query.trim().replace(/\s+/g, ' ');
+
+    if (normalizedQuery === listQuery.query) {
+      return;
+    }
+
+    const timeoutId = window.setTimeout(() => {
+      updateListQuery({
+        page: 1,
+        query: normalizedQuery,
+      });
+    }, 350);
+
+    return () => {
+      window.clearTimeout(timeoutId);
+    };
+  }, [listQuery.query, query, updateListQuery]);
 
   const handleOpenCreate = () => {
     setEditingDepartment(undefined);
@@ -116,7 +161,7 @@ export function DepartmentPageClient({ canCreate, canDelete, canUpdate, departme
         <Alert
           showIcon
           type='info'
-          message='You can review departments, but you do not have permission to make changes.'
+          title='You can review departments, but you do not have permission to make changes.'
           style={{ marginBottom: 16 }}
         />
       ) : null}
@@ -169,16 +214,23 @@ export function DepartmentPageClient({ canCreate, canDelete, canUpdate, departme
             }
             style={{ maxWidth: 320 }}
           />
-          <Select<StatusFilter>
-            value={status}
+          <Select<DepartmentListStatus>
+            value={listQuery.status}
             options={statusOptions}
-            onChange={setStatus}
+            onChange={(nextStatus) => {
+              updateListQuery({
+                page: 1,
+                status: nextStatus,
+              });
+            }}
             style={{ width: 190 }}
           />
         </Flex>
 
         <DepartmentTable
-          departments={filteredDepartments}
+          departments={departments}
+          loading={isPending}
+          pagination={pagination}
           canDelete={canDelete}
           canUpdate={canUpdate}
           deletingDepartmentId={deletingDepartmentId}
@@ -189,6 +241,12 @@ export function DepartmentPageClient({ canCreate, canDelete, canUpdate, departme
           }}
           onDelete={(departmentId) => {
             void deleteDepartment(departmentId);
+          }}
+          onPaginationChange={(page, pageSize) => {
+            updateListQuery({
+              page,
+              pageSize,
+            });
           }}
         />
       </Card>

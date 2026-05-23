@@ -6,6 +6,30 @@ This project uses Next.js 16, React 19, and newer framework conventions that may
 
 Before writing or proposing Next.js code, read the relevant guide in `node_modules/next/dist/docs/`. If it is not available, use `https://nextjs.org/docs`. Heed deprecation notices and prefer the documented Next.js 16 behavior over prior knowledge.
 
+This project also uses Ant Design 6, Tailwind CSS 4, and TypeScript. These tools have version-specific APIs, conventions, and breaking changes that may differ from older assumptions.
+
+Before writing or proposing Ant Design code, read the relevant official Ant Design React guide or component documentation:
+
+- Ant Design React docs: `https://ant.design/docs/react/introduce`
+- Ant Design components: `https://ant.design/components/overview/`
+
+Before writing or proposing Tailwind CSS code, read the relevant official Tailwind CSS documentation and prefer documented Tailwind CSS 4 behavior:
+
+- Tailwind CSS docs: `https://tailwindcss.com/docs`
+- Tailwind CSS utility classes: `https://tailwindcss.com/docs/styling-with-utility-classes`
+
+Before writing or proposing TypeScript code, read the relevant official TypeScript documentation, Handbook, or reference page:
+
+- TypeScript docs: `https://www.typescriptlang.org/docs/`
+- TypeScript Handbook: `https://www.typescriptlang.org/docs/handbook/intro.html`
+
+Before writing or proposing Prisma code, read the relevant official Prisma ORM documentation and prefer documented Prisma 7 behavior:
+
+- Prisma ORM docs: `https://www.prisma.io/docs/orm`
+- Prisma Client docs: `https://www.prisma.io/docs/orm/prisma-client`
+- Prisma schema docs: `https://www.prisma.io/docs/orm/prisma-schema`
+- Prisma Migrate docs: `https://www.prisma.io/docs/orm/prisma-migrate`
+
 ## Project Stack
 
 - Framework: Next.js `16.2.4`
@@ -70,6 +94,16 @@ Do not create unused CRUD hooks just to complete a naming set. For example, only
 When a type is only used by one component and one nearby hook, it may stay close to the component and be exported from that component file. If the type is shared across several components, hooks, or route files, move it to a route-level `types.ts`.
 
 Hooks in Client Component routes must not import server-only modules such as Prisma repositories, server auth helpers, or feature services that are meant to run only on the server. Use route handlers or Server Actions as the boundary for server work.
+
+## Server-Side List Pagination
+
+- For list pages where data can grow over time, use server-side pagination by default.
+- Do not fetch all records and rely only on client-side table pagination.
+- List pages should pass `page`, `pageSize`, search query, filters, and sorting through URL search params where practical.
+- API routes and server-rendered pages should validate pagination params before passing them to services.
+- Repositories should use database-level pagination such as `skip`/`take` with a matching `count`.
+- Responses for paginated lists should include pagination metadata such as `page`, `pageSize`, `totalItems`, and `totalPages`.
+- Client tables should use controlled pagination based on server metadata.
 
 ## RBAC Rules
 

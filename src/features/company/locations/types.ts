@@ -9,6 +9,15 @@ export type LocationListItem = {
   deletedAt: Date | null;
 };
 
+export type LocationListStatus = 'all' | 'active' | 'inactive' | 'deleted';
+
+export type LocationListQuery = {
+  page: number;
+  pageSize: number;
+  query: string;
+  status: LocationListStatus;
+};
+
 export type LocationListData = {
   locations: LocationListItem[];
   summary: {
@@ -16,6 +25,12 @@ export type LocationListData = {
     active: number;
     inactive: number;
     deleted: number;
+  };
+  pagination?: {
+    page: number;
+    pageSize: number;
+    totalItems: number;
+    totalPages: number;
   };
 };
 

@@ -5,12 +5,7 @@ import { Edit3, KeyRound, Plus, Save, ShieldCheck, Trash2, UserRoundCog, UsersRo
 import { useMemo, useState } from 'react';
 import type { ReactNode } from 'react';
 import type { ColumnsType } from 'antd/es/table';
-import type {
-  CompanyAccessManagementData,
-  CompanyMemberRoleAccessItem,
-  CompanyPermissionModule,
-  CompanyRoleAccessItem,
-} from '@/features/auth/permissions/types';
+import type { CompanyAccessManagementData, CompanyMemberRoleAccessItem, CompanyPermissionModule, CompanyRoleAccessItem } from '@/features/auth/permissions/types';
 import { useDeleteCompanyRole } from '../hooks/useDeleteCompanyRole';
 import { useUpdateMemberRoles } from '../hooks/useUpdateMemberRoles';
 import { useUpdateRolePermissions } from '../hooks/useUpdateRolePermissions';
@@ -28,10 +23,7 @@ export function RolesAccessPageClient({ data, canManageRoles, canAssignRoles }: 
   const [roleDrawerOpen, setRoleDrawerOpen] = useState(false);
   const [editingRole, setEditingRole] = useState<CompanyRoleAccessItem>();
   const [selectedRoleId, setSelectedRoleId] = useState(data.roles[0]?.companyRoleId);
-  const selectedRole = useMemo(
-    () => data.roles.find((role) => role.companyRoleId === selectedRoleId) ?? data.roles[0],
-    [data.roles, selectedRoleId],
-  );
+  const selectedRole = useMemo(() => data.roles.find((role) => role.companyRoleId === selectedRoleId) ?? data.roles[0], [data.roles, selectedRoleId]);
   const { clearErrorMessage, errorMessage, isSubmitting, upsertCompanyRole } = useUpsertCompanyRole();
   const { deleteCompanyRole, deletingRoleId } = useDeleteCompanyRole();
   const { isSubmitting: isSavingPermissions, updateRolePermissions } = useUpdateRolePermissions();
@@ -260,7 +252,7 @@ export function RolesAccessPageClient({ data, canManageRoles, canAssignRoles }: 
         <Alert
           showIcon
           type='info'
-          message='You can review roles and assignments, but you do not have permission to make changes.'
+          title='You can review roles and assignments, but you do not have permission to make changes.'
           style={{ marginBottom: 16 }}
         />
       ) : null}
@@ -436,7 +428,7 @@ function RolePermissionEditor({
           <Alert
             showIcon
             type='info'
-            message='System role permissions are managed automatically.'
+            title='System role permissions are managed automatically.'
           />
         ) : null}
 

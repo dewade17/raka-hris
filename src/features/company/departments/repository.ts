@@ -1,5 +1,6 @@
 import db from '@/lib/db';
-import type { UpsertDepartmentInput } from './types';
+import type { Prisma } from '@/generated/prisma/client';
+import type { DepartmentListQuery, UpsertDepartmentInput } from './types';
 
 const departmentSelect = {
   departmentId: true,
@@ -15,16 +16,64 @@ const departmentSelect = {
   },
 } as const;
 
-export async function findCompanyDepartments(companyId: string) {
+export async function findCompanyDepartments(companyId: string, query?: DepartmentListQuery) {
   return db.department.findMany({
-    where: {
-      companyId,
-    },
-    orderBy: {
-      name: 'asc',
-    },
+    where: query ? buildDepartmentListWhere(companyId, query) : { companyId },
+    orderBy: [{ name: 'asc' }, { departmentId: 'asc' }],
+    ...(query
+      ? {
+          skip: (query.page - 1) * query.pageSize,
+          take: query.pageSize,
+        }
+      : {}),
     select: departmentSelect,
   });
+}
+
+export async function countCompanyDepartments(companyId: string, query: DepartmentListQuery) {
+  return db.department.count({
+    where: buildDepartmentListWhere(companyId, query),
+  });
+}
+
+export async function countCompanyDepartmentsSummary(companyId: string) {
+  const [total, active, inactive, deleted] = await Promise.all([
+    db.department.count({
+      where: {
+        companyId,
+        deletedAt: null,
+      },
+    }),
+    db.department.count({
+      where: {
+        companyId,
+        deletedAt: null,
+        isActive: true,
+      },
+    }),
+    db.department.count({
+      where: {
+        companyId,
+        deletedAt: null,
+        isActive: false,
+      },
+    }),
+    db.department.count({
+      where: {
+        companyId,
+        deletedAt: {
+          not: null,
+        },
+      },
+    }),
+  ]);
+
+  return {
+    total,
+    active,
+    inactive,
+    deleted,
+  };
 }
 
 export async function findCompanyDepartmentById(companyId: string, departmentId: string) {
@@ -80,4 +129,34 @@ export async function deleteDepartmentRecord(companyId: string, departmentId: st
       deletedAt: new Date(),
     },
   });
+}
+
+function buildDepartmentListWhere(companyId: string, query: DepartmentListQuery): Prisma.DepartmentWhereInput {
+  const where: Prisma.DepartmentWhereInput = {
+    companyId,
+  };
+
+  if (query.query) {
+    where.name = {
+      contains: query.query,
+    };
+  }
+
+  if (query.status === 'deleted') {
+    where.deletedAt = {
+      not: null,
+    };
+  } else {
+    where.deletedAt = null;
+
+    if (query.status === 'active') {
+      where.isActive = true;
+    }
+
+    if (query.status === 'inactive') {
+      where.isActive = false;
+    }
+  }
+
+  return where;
 }

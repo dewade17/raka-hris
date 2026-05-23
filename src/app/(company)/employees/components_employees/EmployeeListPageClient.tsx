@@ -37,16 +37,7 @@ export function EmployeeListPageClient({ canManage, departmentOptions, employees
     const normalizedQuery = query.trim().toLowerCase();
 
     return employees.filter((employee) => {
-      const searchableText = [
-        employee.user.name,
-        employee.user.email,
-        employee.employeeNumber,
-        employee.primaryDepartment?.name,
-        employee.primaryPosition?.name,
-      ]
-        .filter(Boolean)
-        .join(' ')
-        .toLowerCase();
+      const searchableText = [employee.user.name, employee.user.email, employee.employeeNumber, employee.primaryDepartment?.name, employee.primaryPosition?.name].filter(Boolean).join(' ').toLowerCase();
       const matchesQuery = !normalizedQuery || searchableText.includes(normalizedQuery);
       const matchesStatus =
         status === 'all' ||
@@ -82,7 +73,7 @@ export function EmployeeListPageClient({ canManage, departmentOptions, employees
         style={{ marginBottom: 18 }}
       >
         <Space
-          direction='vertical'
+          orientation='vertical'
           size={4}
         >
           <Typography.Title
@@ -116,7 +107,7 @@ export function EmployeeListPageClient({ canManage, departmentOptions, employees
         <Alert
           showIcon
           type='info'
-          message='You can review employees, but you do not have permission to create employee accounts.'
+          title='You can review employees, but you do not have permission to create employee accounts.'
           style={{ marginBottom: 16 }}
         />
       ) : null}

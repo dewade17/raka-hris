@@ -1,4 +1,15 @@
-import type { UpsertLocationInput } from './types';
+import type { LocationListQuery, LocationListStatus, UpsertLocationInput } from './types';
+
+export const LOCATION_LIST_PAGE_SIZE_OPTIONS = [10, 20, 50] as const;
+
+const DEFAULT_LOCATION_LIST_QUERY: LocationListQuery = {
+  page: 1,
+  pageSize: 10,
+  query: '',
+  status: 'all',
+};
+
+type ListSearchParams = URLSearchParams | Record<string, string | string[] | undefined>;
 
 type LocationValidationResult =
   | {
@@ -75,8 +86,30 @@ export function validateUpsertLocationRequest(payload: unknown): LocationValidat
   };
 }
 
+export function validateLocationListQuery(searchParams: ListSearchParams): LocationListQuery {
+  const page = normalizePositiveInteger(getSearchParamValue(searchParams, 'page'), DEFAULT_LOCATION_LIST_QUERY.page);
+  const requestedPageSize = normalizePositiveInteger(getSearchParamValue(searchParams, 'pageSize'), DEFAULT_LOCATION_LIST_QUERY.pageSize);
+
+  return {
+    page,
+    pageSize: LOCATION_LIST_PAGE_SIZE_OPTIONS.includes(requestedPageSize as (typeof LOCATION_LIST_PAGE_SIZE_OPTIONS)[number]) ? requestedPageSize : DEFAULT_LOCATION_LIST_QUERY.pageSize,
+    query: normalizeRequiredText(getSearchParamValue(searchParams, 'query')).slice(0, 191),
+    status: normalizeLocationListStatus(getSearchParamValue(searchParams, 'status')),
+  };
+}
+
 function normalizeRequiredText(value: unknown) {
   return typeof value === 'string' ? value.trim().replace(/\s+/g, ' ') : '';
+}
+
+function normalizePositiveInteger(value: unknown, fallback: number) {
+  const numericValue = typeof value === 'number' ? value : Number(value);
+
+  return Number.isInteger(numericValue) && numericValue > 0 ? numericValue : fallback;
+}
+
+function normalizeLocationListStatus(value: unknown): LocationListStatus {
+  return value === 'active' || value === 'inactive' || value === 'deleted' ? value : 'all';
 }
 
 function normalizeOptionalNumber(value: unknown) {
@@ -87,6 +120,16 @@ function normalizeOptionalNumber(value: unknown) {
   const numericValue = typeof value === 'number' ? value : Number(value);
 
   return Number.isFinite(numericValue) ? numericValue : Number.NaN;
+}
+
+function getSearchParamValue(searchParams: ListSearchParams, key: string) {
+  if (searchParams instanceof URLSearchParams) {
+    return searchParams.get(key);
+  }
+
+  const value = searchParams[key];
+
+  return Array.isArray(value) ? value[0] : value;
 }
 
 function isRecord(value: unknown): value is Record<string, unknown> {

@@ -1,16 +1,17 @@
-import { NextResponse } from 'next/server';
+import { NextResponse, type NextRequest } from 'next/server';
 import { createLocation, getCompanyLocations } from '@/features/company/locations/service';
-import { validateUpsertLocationRequest } from '@/features/company/locations/validation';
+import { validateLocationListQuery, validateUpsertLocationRequest } from '@/features/company/locations/validation';
 import { getCompanyApiPermissionContext } from '../_utils/companyApiAuth';
 
-export async function GET() {
+export async function GET(request: NextRequest) {
   const context = await getCompanyApiPermissionContext('locations', 'view');
 
   if (!context.success) {
     return context.response;
   }
 
-  const data = await getCompanyLocations(context.company.companyId);
+  const listQuery = validateLocationListQuery(request.nextUrl.searchParams);
+  const data = await getCompanyLocations(context.company.companyId, listQuery);
 
   return NextResponse.json({
     success: true,

@@ -20,7 +20,7 @@ export default function EmployeesError({ reset }: { reset: () => void }) {
       <Alert
         showIcon
         type='error'
-        message='The employee list is unavailable right now.'
+        title='The employee list is unavailable right now.'
       />
     </Result>
   );

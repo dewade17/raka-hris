@@ -2,19 +2,25 @@
 
 import { Button, Popconfirm, Space, Table, Tag, Typography } from 'antd';
 import { Edit3, ExternalLink, Trash2 } from 'lucide-react';
-import type { ColumnsType } from 'antd/es/table';
+import type { ColumnsType, TablePaginationConfig } from 'antd/es/table';
+import type { LocationListData } from '@/features/company/locations/types';
 import type { LocationViewModel } from './LocationPageClient';
 
 type LocationTableProps = {
   locations: LocationViewModel[];
+  loading?: boolean;
+  pagination: NonNullable<LocationListData['pagination']>;
   canDelete: boolean;
   canUpdate: boolean;
   deletingLocationId?: string;
   onEdit: (location: LocationViewModel) => void;
   onDelete: (locationId: string) => void;
+  onPaginationChange: (page: number, pageSize: number) => void;
 };
 
-export function LocationTable({ locations, canDelete, canUpdate, deletingLocationId, onEdit, onDelete }: LocationTableProps) {
+const pageSizeOptions = [10, 20, 50];
+
+export function LocationTable({ locations, loading, pagination, canDelete, canUpdate, deletingLocationId, onEdit, onDelete, onPaginationChange }: LocationTableProps) {
   const columns: ColumnsType<LocationViewModel> = [
     {
       title: 'Name',
@@ -114,11 +120,31 @@ export function LocationTable({ locations, canDelete, canUpdate, deletingLocatio
       rowKey='locationId'
       columns={columns}
       dataSource={locations}
-      pagination={{ pageSize: 10, showSizeChanger: true }}
+      loading={loading}
+      pagination={{
+        current: pagination.page,
+        pageSize: pagination.pageSize,
+        pageSizeOptions,
+        showSizeChanger: true,
+        showTotal: (total, range) => (total === 0 ? 'No locations' : `${range[0]}-${range[1]} of ${total} locations`),
+        total: pagination.totalItems,
+      }}
       locale={{ emptyText: 'No locations match your filters.' }}
+      onChange={(nextPagination) => {
+        handlePaginationChange(nextPagination, pagination, onPaginationChange);
+      }}
       scroll={{ x: 780 }}
     />
   );
+}
+
+function handlePaginationChange(currentPagination: TablePaginationConfig, previousPagination: NonNullable<LocationListData['pagination']>, onPaginationChange: (page: number, pageSize: number) => void) {
+  const nextPageSize = currentPagination.pageSize ?? previousPagination.pageSize;
+  const nextPage = nextPageSize === previousPagination.pageSize ? currentPagination.current ?? previousPagination.page : 1;
+
+  if (nextPage !== previousPagination.page || nextPageSize !== previousPagination.pageSize) {
+    onPaginationChange(nextPage, nextPageSize);
+  }
 }
 
 function renderCoordinates(location: LocationViewModel) {

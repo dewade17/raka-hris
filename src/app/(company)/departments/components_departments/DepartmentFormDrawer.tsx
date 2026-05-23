@@ -92,7 +92,7 @@ export function DepartmentFormDrawer({ open, department, isSubmitting, errorMess
           <Alert
             showIcon
             type='error'
-            message={errorMessage}
+            title={errorMessage}
           />
         ) : null}
 

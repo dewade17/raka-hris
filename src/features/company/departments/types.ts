@@ -8,6 +8,15 @@ export type DepartmentListItem = {
   assignedEmployees: number;
 };
 
+export type DepartmentListStatus = 'all' | 'active' | 'inactive' | 'deleted';
+
+export type DepartmentListQuery = {
+  page: number;
+  pageSize: number;
+  query: string;
+  status: DepartmentListStatus;
+};
+
 export type DepartmentListData = {
   departments: DepartmentListItem[];
   summary: {
@@ -15,6 +24,12 @@ export type DepartmentListData = {
     active: number;
     inactive: number;
     deleted: number;
+  };
+  pagination?: {
+    page: number;
+    pageSize: number;
+    totalItems: number;
+    totalPages: number;
   };
 };
 
