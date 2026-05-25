@@ -86,13 +86,13 @@ export function PositionTable({ positions, canDelete, canUpdate, deletingPositio
                 okType='danger'
                 cancelText='Cancel'
                 disabled={deleted}
-                onConfirm={() => onDelete(position.positionId)}
+                onConfirm={() => onDelete(position.id)}
               >
                 <Button
                   size='small'
                   danger
                   disabled={deleted}
-                  loading={deletingPositionId === position.positionId}
+                  loading={deletingPositionId === position.id}
                   icon={
                     <Trash2
                       size={14}
@@ -113,7 +113,7 @@ export function PositionTable({ positions, canDelete, canUpdate, deletingPositio
 
   return (
     <Table<PositionViewModel>
-      rowKey='positionId'
+      rowKey='id'
       columns={columns}
       dataSource={positions}
       pagination={{ pageSize: 10, showSizeChanger: true }}

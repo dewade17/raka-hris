@@ -22,12 +22,12 @@ export default async function EmployeeProfilePage({ params }: EmployeeProfilePag
   const { membershipId } = await params;
   const { company, membership } = await requirePermission('employees', 'view');
   const [employee, departmentsData, positionsData, permissionKeys] = await Promise.all([
-    getCompanyEmployeeProfile(company.companyId, membershipId),
-    getCompanyDepartments(company.companyId),
-    getCompanyPositions(company.companyId),
+    getCompanyEmployeeProfile(company.id, membershipId),
+    getCompanyDepartments(company.id),
+    getCompanyPositions(company.id),
     resolveMembershipPermissionKeys({
-      companyId: company.companyId,
-      membershipId: membership.membershipId,
+      companyId: company.id,
+      membershipId: membership.id,
       isOwner: membership.isOwner,
     }),
   ]);
@@ -49,7 +49,7 @@ export default async function EmployeeProfilePage({ params }: EmployeeProfilePag
           .filter((department) => department.isActive && !department.deletedAt)
           .map((department) => ({
             label: department.name,
-            value: department.departmentId,
+            value: department.id,
           })),
         employeeViewModel.primaryDepartment,
       )}
@@ -58,7 +58,7 @@ export default async function EmployeeProfilePage({ params }: EmployeeProfilePag
           .filter((position) => position.isActive && !position.deletedAt)
           .map((position) => ({
             label: position.name,
-            value: position.positionId,
+            value: position.id,
           })),
         employeeViewModel.primaryPosition,
       )}
@@ -71,7 +71,7 @@ function mapEmployeeProfileViewModel(employee: NonNullable<Awaited<ReturnType<ty
   const positions = employee.positions.map(mapAssignmentViewModel);
 
   return {
-    membershipId: employee.membershipId,
+    id: employee.id,
     status: employee.status,
     isOwner: employee.isOwner,
     joinedAt: employee.joinedAt.toISOString(),
@@ -80,7 +80,7 @@ function mapEmployeeProfileViewModel(employee: NonNullable<Awaited<ReturnType<ty
     user: employee.user,
     profile: employee.profile
       ? {
-          employeeProfileId: employee.profile.employeeProfileId,
+          id: employee.profile.id,
           employeeNumber: employee.profile.employeeNumber,
           phone: employee.profile.phone,
           emergencyContactName: employee.profile.emergencyContactName,

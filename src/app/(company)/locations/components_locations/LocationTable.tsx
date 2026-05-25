@@ -90,13 +90,13 @@ export function LocationTable({ locations, loading, pagination, canDelete, canUp
                 okType='danger'
                 cancelText='Cancel'
                 disabled={deleted}
-                onConfirm={() => onDelete(location.locationId)}
+                onConfirm={() => onDelete(location.id)}
               >
                 <Button
                   size='small'
                   danger
                   disabled={deleted}
-                  loading={deletingLocationId === location.locationId}
+                  loading={deletingLocationId === location.id}
                   icon={
                     <Trash2
                       size={14}
@@ -117,7 +117,7 @@ export function LocationTable({ locations, loading, pagination, canDelete, canUp
 
   return (
     <Table<LocationViewModel>
-      rowKey='locationId'
+      rowKey='id'
       columns={columns}
       dataSource={locations}
       loading={loading}

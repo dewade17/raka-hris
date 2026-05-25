@@ -44,14 +44,14 @@ export async function signInWithPassword(
   });
 
   await createUserSession({
-    userId: user.userId,
-    membershipId: membership?.membershipId ?? null,
+    userId: user.id,
+    membershipId: membership?.id ?? null,
     ipAddress: context.ipAddress ?? null,
     userAgent: context.userAgent ?? null,
   });
 
   if (membership) {
-    await markMembershipLoggedIn(membership.membershipId);
+    await markMembershipLoggedIn(membership.id);
   }
 
   return {

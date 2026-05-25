@@ -13,7 +13,7 @@ export type EmployeeListAssignmentViewModel = {
 };
 
 export type EmployeeListViewModel = {
-  membershipId: string;
+  id: string;
   status: MembershipStatus;
   isOwner: boolean;
   joinedAt: string;

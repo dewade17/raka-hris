@@ -13,7 +13,7 @@ const employeePositionOrderBy: Prisma.EmployeePositionOrderByWithRelationInput[]
 ];
 
 const employeeListSelect = {
-  membershipId: true,
+  id: true,
   status: true,
   isOwner: true,
   joinedAt: true,
@@ -35,12 +35,12 @@ const employeeListSelect = {
     orderBy: employeeDepartmentOrderBy,
     take: 1,
     select: {
-      employeeDepartmentId: true,
+      id: true,
       isPrimary: true,
       createdAt: true,
       department: {
         select: {
-          departmentId: true,
+          id: true,
           name: true,
           isActive: true,
           deletedAt: true,
@@ -52,12 +52,12 @@ const employeeListSelect = {
     orderBy: employeePositionOrderBy,
     take: 1,
     select: {
-      employeePositionId: true,
+      id: true,
       isPrimary: true,
       createdAt: true,
       position: {
         select: {
-          positionId: true,
+          id: true,
           name: true,
           isActive: true,
           deletedAt: true,
@@ -68,7 +68,7 @@ const employeeListSelect = {
 } as const;
 
 const employeeProfileSelect = {
-  membershipId: true,
+  id: true,
   status: true,
   isOwner: true,
   joinedAt: true,
@@ -82,7 +82,7 @@ const employeeProfileSelect = {
   },
   employeeProfile: {
     select: {
-      employeeProfileId: true,
+      id: true,
       employeeNumber: true,
       phone: true,
       emergencyContactName: true,
@@ -105,12 +105,12 @@ const employeeProfileSelect = {
   employeeDepartments: {
     orderBy: employeeDepartmentOrderBy,
     select: {
-      employeeDepartmentId: true,
+      id: true,
       isPrimary: true,
       createdAt: true,
       department: {
         select: {
-          departmentId: true,
+          id: true,
           name: true,
           isActive: true,
           deletedAt: true,
@@ -121,12 +121,12 @@ const employeeProfileSelect = {
   employeePositions: {
     orderBy: employeePositionOrderBy,
     select: {
-      employeePositionId: true,
+      id: true,
       isPrimary: true,
       createdAt: true,
       position: {
         select: {
-          positionId: true,
+          id: true,
           name: true,
           isActive: true,
           deletedAt: true,
@@ -182,10 +182,10 @@ export async function findCompanyEmployeeMembership(companyId: string, membershi
   return db.membership.findFirst({
     where: {
       companyId,
-      membershipId,
+      id: membershipId,
     },
     select: {
-      membershipId: true,
+      id: true,
     },
   });
 }
@@ -194,10 +194,10 @@ export async function findCompanyEmployeeForManagement(companyId: string, member
   return db.membership.findFirst({
     where: {
       companyId,
-      membershipId,
+      id: membershipId,
     },
     select: {
-      membershipId: true,
+      id: true,
       userId: true,
       isOwner: true,
       status: true,
@@ -209,7 +209,7 @@ export async function findCompanyEmployeeProfile(companyId: string, membershipId
   return db.membership.findFirst({
     where: {
       companyId,
-      membershipId,
+      id: membershipId,
     },
     select: employeeProfileSelect,
   });
@@ -223,7 +223,7 @@ export async function updateCompanyEmployeeRecord(
   return db.$transaction(async (tx) => {
     await tx.user.update({
       where: {
-        userId,
+        id: userId,
       },
       data: {
         name: data.fullName,
@@ -233,7 +233,7 @@ export async function updateCompanyEmployeeRecord(
 
     await tx.membership.update({
       where: {
-        membershipId,
+        id: membershipId,
       },
       data: {
         status: data.status,
@@ -309,7 +309,7 @@ export async function terminateCompanyEmployeeRecord(
   return db.$transaction(async (tx) => {
     await tx.membership.update({
       where: {
-        membershipId,
+        id: membershipId,
       },
       data: {
         status: MembershipStatus.TERMINATED,
@@ -352,25 +352,25 @@ export async function createCompanyEmployeeAccountRecord(
         passwordChangedAt: null,
       },
       select: {
-        userId: true,
+        id: true,
       },
     });
 
     const membership = await tx.membership.create({
       data: {
         companyId,
-        userId: user.userId,
+        userId: user.id,
         status: MembershipStatus.ACTIVE,
         isOwner: false,
       },
       select: {
-        membershipId: true,
+        id: true,
       },
     });
 
     await tx.employeeDepartment.create({
       data: {
-        membershipId: membership.membershipId,
+        membershipId: membership.id,
         departmentId: data.departmentId,
         isPrimary: true,
       },
@@ -378,15 +378,15 @@ export async function createCompanyEmployeeAccountRecord(
 
     await tx.employeePosition.create({
       data: {
-        membershipId: membership.membershipId,
+        membershipId: membership.id,
         positionId: data.positionId,
         isPrimary: true,
       },
     });
 
     return {
-      userId: user.userId,
-      membershipId: membership.membershipId,
+      userId: user.id,
+      id: membership.id,
     };
   });
 }
@@ -394,7 +394,7 @@ export async function createCompanyEmployeeAccountRecord(
 export async function deleteCreatedCompanyEmployeeAccount(userId: string) {
   return db.user.deleteMany({
     where: {
-      userId,
+      id: userId,
     },
   });
 }
@@ -403,12 +403,12 @@ export async function findActiveCompanyDepartment(companyId: string, departmentI
   return db.department.findFirst({
     where: {
       companyId,
-      departmentId,
+      id: departmentId,
       isActive: true,
       deletedAt: null,
     },
     select: {
-      departmentId: true,
+      id: true,
     },
   });
 }
@@ -417,12 +417,12 @@ export async function findActiveCompanyPosition(companyId: string, positionId: s
   return db.position.findFirst({
     where: {
       companyId,
-      positionId,
+      id: positionId,
       isActive: true,
       deletedAt: null,
     },
     select: {
-      positionId: true,
+      id: true,
     },
   });
 }

@@ -110,7 +110,7 @@ export async function createCompanyEmployee(companyId: string, companyName: stri
       success: true,
       status: 201,
       message: 'Employee created successfully. The login details were sent by email.',
-      membershipId: employee.membershipId,
+      id: employee.id,
     };
   } catch (error) {
     if (isUniqueConstraintError(error)) {
@@ -147,7 +147,7 @@ export async function getCompanyEmployeeList(companyId: string): Promise<Company
     );
 
     return {
-      membershipId: employee.membershipId,
+      id: employee.id,
       status: employee.status,
       isOwner: employee.isOwner,
       joinedAt: employee.joinedAt,
@@ -184,7 +184,7 @@ export async function getCompanyEmployeeProfile(companyId: string, membershipId:
   const positions = employee.employeePositions.map(mapPositionAssignment);
 
   return {
-    membershipId: employee.membershipId,
+    id: employee.id,
     status: employee.status,
     isOwner: employee.isOwner,
     joinedAt: employee.joinedAt,
@@ -231,7 +231,7 @@ export async function updateCompanyEmployee(
       };
     }
 
-    await updateCompanyEmployeeRecord(employee.membershipId, employee.userId, input);
+    await updateCompanyEmployeeRecord(employee.id, employee.userId, input);
 
     return {
       success: true,
@@ -288,7 +288,7 @@ export async function terminateCompanyEmployee(
       };
     }
 
-    await terminateCompanyEmployeeRecord(employee.membershipId, terminatedByUserId, input);
+    await terminateCompanyEmployeeRecord(employee.id, terminatedByUserId, input);
 
     return {
       success: true,
@@ -360,7 +360,7 @@ export async function updateCompanyEmployeeAssignment(
       }
     }
 
-    await updateEmployeeAssignmentRecords(employee.membershipId, input);
+    await updateEmployeeAssignmentRecords(employee.id, input);
 
     return {
       success: true,
@@ -441,8 +441,8 @@ function isUniqueConstraintError(error: unknown) {
 
 function mapDepartmentAssignment(assignment: EmployeeDepartmentAssignmentRecord): EmployeeAssignmentSummary {
   return {
-    assignmentId: assignment.employeeDepartmentId,
-    sourceId: assignment.department.departmentId,
+    assignmentId: assignment.id,
+    sourceId: assignment.department.id,
     name: assignment.department.name,
     isPrimary: assignment.isPrimary,
     isActive: assignment.department.isActive,
@@ -453,8 +453,8 @@ function mapDepartmentAssignment(assignment: EmployeeDepartmentAssignmentRecord)
 
 function mapPositionAssignment(assignment: EmployeePositionAssignmentRecord): EmployeeAssignmentSummary {
   return {
-    assignmentId: assignment.employeePositionId,
-    sourceId: assignment.position.positionId,
+    assignmentId: assignment.id,
+    sourceId: assignment.position.id,
     name: assignment.position.name,
     isPrimary: assignment.isPrimary,
     isActive: assignment.position.isActive,

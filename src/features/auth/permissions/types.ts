@@ -22,7 +22,7 @@ export type CompanyPermissionModule = {
 };
 
 export type CompanyRoleAccessItem = {
-  companyRoleId: string;
+  id: string;
   name: string;
   description: string | null;
   isSystem: boolean;
@@ -32,7 +32,7 @@ export type CompanyRoleAccessItem = {
 };
 
 export type CompanyMemberRoleAccessItem = {
-  membershipId: string;
+  id: string;
   name: string;
   email: string | null;
   status: string;

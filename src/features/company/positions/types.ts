@@ -1,5 +1,5 @@
 export type PositionListItem = {
-  positionId: string;
+  id: string;
   name: string;
   isActive: boolean;
   createdAt: Date;

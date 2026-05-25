@@ -17,10 +17,10 @@ export default async function DepartmentsPage({ searchParams }: DepartmentsPageP
   const listQuery = validateDepartmentListQuery(await searchParams);
   const { company, membership } = await requirePermission('departments', 'view');
   const [data, permissionKeys] = await Promise.all([
-    getCompanyDepartments(company.companyId, listQuery),
+    getCompanyDepartments(company.id, listQuery),
     resolveMembershipPermissionKeys({
-      companyId: company.companyId,
-      membershipId: membership.membershipId,
+      companyId: company.id,
+      membershipId: membership.id,
       isOwner: membership.isOwner,
     }),
   ]);
@@ -42,7 +42,7 @@ export default async function DepartmentsPage({ searchParams }: DepartmentsPageP
       listQuery={listQuery}
       departments={data.departments.map(
         (department): DepartmentViewModel => ({
-          departmentId: department.departmentId,
+          id: department.id,
           name: department.name,
           isActive: department.isActive,
           createdAt: department.createdAt.toISOString(),

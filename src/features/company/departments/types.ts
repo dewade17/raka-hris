@@ -1,5 +1,5 @@
 export type DepartmentListItem = {
-  departmentId: string;
+  id: string;
   name: string;
   isActive: boolean;
   createdAt: Date;

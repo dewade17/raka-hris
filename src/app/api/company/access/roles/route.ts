@@ -25,7 +25,7 @@ export async function POST(request: Request) {
     );
   }
 
-  const result = await createCompanyRole(context.company.companyId, {
+  const result = await createCompanyRole(context.company.id, {
     name: payload.name,
     description: payload.description,
   });

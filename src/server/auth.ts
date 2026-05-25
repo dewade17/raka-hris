@@ -85,9 +85,9 @@ export async function requirePermission(
 
   const membershipRole = await db.membershipRole.findFirst({
     where: {
-      membershipId: context.membership.membershipId,
+      membershipId: context.membership.id,
       role: {
-        companyId: context.company.companyId,
+        companyId: context.company.id,
         rolePermissions: {
           some: {
             permission: {
@@ -99,7 +99,7 @@ export async function requirePermission(
       },
     },
     select: {
-      membershipRoleId: true,
+      id: true,
     },
   });
 

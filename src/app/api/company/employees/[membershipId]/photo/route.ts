@@ -31,7 +31,7 @@ export async function GET(request: NextRequest, context: EmployeePhotoRouteConte
 
   const { membershipId } = await context.params;
   const path = request.nextUrl.searchParams.get('path');
-  const employeePhotoPathPrefix = getEmployeePhotoPathPrefix(authContext.company.companyId, membershipId);
+  const employeePhotoPathPrefix = getEmployeePhotoPathPrefix(authContext.company.id, membershipId);
 
   if (!path || !path.startsWith(employeePhotoPathPrefix)) {
     return NextResponse.json(
@@ -77,7 +77,7 @@ export async function POST(request: NextRequest, context: EmployeePhotoRouteCont
   }
 
   const { membershipId } = await context.params;
-  const employee = await findCompanyEmployeeForManagement(authContext.company.companyId, membershipId);
+  const employee = await findCompanyEmployeeForManagement(authContext.company.id, membershipId);
 
   if (!employee || employee.isOwner || employee.status === 'TERMINATED') {
     return NextResponse.json(
@@ -116,7 +116,7 @@ export async function POST(request: NextRequest, context: EmployeePhotoRouteCont
 
   const extension = allowedEmployeePhotoMimeTypes.get(file.type) ?? 'png';
   const objectPath = [
-    getEmployeePhotoPathPrefix(authContext.company.companyId, membershipId),
+    getEmployeePhotoPathPrefix(authContext.company.id, membershipId),
     `${crypto.randomUUID()}.${extension}`,
   ].join('');
 

@@ -34,7 +34,7 @@ export async function PATCH(request: Request, context: EmployeeRouteContext) {
   }
 
   const { membershipId } = await context.params;
-  const result = await updateCompanyEmployee(authContext.company.companyId, membershipId, validation.data);
+  const result = await updateCompanyEmployee(authContext.company.id, membershipId, validation.data);
 
   return NextResponse.json(
     {
@@ -70,7 +70,7 @@ export async function DELETE(request: Request, context: EmployeeRouteContext) {
   }
 
   const { membershipId } = await context.params;
-  const result = await terminateCompanyEmployee(authContext.company.companyId, membershipId, authContext.membership.userId, validation.data);
+  const result = await terminateCompanyEmployee(authContext.company.id, membershipId, authContext.membership.userId, validation.data);
 
   return NextResponse.json(
     {

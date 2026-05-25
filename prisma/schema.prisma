@@ -50,7 +50,7 @@ enum AuthProvider {
 }
 
 model User {
-  userId               String       @id @default(cuid())
+  id                   String       @id @default(uuid(7)) @map("userId")
   email                String?      @unique @db.VarChar(191)
   name                 String       @db.VarChar(191)
   passwordHash         String       @db.VarChar(255)
@@ -72,7 +72,7 @@ model User {
 }
 
 model UserAuthProvider {
-  userAuthProviderId String       @id @default(cuid())
+  id                 String       @id @default(uuid(7)) @map("userAuthProviderId")
   userId             String
   provider           AuthProvider
   providerAccountId  String       @db.VarChar(191)
@@ -84,7 +84,7 @@ model UserAuthProvider {
   createdAt          DateTime     @default(now())
   updatedAt          DateTime     @updatedAt
 
-  user User @relation(fields: [userId], references: [userId], onDelete: Cascade, onUpdate: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   @@unique([provider, providerAccountId])
   @@index([userId])
@@ -93,7 +93,7 @@ model UserAuthProvider {
 }
 
 model Company {
-  companyId String @id @default(cuid())
+  id        String @id @default(uuid(7)) @map("companyId")
   name      String @db.VarChar(191)
 
   email        String? @db.VarChar(191)
@@ -110,7 +110,7 @@ model Company {
   updatedAt       DateTime      @updatedAt
   deletedAt       DateTime?
 
-  createdByUser User?          @relation("CreatedByUser", fields: [createdByUserId], references: [userId], onDelete: SetNull, onUpdate: Cascade)
+  createdByUser User?          @relation("CreatedByUser", fields: [createdByUserId], references: [id], onDelete: SetNull, onUpdate: Cascade)
   memberships   Membership[]
   roles         CompanyRole[]
   subscriptions Subscription[]
@@ -124,7 +124,7 @@ model Company {
 }
 
 model Membership {
-  membershipId String           @id @default(cuid())
+  id           String           @id @default(uuid(7)) @map("membershipId")
   companyId    String
   userId       String
   status       MembershipStatus @default(ACTIVE)
@@ -141,9 +141,9 @@ model Membership {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  company             Company              @relation(fields: [companyId], references: [companyId], onDelete: Cascade, onUpdate: Cascade)
-  user                User                 @relation(fields: [userId], references: [userId], onDelete: Cascade, onUpdate: Cascade)
-  terminatedBy        User?                @relation("MembershipTerminatedBy", fields: [terminatedByUserId], references: [userId], onDelete: SetNull, onUpdate: Cascade)
+  company             Company              @relation(fields: [companyId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  user                User                 @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  terminatedBy        User?                @relation("MembershipTerminatedBy", fields: [terminatedByUserId], references: [id], onDelete: SetNull, onUpdate: Cascade)
   roles               MembershipRole[]
   sessions            UserSession[]
   employeeProfile     EmployeeProfile?
@@ -158,7 +158,7 @@ model Membership {
 }
 
 model Permission {
-  permissionId String   @id @default(cuid())
+  id           String   @id @default(uuid(7)) @map("permissionId")
   module       String   @db.VarChar(100)
   action       String   @db.VarChar(100)
   name         String   @db.VarChar(191)
@@ -174,7 +174,7 @@ model Permission {
 }
 
 model CompanyRole {
-  companyRoleId String   @id @default(cuid())
+  id            String   @id @default(uuid(7)) @map("companyRoleId")
   companyId     String
   name          String   @db.VarChar(191)
   description   String?  @db.Text
@@ -183,7 +183,7 @@ model CompanyRole {
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
 
-  company         Company                 @relation(fields: [companyId], references: [companyId], onDelete: Cascade, onUpdate: Cascade)
+  company         Company                 @relation(fields: [companyId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   rolePermissions CompanyRolePermission[]
   membershipRoles MembershipRole[]
 
@@ -193,13 +193,13 @@ model CompanyRole {
 }
 
 model CompanyRolePermission {
-  companyRolePermissionId String   @id @default(cuid())
+  id                      String   @id @default(uuid(7)) @map("companyRolePermissionId")
   roleId                  String
   permissionId            String
   createdAt               DateTime @default(now())
 
-  role       CompanyRole @relation(fields: [roleId], references: [companyRoleId], onDelete: Cascade, onUpdate: Cascade)
-  permission Permission  @relation(fields: [permissionId], references: [permissionId], onDelete: Cascade, onUpdate: Cascade)
+  role       CompanyRole @relation(fields: [roleId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  permission Permission  @relation(fields: [permissionId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   @@unique([roleId, permissionId])
   @@index([permissionId])
@@ -207,13 +207,13 @@ model CompanyRolePermission {
 }
 
 model MembershipRole {
-  membershipRoleId String   @id @default(cuid())
+  id               String   @id @default(uuid(7)) @map("membershipRoleId")
   membershipId     String
   roleId           String
   createdAt        DateTime @default(now())
 
-  membership Membership  @relation(fields: [membershipId], references: [membershipId], onDelete: Cascade, onUpdate: Cascade)
-  role       CompanyRole @relation(fields: [roleId], references: [companyRoleId], onDelete: Cascade, onUpdate: Cascade)
+  membership Membership  @relation(fields: [membershipId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  role       CompanyRole @relation(fields: [roleId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   @@unique([membershipId, roleId])
   @@index([roleId])
@@ -221,7 +221,7 @@ model MembershipRole {
 }
 
 model SubscriptionPlan {
-  subscriptionPlanId String          @id @default(cuid())
+  id                 String          @id @default(uuid(7)) @map("subscriptionPlanId")
   name               String          @db.VarChar(191)
   description        String?         @db.Text
   pricePerUser       Decimal         @db.Decimal(15, 2)
@@ -238,7 +238,7 @@ model SubscriptionPlan {
 }
 
 model Subscription {
-  subscriptionId       String             @id @default(cuid())
+  id                   String             @id @default(uuid(7)) @map("subscriptionId")
   companyId            String
   planId               String
   status               SubscriptionStatus @default(TRIALING)
@@ -253,8 +253,8 @@ model Subscription {
   createdAt            DateTime           @default(now())
   updatedAt            DateTime           @updatedAt
 
-  company Company          @relation(fields: [companyId], references: [companyId], onDelete: Cascade, onUpdate: Cascade)
-  plan    SubscriptionPlan @relation(fields: [planId], references: [subscriptionPlanId], onDelete: Restrict, onUpdate: Cascade)
+  company Company          @relation(fields: [companyId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  plan    SubscriptionPlan @relation(fields: [planId], references: [id], onDelete: Restrict, onUpdate: Cascade)
 
   @@index([companyId, status])
   @@index([planId])
@@ -262,7 +262,7 @@ model Subscription {
 }
 
 model UserSession {
-  userSessionId    String        @id @default(cuid())
+  id               String        @id @default(uuid(7)) @map("userSessionId")
   userId           String
   membershipId     String?
   refreshTokenHash String        @unique @db.Char(64)
@@ -280,8 +280,8 @@ model UserSession {
   createdAt        DateTime      @default(now())
   updatedAt        DateTime      @updatedAt
 
-  user       User        @relation(fields: [userId], references: [userId], onDelete: Cascade, onUpdate: Cascade)
-  membership Membership? @relation(fields: [membershipId], references: [membershipId], onDelete: Cascade, onUpdate: Cascade)
+  user       User        @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  membership Membership? @relation(fields: [membershipId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   @@index([userId, status])
   @@index([membershipId, status])
@@ -290,7 +290,7 @@ model UserSession {
 }
 
 model EmployeeProfile {
-  employeeProfileId String @id @default(cuid())
+  id                String @id @default(uuid(7)) @map("employeeProfileId")
   membershipId      String @unique
 
   employeeNumber        String? @db.VarChar(100)
@@ -318,7 +318,7 @@ model EmployeeProfile {
   updatedAt DateTime  @updatedAt
   deletedAt DateTime?
 
-  membership Membership @relation(fields: [membershipId], references: [membershipId], onDelete: Cascade, onUpdate: Cascade)
+  membership Membership @relation(fields: [membershipId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   @@index([employeeNumber])
   @@index([hireDate])
@@ -327,7 +327,7 @@ model EmployeeProfile {
 }
 
 model Department {
-  departmentId String    @id @default(cuid())
+  id           String    @id @default(uuid(7)) @map("departmentId")
   companyId    String
   name         String    @db.VarChar(191)
   isActive     Boolean   @default(true)
@@ -335,7 +335,7 @@ model Department {
   updatedAt    DateTime  @updatedAt
   deletedAt    DateTime?
 
-  company       Company              @relation(fields: [companyId], references: [companyId], onDelete: Cascade, onUpdate: Cascade)
+  company       Company              @relation(fields: [companyId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   employeeLinks EmployeeDepartment[]
 
   @@unique([companyId, name])
@@ -345,7 +345,7 @@ model Department {
 }
 
 model Position {
-  positionId String    @id @default(cuid())
+  id         String    @id @default(uuid(7)) @map("positionId")
   companyId  String
   name       String    @db.VarChar(191)
   isActive   Boolean   @default(true)
@@ -353,7 +353,7 @@ model Position {
   updatedAt  DateTime  @updatedAt
   deletedAt  DateTime?
 
-  company       Company            @relation(fields: [companyId], references: [companyId], onDelete: Cascade, onUpdate: Cascade)
+  company       Company            @relation(fields: [companyId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   employeeLinks EmployeePosition[]
 
   @@unique([companyId, name])
@@ -363,7 +363,7 @@ model Position {
 }
 
 model Location {
-  locationId String    @id @default(cuid())
+  id         String    @id @default(uuid(7)) @map("locationId")
   companyId  String
   name       String    @db.VarChar(191)
   latitude   Decimal?  @db.Decimal(10, 6)
@@ -373,7 +373,7 @@ model Location {
   updatedAt  DateTime  @updatedAt
   deletedAt  DateTime?
 
-  company Company @relation(fields: [companyId], references: [companyId], onDelete: Cascade, onUpdate: Cascade)
+  company Company @relation(fields: [companyId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   @@unique([companyId, name])
   @@index([companyId, isActive])
@@ -382,14 +382,14 @@ model Location {
 }
 
 model EmployeeDepartment {
-  employeeDepartmentId String   @id @default(cuid())
+  id                   String   @id @default(uuid(7)) @map("employeeDepartmentId")
   membershipId         String
   departmentId         String
   isPrimary            Boolean  @default(true)
   createdAt            DateTime @default(now())
 
-  membership Membership @relation(fields: [membershipId], references: [membershipId], onDelete: Cascade, onUpdate: Cascade)
-  department Department @relation(fields: [departmentId], references: [departmentId], onDelete: Cascade, onUpdate: Cascade)
+  membership Membership @relation(fields: [membershipId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  department Department @relation(fields: [departmentId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   @@unique([membershipId, departmentId])
   @@index([departmentId])
@@ -397,14 +397,14 @@ model EmployeeDepartment {
 }
 
 model EmployeePosition {
-  employeePositionId String   @id @default(cuid())
+  id                 String   @id @default(uuid(7)) @map("employeePositionId")
   membershipId       String
   positionId         String
   isPrimary          Boolean  @default(true)
   createdAt          DateTime @default(now())
 
-  membership Membership @relation(fields: [membershipId], references: [membershipId], onDelete: Cascade, onUpdate: Cascade)
-  position   Position   @relation(fields: [positionId], references: [positionId], onDelete: Cascade, onUpdate: Cascade)
+  membership Membership @relation(fields: [membershipId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  position   Position   @relation(fields: [positionId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   @@unique([membershipId, positionId])
   @@index([positionId])

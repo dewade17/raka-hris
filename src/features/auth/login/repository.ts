@@ -35,7 +35,7 @@ export async function findUserForPasswordLogin(email: string) {
 export async function markMembershipLoggedIn(membershipId: string) {
   return db.membership.update({
     where: {
-      membershipId,
+      id: membershipId,
     },
     data: {
       lastLoginAt: new Date(),

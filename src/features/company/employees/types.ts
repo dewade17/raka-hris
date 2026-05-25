@@ -11,7 +11,7 @@ export type EmployeeAssignmentSummary = {
 };
 
 export type CompanyEmployeeProfile = {
-  membershipId: string;
+  id: string;
   status: MembershipStatus;
   isOwner: boolean;
   joinedAt: Date;
@@ -22,7 +22,7 @@ export type CompanyEmployeeProfile = {
     email: string | null;
   };
   profile: {
-    employeeProfileId: string;
+    id: string;
     employeeNumber: string | null;
     phone: string | null;
     emergencyContactName: string | null;
@@ -48,7 +48,7 @@ export type CompanyEmployeeProfile = {
 };
 
 export type CompanyEmployeeListItem = {
-  membershipId: string;
+  id: string;
   status: MembershipStatus;
   isOwner: boolean;
   joinedAt: Date;
@@ -118,7 +118,7 @@ export type EmployeeCreateMutationResult =
       success: true;
       status: 201;
       message: string;
-      membershipId: string;
+      id: string;
     }
   | {
       success: false;

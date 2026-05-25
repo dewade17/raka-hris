@@ -113,7 +113,7 @@ export async function deleteLocation(companyId: string, locationId: string): Pro
 
 function mapLocationRecord(location: Awaited<ReturnType<typeof findCompanyLocations>>[number]) {
   return {
-    locationId: location.locationId,
+    id: location.id,
     name: location.name,
     latitude: location.latitude?.toString() ?? null,
     longitude: location.longitude?.toString() ?? null,

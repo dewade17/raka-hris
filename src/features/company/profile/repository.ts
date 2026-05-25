@@ -4,11 +4,11 @@ import type { UpdateCompanyProfileInput } from './types';
 export async function findCompanyProfileById(companyId: string) {
   return db.company.findFirst({
     where: {
-      companyId,
+      id: companyId,
       deletedAt: null,
     },
     select: {
-      companyId: true,
+      id: true,
       name: true,
       email: true,
       phone: true,
@@ -25,11 +25,11 @@ export async function findCompanyProfileById(companyId: string) {
 export async function updateCompanyProfileRecord(companyId: string, data: UpdateCompanyProfileInput) {
   return db.company.update({
     where: {
-      companyId,
+      id: companyId,
     },
     data,
     select: {
-      companyId: true,
+      id: true,
       name: true,
       email: true,
       phone: true,

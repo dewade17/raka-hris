@@ -7,7 +7,7 @@ import { useUpdateCompanyProfile } from '../hooks/useUpdateCompanyProfile';
 import { CompanyProfileForm } from './CompanyProfileForm';
 
 type CompanyProfileViewModel = {
-  companyId: string;
+  id: string;
   name: string;
   email: string | null;
   phone: string | null;

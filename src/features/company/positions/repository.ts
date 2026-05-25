@@ -2,7 +2,7 @@ import db from '@/lib/db';
 import type { UpsertPositionInput } from './types';
 
 const positionSelect = {
-  positionId: true,
+  id: true,
   name: true,
   isActive: true,
   createdAt: true,
@@ -31,7 +31,7 @@ export async function findCompanyPositionById(companyId: string, positionId: str
   return db.position.findFirst({
     where: {
       companyId,
-      positionId,
+      id: positionId,
     },
     select: positionSelect,
   });
@@ -52,7 +52,7 @@ export async function updatePositionRecord(companyId: string, positionId: string
   const result = await db.position.updateMany({
     where: {
       companyId,
-      positionId,
+      id: positionId,
       deletedAt: null,
     },
     data: {
@@ -72,7 +72,7 @@ export async function deletePositionRecord(companyId: string, positionId: string
   return db.position.updateMany({
     where: {
       companyId,
-      positionId,
+      id: positionId,
       deletedAt: null,
     },
     data: {

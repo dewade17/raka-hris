@@ -71,7 +71,7 @@ export function EmployeeTable({ employees }: EmployeeTableProps) {
       width: 150,
       render: (_, employee) => (
         <Link
-          href={`/employees/${employee.membershipId}/profile`}
+          href={`/employees/${employee.id}/profile`}
           prefetch={false}
         >
           <Button
@@ -93,7 +93,7 @@ export function EmployeeTable({ employees }: EmployeeTableProps) {
 
   return (
     <Table<EmployeeListViewModel>
-      rowKey='membershipId'
+      rowKey='id'
       columns={columns}
       dataSource={employees}
       pagination={{ pageSize: 10, showSizeChanger: true }}

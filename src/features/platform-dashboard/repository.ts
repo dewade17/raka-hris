@@ -29,7 +29,7 @@ export async function findRecentPlatformCompanies() {
     },
     take: 8,
     select: {
-      companyId: true,
+      id: true,
       name: true,
       status: true,
       _count: {

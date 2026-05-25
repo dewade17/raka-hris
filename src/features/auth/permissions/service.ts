@@ -71,7 +71,7 @@ export async function resolveMembershipPermissions(membershipId: string) {
       const key = `${permission.module}:${permission.action}`;
 
       permissions.set(key, {
-        permissionId: permission.permissionId,
+        permissionId: permission.id,
         module: permission.module,
         action: permission.action,
         name: permission.name,
@@ -145,7 +145,7 @@ export async function ensureCompanyAccessDefaults(companyId: string, ownerMember
     if (roleTemplate.name === ownerRoleName) {
       await updateCompanyRoleTemplateRecord({
         companyId,
-        roleId: existingRole.companyRoleId,
+        roleId: existingRole.id,
         description: roleTemplate.description,
         isSystem: true,
         permissionIds,
@@ -168,7 +168,7 @@ export async function getCompanyAccessManagementData(companyId: string): Promise
 
   const permissionModules = mapPermissionModules();
   const roleItems = roles.map((role) => ({
-    companyRoleId: role.companyRoleId,
+    id: role.id,
     name: role.name,
     description: role.description,
     isSystem: role.isSystem,
@@ -182,12 +182,12 @@ export async function getCompanyAccessManagementData(companyId: string): Promise
     const rolesForMember = member.roles.map((membershipRole) => membershipRole.role);
 
     return {
-      membershipId: member.membershipId,
+      id: member.id,
       name: member.user.name,
       email: member.user.email,
       status: member.status,
       isOwner: member.isOwner,
-      roleIds: rolesForMember.map((role) => role.companyRoleId),
+      roleIds: rolesForMember.map((role) => role.id),
       roleNames: rolesForMember.map((role) => role.name),
     };
   });
@@ -403,7 +403,7 @@ export async function updateCompanyMemberRoles(
     };
   }
 
-  await replaceMembershipRoleRecords(membership.membershipId, normalizedRoleIds);
+  await replaceMembershipRoleRecords(membership.id, normalizedRoleIds);
 
   return {
     success: true,

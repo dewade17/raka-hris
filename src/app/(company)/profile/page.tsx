@@ -11,10 +11,10 @@ export const metadata: Metadata = {
 export default async function CompanyProfilePage() {
   const { company, membership } = await requirePermission('companyProfile', 'view');
   const [profile, permissionKeys] = await Promise.all([
-    getCompanyProfileData(company.companyId),
+    getCompanyProfileData(company.id),
     resolveMembershipPermissionKeys({
-      companyId: company.companyId,
-      membershipId: membership.membershipId,
+      companyId: company.id,
+      membershipId: membership.id,
       isOwner: membership.isOwner,
     }),
   ]);
@@ -23,7 +23,7 @@ export default async function CompanyProfilePage() {
     <CompanyProfileEditor
       canUpdate={hasResolvedPermission(permissionKeys, 'companyProfile', 'update')}
       profile={{
-        companyId: profile.companyId,
+        id: profile.id,
         name: profile.name,
         email: profile.email,
         phone: profile.phone,

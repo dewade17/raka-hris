@@ -92,13 +92,13 @@ export function DepartmentTable({ departments, loading, pagination, canDelete, c
                 okType='danger'
                 cancelText='Cancel'
                 disabled={deleted}
-                onConfirm={() => onDelete(department.departmentId)}
+                onConfirm={() => onDelete(department.id)}
               >
                 <Button
                   size='small'
                   danger
                   disabled={deleted}
-                  loading={deletingDepartmentId === department.departmentId}
+                  loading={deletingDepartmentId === department.id}
                   icon={
                     <Trash2
                       size={14}
@@ -119,7 +119,7 @@ export function DepartmentTable({ departments, loading, pagination, canDelete, c
 
   return (
     <Table<DepartmentViewModel>
-      rowKey='departmentId'
+      rowKey='id'
       columns={columns}
       dataSource={departments}
       loading={loading}

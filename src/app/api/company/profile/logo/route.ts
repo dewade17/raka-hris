@@ -191,12 +191,12 @@ async function validateCompanyLogoAccess(): Promise<CompanyLogoAccessResult> {
     canUpdate:
       authContext.membership.isOwner ||
       (await membershipHasPermission(
-        authContext.membership.membershipId,
+        authContext.membership.id,
         "companyProfile",
         "uploadLogo",
-        authContext.company.companyId,
+        authContext.company.id,
       )),
-    companyId: authContext.company.companyId,
+    companyId: authContext.company.id,
   };
 }
 

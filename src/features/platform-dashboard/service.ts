@@ -68,7 +68,7 @@ export async function getPlatformDashboardData(): Promise<PlatformDashboardData>
         const subscription = company.subscriptions[0] ?? null;
 
         return {
-          key: company.companyId,
+          key: company.id,
           name: company.name,
           status: formatEnum(company.status),
           members: company._count.memberships,

@@ -61,10 +61,10 @@ export async function getCompanyApiPermissionContext(module: string, action: str
   }
 
   const canAccess = await membershipHasPermission(
-    context.membership.membershipId,
+    context.membership.id,
     module,
     action,
-    context.company.companyId,
+    context.company.id,
   );
 
   if (!canAccess) {

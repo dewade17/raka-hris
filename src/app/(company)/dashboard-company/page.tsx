@@ -16,10 +16,10 @@ export const metadata: Metadata = {
 export default async function CompanyDashboardPage() {
   const { company, membership } = await requirePermission('dashboard', 'view');
   const [dashboardData, permissionKeys] = await Promise.all([
-    getCompanyDashboardData(company.companyId),
+    getCompanyDashboardData(company.id),
     resolveMembershipPermissionKeys({
-      companyId: company.companyId,
-      membershipId: membership.membershipId,
+      companyId: company.id,
+      membershipId: membership.id,
       isOwner: membership.isOwner,
     }),
   ]);

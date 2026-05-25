@@ -10,7 +10,7 @@ export async function GET() {
     return context.response;
   }
 
-  const data = await getCompanyPositions(context.company.companyId);
+  const data = await getCompanyPositions(context.company.id);
 
   return NextResponse.json({
     success: true,
@@ -42,7 +42,7 @@ export async function POST(request: Request) {
     );
   }
 
-  const result = await createPosition(context.company.companyId, validation.data);
+  const result = await createPosition(context.company.id, validation.data);
 
   return NextResponse.json(
     {

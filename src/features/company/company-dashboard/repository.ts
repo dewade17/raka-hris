@@ -8,10 +8,10 @@ import db from "@/lib/db";
 export async function findCompanyDashboardRecord(companyId: string) {
   return db.company.findUnique({
     where: {
-      companyId,
+      id: companyId,
     },
     select: {
-      companyId: true,
+      id: true,
       name: true,
       email: true,
       phone: true,

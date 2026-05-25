@@ -32,7 +32,7 @@ export async function PATCH(request: Request, context: CompanyRolePermissionsRou
   }
 
   const { roleId } = await context.params;
-  const result = await updateCompanyRolePermissions(authContext.company.companyId, roleId, payload.permissionKeys);
+  const result = await updateCompanyRolePermissions(authContext.company.id, roleId, payload.permissionKeys);
 
   return NextResponse.json(
     {

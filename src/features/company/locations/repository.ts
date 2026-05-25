@@ -3,7 +3,7 @@ import type { Prisma } from '@/generated/prisma/client';
 import type { LocationListQuery, UpsertLocationInput } from './types';
 
 const locationSelect = {
-  locationId: true,
+  id: true,
   name: true,
   latitude: true,
   longitude: true,
@@ -16,7 +16,7 @@ const locationSelect = {
 export async function findCompanyLocations(companyId: string, query?: LocationListQuery) {
   return db.location.findMany({
     where: query ? buildLocationListWhere(companyId, query) : { companyId },
-    orderBy: [{ name: 'asc' }, { locationId: 'asc' }],
+    orderBy: [{ name: 'asc' }, { id: 'asc' }],
     ...(query
       ? {
           skip: (query.page - 1) * query.pageSize,
@@ -77,7 +77,7 @@ export async function findCompanyLocationById(companyId: string, locationId: str
   return db.location.findFirst({
     where: {
       companyId,
-      locationId,
+      id: locationId,
     },
     select: locationSelect,
   });
@@ -100,7 +100,7 @@ export async function updateLocationRecord(companyId: string, locationId: string
   const result = await db.location.updateMany({
     where: {
       companyId,
-      locationId,
+      id: locationId,
       deletedAt: null,
     },
     data: {
@@ -122,7 +122,7 @@ export async function deleteLocationRecord(companyId: string, locationId: string
   return db.location.updateMany({
     where: {
       companyId,
-      locationId,
+      id: locationId,
       deletedAt: null,
     },
     data: {

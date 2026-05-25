@@ -41,8 +41,8 @@ export async function registerCompanyOwner(
       passwordHash,
     });
     await ensureCompanyAccessDefaults(
-      account.company.companyId,
-      account.membership.membershipId,
+      account.company.id,
+      account.membership.id,
     ).catch(() => null);
 
     return {
@@ -112,18 +112,18 @@ export async function completeGoogleWorkspaceSetup(
   try {
     const workspace = await createWorkspaceForExistingUser({
       ...input,
-      userId: context.user.userId,
+      userId: context.user.id,
       email: context.user.email,
     });
 
     await ensureCompanyAccessDefaults(
-      workspace.company.companyId,
-      workspace.membership.membershipId,
+      workspace.company.id,
+      workspace.membership.id,
     ).catch(() => null);
 
     await createUserSession({
-      userId: context.user.userId,
-      membershipId: workspace.membership.membershipId,
+      userId: context.user.id,
+      membershipId: workspace.membership.id,
     });
 
     return {

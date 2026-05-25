@@ -11,10 +11,10 @@ export const metadata: Metadata = {
 export default async function PositionsPage() {
   const { company, membership } = await requirePermission('positions', 'view');
   const [data, permissionKeys] = await Promise.all([
-    getCompanyPositions(company.companyId),
+    getCompanyPositions(company.id),
     resolveMembershipPermissionKeys({
-      companyId: company.companyId,
-      membershipId: membership.membershipId,
+      companyId: company.id,
+      membershipId: membership.id,
       isOwner: membership.isOwner,
     }),
   ]);
@@ -27,7 +27,7 @@ export default async function PositionsPage() {
       summary={data.summary}
       positions={data.positions.map(
         (position): PositionViewModel => ({
-          positionId: position.positionId,
+          id: position.id,
           name: position.name,
           isActive: position.isActive,
           createdAt: position.createdAt.toISOString(),

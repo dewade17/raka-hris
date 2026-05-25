@@ -1,5 +1,5 @@
 export type LocationListItem = {
-  locationId: string;
+  id: string;
   name: string;
   latitude: string | null;
   longitude: string | null;

@@ -120,7 +120,7 @@ export async function deleteDepartment(companyId: string, departmentId: string):
 
 function mapDepartmentRecord(department: Awaited<ReturnType<typeof findCompanyDepartments>>[number]) {
   return {
-    departmentId: department.departmentId,
+    id: department.id,
     name: department.name,
     isActive: department.isActive,
     createdAt: department.createdAt,

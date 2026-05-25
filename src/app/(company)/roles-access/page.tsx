@@ -10,10 +10,10 @@ export const metadata: Metadata = {
 export default async function RolesAccessPage() {
   const { company, membership } = await requirePermission('access', 'view');
   const [data, permissionKeys] = await Promise.all([
-    getCompanyAccessManagementData(company.companyId),
+    getCompanyAccessManagementData(company.id),
     resolveMembershipPermissionKeys({
-      companyId: company.companyId,
-      membershipId: membership.membershipId,
+      companyId: company.id,
+      membershipId: membership.id,
       isOwner: membership.isOwner,
     }),
   ]);

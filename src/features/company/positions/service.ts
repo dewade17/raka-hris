@@ -106,7 +106,7 @@ export async function deletePosition(companyId: string, positionId: string): Pro
 
 function mapPositionRecord(position: Awaited<ReturnType<typeof findCompanyPositions>>[number]) {
   return {
-    positionId: position.positionId,
+    id: position.id,
     name: position.name,
     isActive: position.isActive,
     createdAt: position.createdAt,

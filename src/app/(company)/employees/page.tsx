@@ -14,12 +14,12 @@ export const metadata: Metadata = {
 export default async function EmployeesPage() {
   const { company, membership } = await requirePermission('employees', 'view');
   const [data, departmentsData, positionsData, permissionKeys] = await Promise.all([
-    getCompanyEmployeeList(company.companyId),
-    getCompanyDepartments(company.companyId),
-    getCompanyPositions(company.companyId),
+    getCompanyEmployeeList(company.id),
+    getCompanyDepartments(company.id),
+    getCompanyPositions(company.id),
     resolveMembershipPermissionKeys({
-      companyId: company.companyId,
-      membershipId: membership.membershipId,
+      companyId: company.id,
+      membershipId: membership.id,
       isOwner: membership.isOwner,
     }),
   ]);
@@ -36,7 +36,7 @@ export default async function EmployeesPage() {
         .map(mapPositionOption)}
       employees={data.employees.map(
         (employee): EmployeeListViewModel => ({
-          membershipId: employee.membershipId,
+          id: employee.id,
           status: employee.status,
           isOwner: employee.isOwner,
           joinedAt: employee.joinedAt.toISOString(),
@@ -68,21 +68,21 @@ function mapAssignmentViewModel(assignment: {
 }
 
 function mapDepartmentOption(department: {
-  departmentId: string;
+  id: string;
   name: string;
 }): EmployeeCreateAssignmentOption {
   return {
     label: department.name,
-    value: department.departmentId,
+    value: department.id,
   };
 }
 
 function mapPositionOption(position: {
-  positionId: string;
+  id: string;
   name: string;
 }): EmployeeCreateAssignmentOption {
   return {
     label: position.name,
-    value: position.positionId,
+    value: position.id,
   };
 }

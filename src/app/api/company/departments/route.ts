@@ -11,7 +11,7 @@ export async function GET(request: NextRequest) {
   }
 
   const listQuery = validateDepartmentListQuery(request.nextUrl.searchParams);
-  const data = await getCompanyDepartments(context.company.companyId, listQuery);
+  const data = await getCompanyDepartments(context.company.id, listQuery);
 
   return NextResponse.json({
     success: true,
@@ -43,7 +43,7 @@ export async function POST(request: Request) {
     );
   }
 
-  const result = await createDepartment(context.company.companyId, validation.data);
+  const result = await createDepartment(context.company.id, validation.data);
 
   return NextResponse.json(
     {

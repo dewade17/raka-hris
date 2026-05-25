@@ -10,7 +10,7 @@ import { PositionFormDrawer, type PositionFormValues } from './PositionFormDrawe
 import { PositionTable } from './PositionTable';
 
 export type PositionViewModel = {
-  positionId: string;
+  id: string;
   name: string;
   isActive: boolean;
   createdAt: string;
@@ -64,7 +64,7 @@ export function PositionPageClient({ canCreate, canDelete, canUpdate, positions,
   };
 
   const handleSubmit = async (values: PositionFormValues) => {
-    const success = await upsertPosition(values, editingPosition?.positionId);
+    const success = await upsertPosition(values, editingPosition?.id);
 
     if (success) {
       setDrawerOpen(false);

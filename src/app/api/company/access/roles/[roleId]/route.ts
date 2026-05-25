@@ -32,7 +32,7 @@ export async function PATCH(request: Request, context: CompanyRoleRouteContext) 
   }
 
   const { roleId } = await context.params;
-  const result = await updateCompanyRole(authContext.company.companyId, roleId, {
+  const result = await updateCompanyRole(authContext.company.id, roleId, {
     name: payload.name,
     description: payload.description,
   });
@@ -58,7 +58,7 @@ export async function DELETE(_request: Request, context: CompanyRoleRouteContext
   }
 
   const { roleId } = await context.params;
-  const result = await deleteCompanyRole(authContext.company.companyId, roleId);
+  const result = await deleteCompanyRole(authContext.company.id, roleId);
 
   return NextResponse.json(
     {

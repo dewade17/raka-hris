@@ -10,8 +10,8 @@ export default async function CompanyLayout({
 }>) {
   const { company, membership, user } = await requireActiveCompanyMembership();
   const permissionKeys = await resolveMembershipPermissionKeys({
-    companyId: company.companyId,
-    membershipId: membership.membershipId,
+    companyId: company.id,
+    membershipId: membership.id,
     isOwner: membership.isOwner,
   });
 

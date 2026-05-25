@@ -34,7 +34,7 @@ export async function PATCH(request: Request, context: DepartmentRouteContext) {
   }
 
   const { departmentId } = await context.params;
-  const result = await updateDepartment(authContext.company.companyId, departmentId, validation.data);
+  const result = await updateDepartment(authContext.company.id, departmentId, validation.data);
 
   return NextResponse.json(
     {
@@ -58,7 +58,7 @@ export async function DELETE(_request: Request, context: DepartmentRouteContext)
   }
 
   const { departmentId } = await context.params;
-  const result = await deleteDepartment(authContext.company.companyId, departmentId);
+  const result = await deleteDepartment(authContext.company.id, departmentId);
 
   return NextResponse.json(
     {

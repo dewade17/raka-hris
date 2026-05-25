@@ -47,7 +47,7 @@ export async function findMembershipPermission(
       },
     },
     select: {
-      membershipRoleId: true,
+      id: true,
     },
   });
 }
@@ -86,7 +86,7 @@ export async function findCatalogPermissionRecords() {
       })),
     },
     select: {
-      permissionId: true,
+      id: true,
       module: true,
       action: true,
     },
@@ -129,7 +129,7 @@ export async function createCompanyRoleTemplateRecord(input: {
       },
     });
 
-    await createRolePermissionLinks(tx, role.companyRoleId, input.permissionIds);
+    await createRolePermissionLinks(tx, role.id, input.permissionIds);
 
     return role;
   });
@@ -145,7 +145,7 @@ export async function updateCompanyRoleTemplateRecord(input: {
   return db.$transaction(async (tx) => {
     const role = await tx.companyRole.update({
       where: {
-        companyRoleId: input.roleId,
+        id: input.roleId,
         companyId: input.companyId,
       },
       data: {
@@ -155,7 +155,7 @@ export async function updateCompanyRoleTemplateRecord(input: {
       },
     });
 
-    await replaceRolePermissionLinks(tx, role.companyRoleId, input.permissionIds);
+    await replaceRolePermissionLinks(tx, role.id, input.permissionIds);
 
     return role;
   });
@@ -203,7 +203,7 @@ export async function findCompanyMembersForRoleAccess(companyId: string) {
       },
     ],
     select: {
-      membershipId: true,
+      id: true,
       status: true,
       isOwner: true,
       user: {
@@ -216,7 +216,7 @@ export async function findCompanyMembersForRoleAccess(companyId: string) {
         include: {
           role: {
             select: {
-              companyRoleId: true,
+              id: true,
               name: true,
               isSystem: true,
             },
@@ -254,7 +254,7 @@ export async function updateCompanyRoleRecord(input: {
 }) {
   return db.companyRole.update({
     where: {
-      companyRoleId: input.roleId,
+      id: input.roleId,
       companyId: input.companyId,
     },
     data: {
@@ -268,7 +268,7 @@ export async function findCompanyRoleForMutation(companyId: string, roleId: stri
   return db.companyRole.findFirst({
     where: {
       companyId,
-      companyRoleId: roleId,
+      id: roleId,
     },
     include: {
       _count: {
@@ -283,7 +283,7 @@ export async function findCompanyRoleForMutation(companyId: string, roleId: stri
 export async function deleteCompanyRoleRecord(companyId: string, roleId: string) {
   return db.companyRole.delete({
     where: {
-      companyRoleId: roleId,
+      id: roleId,
       companyId,
     },
   });
@@ -299,10 +299,10 @@ export async function findCompanyMembershipForRoleMutation(companyId: string, me
   return db.membership.findFirst({
     where: {
       companyId,
-      membershipId,
+      id: membershipId,
     },
     select: {
-      membershipId: true,
+      id: true,
       isOwner: true,
     },
   });
@@ -316,13 +316,13 @@ export async function findCompanyAssignableRoleIds(companyId: string, roleIds: s
   return db.companyRole.findMany({
     where: {
       companyId,
-      companyRoleId: {
+      id: {
         in: roleIds,
       },
       isSystem: false,
     },
     select: {
-      companyRoleId: true,
+      id: true,
     },
   });
 }
@@ -358,7 +358,7 @@ export async function ensureOwnerMembershipRole(companyId: string, membershipId:
       },
     },
     select: {
-      companyRoleId: true,
+      id: true,
     },
   });
 
@@ -370,25 +370,25 @@ export async function ensureOwnerMembershipRole(companyId: string, membershipId:
     where: {
       membershipId_roleId: {
         membershipId,
-        roleId: ownerRole.companyRoleId,
+        roleId: ownerRole.id,
       },
     },
     update: {},
     create: {
       membershipId,
-      roleId: ownerRole.companyRoleId,
+      roleId: ownerRole.id,
     },
   });
 }
 
 export function mapPermissionIdsByKey(
   permissionRecords: Array<{
-    permissionId: string;
+    id: string;
     module: string;
     action: string;
   }>,
 ) {
-  return new Map(permissionRecords.map((permission) => [createPermissionKey(permission.module, permission.action), permission.permissionId]));
+  return new Map(permissionRecords.map((permission) => [createPermissionKey(permission.module, permission.action), permission.id]));
 }
 
 async function createRolePermissionLinks(tx: Prisma.TransactionClient, roleId: string, permissionIds: string[]) {

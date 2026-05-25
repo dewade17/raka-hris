@@ -34,7 +34,7 @@ export async function PATCH(request: Request, context: LocationRouteContext) {
   }
 
   const { locationId } = await context.params;
-  const result = await updateLocation(authContext.company.companyId, locationId, validation.data);
+  const result = await updateLocation(authContext.company.id, locationId, validation.data);
 
   return NextResponse.json(
     {
@@ -58,7 +58,7 @@ export async function DELETE(_request: Request, context: LocationRouteContext) {
   }
 
   const { locationId } = await context.params;
-  const result = await deleteLocation(authContext.company.companyId, locationId);
+  const result = await deleteLocation(authContext.company.id, locationId);
 
   return NextResponse.json(
     {

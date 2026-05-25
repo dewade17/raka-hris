@@ -3,7 +3,7 @@ import type { Prisma } from '@/generated/prisma/client';
 import type { DepartmentListQuery, UpsertDepartmentInput } from './types';
 
 const departmentSelect = {
-  departmentId: true,
+  id: true,
   name: true,
   isActive: true,
   createdAt: true,
@@ -19,7 +19,7 @@ const departmentSelect = {
 export async function findCompanyDepartments(companyId: string, query?: DepartmentListQuery) {
   return db.department.findMany({
     where: query ? buildDepartmentListWhere(companyId, query) : { companyId },
-    orderBy: [{ name: 'asc' }, { departmentId: 'asc' }],
+    orderBy: [{ name: 'asc' }, { id: 'asc' }],
     ...(query
       ? {
           skip: (query.page - 1) * query.pageSize,
@@ -80,7 +80,7 @@ export async function findCompanyDepartmentById(companyId: string, departmentId:
   return db.department.findFirst({
     where: {
       companyId,
-      departmentId,
+      id: departmentId,
     },
     select: departmentSelect,
   });
@@ -101,7 +101,7 @@ export async function updateDepartmentRecord(companyId: string, departmentId: st
   const result = await db.department.updateMany({
     where: {
       companyId,
-      departmentId,
+      id: departmentId,
       deletedAt: null,
     },
     data: {
@@ -121,7 +121,7 @@ export async function deleteDepartmentRecord(companyId: string, departmentId: st
   return db.department.updateMany({
     where: {
       companyId,
-      departmentId,
+      id: departmentId,
       deletedAt: null,
     },
     data: {

@@ -124,22 +124,22 @@ async function resolveGoogleAuth(profile: GoogleUserProfile): Promise<GoogleAuth
   const providerAccount = await findGoogleProviderAccount(profile.providerAccountId);
 
   if (providerAccount) {
-    await markGoogleProviderLoggedIn(providerAccount.userAuthProviderId, profile);
+    await markGoogleProviderLoggedIn(providerAccount.id, profile);
 
-    return resolveAuthenticatedUser(providerAccount.user.userId, providerAccount.user.platformRole, providerAccount.user.isActive, providerAccount.user.memberships[0]?.membershipId ?? null);
+    return resolveAuthenticatedUser(providerAccount.user.id, providerAccount.user.platformRole, providerAccount.user.isActive, providerAccount.user.memberships[0]?.id ?? null);
   }
 
   const linkableUser = await findGoogleLinkableUserByEmail(profile.email);
 
   if (linkableUser) {
-    await linkGoogleProviderToUser(linkableUser.userId, profile);
+    await linkGoogleProviderToUser(linkableUser.id, profile);
 
-    return resolveAuthenticatedUser(linkableUser.userId, linkableUser.platformRole, linkableUser.isActive, linkableUser.memberships[0]?.membershipId ?? null);
+    return resolveAuthenticatedUser(linkableUser.id, linkableUser.platformRole, linkableUser.isActive, linkableUser.memberships[0]?.id ?? null);
   }
 
   const user = await createGoogleOnlyUser(profile);
 
-  return resolveAuthenticatedUser(user.userId, user.platformRole, user.isActive, user.memberships[0]?.membershipId ?? null);
+  return resolveAuthenticatedUser(user.id, user.platformRole, user.isActive, user.memberships[0]?.id ?? null);
 }
 
 function resolveAuthenticatedUser(userId: string, platformRole: GoogleAuthResolution['platformRole'], isActive: boolean, membershipId: string | null): GoogleAuthResolution {

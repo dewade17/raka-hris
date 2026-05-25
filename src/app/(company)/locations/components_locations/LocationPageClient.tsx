@@ -11,7 +11,7 @@ import { LocationFormDrawer, type LocationFormValues } from './LocationFormDrawe
 import { LocationTable } from './LocationTable';
 
 export type LocationViewModel = {
-  locationId: string;
+  id: string;
   name: string;
   latitude: string | null;
   longitude: string | null;
@@ -110,7 +110,7 @@ export function LocationPageClient({ canCreate, canDelete, canUpdate, locations,
   };
 
   const handleSubmit = async (values: LocationFormValues) => {
-    const success = await upsertLocation(values, editingLocation?.locationId);
+    const success = await upsertLocation(values, editingLocation?.id);
 
     if (success) {
       setDrawerOpen(false);

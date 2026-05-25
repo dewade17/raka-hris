@@ -20,7 +20,7 @@ export async function findUserByEmail(email: string) {
       email,
     },
     select: {
-      userId: true,
+      id: true,
     },
   });
 }
@@ -48,13 +48,13 @@ export async function createCompanyOwnerAccount(
         email: input.email,
         phone: input.phoneNumber,
         status: CompanyStatus.ACTIVE,
-        createdByUserId: user.userId,
+        createdByUserId: user.id,
       },
     });
 
     const ownerRole = await tx.companyRole.create({
       data: {
-        companyId: company.companyId,
+        companyId: company.id,
         name: "Owner",
         description: "Full company access for the workspace owner.",
         isSystem: true,
@@ -64,8 +64,8 @@ export async function createCompanyOwnerAccount(
 
     const membership = await tx.membership.create({
       data: {
-        companyId: company.companyId,
-        userId: user.userId,
+        companyId: company.id,
+        userId: user.id,
         status: MembershipStatus.ACTIVE,
         isOwner: true,
       },
@@ -73,15 +73,15 @@ export async function createCompanyOwnerAccount(
 
     await tx.membershipRole.create({
       data: {
-        membershipId: membership.membershipId,
-        roleId: ownerRole.companyRoleId,
+        membershipId: membership.id,
+        roleId: ownerRole.id,
       },
     });
 
     await tx.subscription.create({
       data: {
-        companyId: company.companyId,
-        planId: subscriptionPlan.subscriptionPlanId,
+        companyId: company.id,
+        planId: subscriptionPlan.id,
         status: SubscriptionStatus.TRIALING,
         seatLimit: input.seatLimit,
         pricePerUserSnapshot: subscriptionPlan.pricePerUser,
@@ -115,7 +115,7 @@ export async function createWorkspaceForExistingUser(
 
     const ownerRole = await tx.companyRole.create({
       data: {
-        companyId: company.companyId,
+        companyId: company.id,
         name: "Owner",
         description: "Full company access for the workspace owner.",
         isSystem: true,
@@ -125,7 +125,7 @@ export async function createWorkspaceForExistingUser(
 
     const membership = await tx.membership.create({
       data: {
-        companyId: company.companyId,
+        companyId: company.id,
         userId: input.userId,
         status: MembershipStatus.ACTIVE,
         isOwner: true,
@@ -134,15 +134,15 @@ export async function createWorkspaceForExistingUser(
 
     await tx.membershipRole.create({
       data: {
-        membershipId: membership.membershipId,
-        roleId: ownerRole.companyRoleId,
+        membershipId: membership.id,
+        roleId: ownerRole.id,
       },
     });
 
     await tx.subscription.create({
       data: {
-        companyId: company.companyId,
-        planId: subscriptionPlan.subscriptionPlanId,
+        companyId: company.id,
+        planId: subscriptionPlan.id,
         status: SubscriptionStatus.TRIALING,
         seatLimit: input.seatLimit,
         pricePerUserSnapshot: subscriptionPlan.pricePerUser,

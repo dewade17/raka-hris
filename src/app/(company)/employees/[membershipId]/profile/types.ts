@@ -17,7 +17,7 @@ export type EmployeeAssignmentViewModel = {
 };
 
 export type EmployeeProfileViewModel = {
-  membershipId: string;
+  id: string;
   status: MembershipStatus;
   isOwner: boolean;
   joinedAt: string;
@@ -28,7 +28,7 @@ export type EmployeeProfileViewModel = {
     email: string | null;
   };
   profile: {
-    employeeProfileId: string;
+    id: string;
     employeeNumber: string | null;
     phone: string | null;
     emergencyContactName: string | null;

@@ -27,7 +27,7 @@ export async function PATCH(request: Request) {
     );
   }
 
-  const result = await updateCompanyProfile(authContext.company.companyId, validation.data);
+  const result = await updateCompanyProfile(authContext.company.id, validation.data);
 
   return NextResponse.json(
     {

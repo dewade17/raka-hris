@@ -8,7 +8,7 @@ import type { EmployeeCreateFormValues } from '../components_employees/EmployeeC
 type EmployeeCreateApiResponse = {
   success?: boolean;
   message?: string;
-  membershipId?: string;
+  id?: string;
 };
 
 export function useCreateEmployee() {
@@ -43,8 +43,8 @@ export function useCreateEmployee() {
 
         message.success(payload.message ?? 'Employee created successfully.');
 
-        if (payload.membershipId) {
-          router.push(`/employees/${encodeURIComponent(payload.membershipId)}/profile`);
+        if (payload.id) {
+          router.push(`/employees/${encodeURIComponent(payload.id)}/profile`);
         } else {
           router.refresh();
         }

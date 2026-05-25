@@ -20,7 +20,7 @@ type EmployeeAssignmentCardProps = {
 export function EmployeeAssignmentCard({ employee, canManage, departmentOptions, positionOptions }: EmployeeAssignmentCardProps) {
   const { token } = theme.useToken();
   const [form] = Form.useForm<EmployeeAssignmentFormValues>();
-  const { clearErrorMessage, errorMessage, isSubmitting, updateEmployeeAssignment } = useUpdateEmployeeAssignment(employee.membershipId);
+  const { clearErrorMessage, errorMessage, isSubmitting, updateEmployeeAssignment } = useUpdateEmployeeAssignment(employee.id);
   const selectedDepartmentId = Form.useWatch('departmentId', form);
   const selectedPositionId = Form.useWatch('positionId', form);
   const selectedDepartment = findOptionLabel(departmentOptions, selectedDepartmentId ?? form.getFieldValue('departmentId'));

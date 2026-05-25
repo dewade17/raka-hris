@@ -29,13 +29,13 @@ export async function POST(request: Request) {
     );
   }
 
-  const result = await createCompanyEmployee(context.company.companyId, context.company.name, validation.data);
+  const result = await createCompanyEmployee(context.company.id, context.company.name, validation.data);
 
   return NextResponse.json(
     {
       success: result.success,
       message: result.message,
-      ...(result.success ? { membershipId: result.membershipId } : {}),
+      ...(result.success ? { id: result.id } : {}),
     },
     { status: result.status },
   );

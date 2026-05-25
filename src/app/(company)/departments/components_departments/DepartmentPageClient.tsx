@@ -11,7 +11,7 @@ import { DepartmentFormDrawer, type DepartmentFormValues } from './DepartmentFor
 import { DepartmentTable } from './DepartmentTable';
 
 export type DepartmentViewModel = {
-  departmentId: string;
+  id: string;
   name: string;
   isActive: boolean;
   createdAt: string;
@@ -109,7 +109,7 @@ export function DepartmentPageClient({ canCreate, canDelete, canUpdate, departme
   };
 
   const handleSubmit = async (values: DepartmentFormValues) => {
-    const success = await upsertDepartment(values, editingDepartment?.departmentId);
+    const success = await upsertDepartment(values, editingDepartment?.id);
 
     if (success) {
       setDrawerOpen(false);

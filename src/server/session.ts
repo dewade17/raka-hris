@@ -91,7 +91,7 @@ export async function getCurrentSession() {
         include: {
           company: {
             select: {
-              companyId: true,
+              id: true,
               name: true,
               status: true,
               deletedAt: true,
@@ -135,7 +135,7 @@ export async function renewCurrentSessionIfNeeded() {
   if (!shouldRenewSession(session.expiresAt, now)) {
     await db.userSession.update({
       where: {
-        userSessionId: session.userSessionId,
+        id: session.id,
       },
       data: {
         lastUsedAt: now,
@@ -145,7 +145,7 @@ export async function renewCurrentSessionIfNeeded() {
     return session;
   }
 
-  return renewUserSession(session.userSessionId);
+  return renewUserSession(session.id);
 }
 
 export async function renewUserSession(userSessionId: string) {
@@ -156,7 +156,7 @@ export async function renewUserSession(userSessionId: string) {
 
   const session = await db.userSession.update({
     where: {
-      userSessionId,
+      id: userSessionId,
     },
     data: {
       refreshTokenHash,

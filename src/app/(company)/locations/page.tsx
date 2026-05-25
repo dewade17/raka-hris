@@ -17,10 +17,10 @@ export default async function LocationsPage({ searchParams }: LocationsPageProps
   const listQuery = validateLocationListQuery(await searchParams);
   const { company, membership } = await requirePermission('locations', 'view');
   const [data, permissionKeys] = await Promise.all([
-    getCompanyLocations(company.companyId, listQuery),
+    getCompanyLocations(company.id, listQuery),
     resolveMembershipPermissionKeys({
-      companyId: company.companyId,
-      membershipId: membership.membershipId,
+      companyId: company.id,
+      membershipId: membership.id,
       isOwner: membership.isOwner,
     }),
   ]);
@@ -42,7 +42,7 @@ export default async function LocationsPage({ searchParams }: LocationsPageProps
       listQuery={listQuery}
       locations={data.locations.map(
         (location): LocationViewModel => ({
-          locationId: location.locationId,
+          id: location.id,
           name: location.name,
           latitude: location.latitude,
           longitude: location.longitude,

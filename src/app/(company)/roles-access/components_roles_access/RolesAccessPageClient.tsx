@@ -22,8 +22,8 @@ export function RolesAccessPageClient({ data, canManageRoles, canAssignRoles }: 
   const { token } = theme.useToken();
   const [roleDrawerOpen, setRoleDrawerOpen] = useState(false);
   const [editingRole, setEditingRole] = useState<CompanyRoleAccessItem>();
-  const [selectedRoleId, setSelectedRoleId] = useState(data.roles[0]?.companyRoleId);
-  const selectedRole = useMemo(() => data.roles.find((role) => role.companyRoleId === selectedRoleId) ?? data.roles[0], [data.roles, selectedRoleId]);
+  const [selectedRoleId, setSelectedRoleId] = useState(data.roles[0]?.id);
+  const selectedRole = useMemo(() => data.roles.find((role) => role.id === selectedRoleId) ?? data.roles[0], [data.roles, selectedRoleId]);
   const { clearErrorMessage, errorMessage, isSubmitting, upsertCompanyRole } = useUpsertCompanyRole();
   const { deleteCompanyRole, deletingRoleId } = useDeleteCompanyRole();
   const { isSubmitting: isSavingPermissions, updateRolePermissions } = useUpdateRolePermissions();
@@ -33,7 +33,7 @@ export function RolesAccessPageClient({ data, canManageRoles, canAssignRoles }: 
     .filter((role) => !role.isSystem)
     .map((role) => ({
       label: role.name,
-      value: role.companyRoleId,
+      value: role.id,
     }));
 
   const handleOpenCreate = () => {
@@ -43,7 +43,7 @@ export function RolesAccessPageClient({ data, canManageRoles, canAssignRoles }: 
   };
 
   const handleSubmitRole = async (values: RoleFormValues) => {
-    const success = await upsertCompanyRole(values, editingRole?.companyRoleId);
+    const success = await upsertCompanyRole(values, editingRole?.id);
 
     if (success) {
       setRoleDrawerOpen(false);
@@ -91,7 +91,7 @@ export function RolesAccessPageClient({ data, canManageRoles, canAssignRoles }: 
         <Space size={6}>
           <Button
             size='small'
-            onClick={() => setSelectedRoleId(role.companyRoleId)}
+            onClick={() => setSelectedRoleId(role.id)}
             icon={
               <ShieldCheck
                 size={14}
@@ -129,14 +129,14 @@ export function RolesAccessPageClient({ data, canManageRoles, canAssignRoles }: 
                 cancelText='Cancel'
                 disabled={role.assignedMembers > 0}
                 onConfirm={() => {
-                  void deleteCompanyRole(role.companyRoleId);
+                  void deleteCompanyRole(role.id);
                 }}
               >
                 <Button
                   size='small'
                   danger
                   disabled={role.assignedMembers > 0}
-                  loading={deletingRoleId === role.companyRoleId}
+                  loading={deletingRoleId === role.id}
                   icon={
                     <Trash2
                       size={14}
@@ -197,11 +197,11 @@ export function RolesAccessPageClient({ data, canManageRoles, canAssignRoles }: 
             value={member.roleIds}
             options={assignableRoleOptions}
             disabled={!canAssignRoles}
-            loading={updatingMembershipId === member.membershipId}
+            loading={updatingMembershipId === member.id}
             maxTagCount='responsive'
             style={{ width: '100%' }}
             onChange={(roleIds) => {
-              void updateMemberRoles(member.membershipId, roleIds);
+              void updateMemberRoles(member.id, roleIds);
             }}
           />
         ),
@@ -297,11 +297,11 @@ export function RolesAccessPageClient({ data, canManageRoles, canAssignRoles }: 
             }}
           >
             <Table<CompanyRoleAccessItem>
-              rowKey='companyRoleId'
+              rowKey='id'
               columns={roleColumns}
               dataSource={data.roles}
               pagination={false}
-              rowClassName={(role) => (role.companyRoleId === selectedRole?.companyRoleId ? 'ant-table-row-selected' : '')}
+              rowClassName={(role) => (role.id === selectedRole?.id ? 'ant-table-row-selected' : '')}
               scroll={{ x: 820 }}
               locale={{ emptyText: 'No roles have been created.' }}
             />
@@ -314,7 +314,7 @@ export function RolesAccessPageClient({ data, canManageRoles, canAssignRoles }: 
         >
           {selectedRole ? (
             <RolePermissionEditor
-              key={selectedRole.companyRoleId}
+              key={selectedRole.id}
               canManageRoles={canManageRoles}
               isSavingPermissions={isSavingPermissions}
               permissionModules={data.permissionModules}
@@ -346,7 +346,7 @@ export function RolesAccessPageClient({ data, canManageRoles, canAssignRoles }: 
         }}
       >
         <Table<CompanyMemberRoleAccessItem>
-          rowKey='membershipId'
+          rowKey='id'
           columns={memberColumns}
           dataSource={data.members}
           pagination={{ pageSize: 10, showSizeChanger: true }}
@@ -404,7 +404,7 @@ function RolePermissionEditor({
             disabled={!permissionsChanged}
             loading={isSavingPermissions}
             onClick={() => {
-              void onSave(role.companyRoleId, draftPermissionKeys);
+              void onSave(role.id, draftPermissionKeys);
             }}
             icon={
               <Save

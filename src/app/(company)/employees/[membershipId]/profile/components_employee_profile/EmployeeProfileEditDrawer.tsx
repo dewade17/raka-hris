@@ -50,7 +50,7 @@ export function EmployeeProfileEditDrawer({ open, employee, isSubmitting, errorM
   );
 
   const { employeePhotoAccept, isPhotoUploading, uploadEmployeePhoto, validatePhotoBeforeUpload } = useUploadEmployeePhoto({
-    membershipId: employee.membershipId,
+    membershipId: employee.id,
     onClearError,
     onPhotoUploaded: handlePhotoUploaded,
   });

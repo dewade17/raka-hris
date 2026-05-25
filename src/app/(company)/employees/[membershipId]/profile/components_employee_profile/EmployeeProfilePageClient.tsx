@@ -24,8 +24,8 @@ type EmployeeProfilePageClientProps = {
 
 export function EmployeeProfilePageClient({ employee, canAssign, canTerminate, canUpdate, departmentOptions, positionOptions }: EmployeeProfilePageClientProps) {
   const [editDrawerOpen, setEditDrawerOpen] = useState(false);
-  const { clearErrorMessage, errorMessage, isSubmitting, updateEmployeeProfile } = useUpdateEmployeeProfile(employee.membershipId);
-  const { isSubmitting: isTerminating, terminateEmployee } = useTerminateEmployee(employee.membershipId);
+  const { clearErrorMessage, errorMessage, isSubmitting, updateEmployeeProfile } = useUpdateEmployeeProfile(employee.id);
+  const { isSubmitting: isTerminating, terminateEmployee } = useTerminateEmployee(employee.id);
   const canUpdateAssignment = canAssign && !employee.isOwner && employee.status !== 'TERMINATED';
 
   const handleSubmit = async (values: EmployeeProfileEditFormValues) => {

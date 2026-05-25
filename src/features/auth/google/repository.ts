@@ -110,7 +110,7 @@ export async function markGoogleProviderLoggedIn(
 ) {
   return db.userAuthProvider.update({
     where: {
-      userAuthProviderId,
+      id: userAuthProviderId,
     },
     data: {
       email: profile.email,
